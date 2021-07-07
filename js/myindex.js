@@ -1,0 +1,3 @@
+$('.nav-link').click(function(){
+    
+})
