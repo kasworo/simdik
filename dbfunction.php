@@ -69,24 +69,23 @@
         return $conn->affected_rows;
     }
 
-    function editdata($tbl, $data, $cols='',$id=''){
+    function editdata($tbl, $data, $kol='', $id=''){
         global $conn;
-        $cols = array();
+        $cols = [];
         foreach($data as $key=>$val) {
             $cols[] = "$key = '$val'";
         }
         if($id==''){
-            $where=array();
-            foreach($cols as $wh=>$nil){
+            $where=[];
+            foreach($kol as $wh=>$nil) {
                 $where[] = "$wh = '$nil'";
             }
             $sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE ".implode (' AND ',$where);
         }        
         else
         {
-            $sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE $cols='$id'";
+            $sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE $kol='$id'";
         }
-        
         $conn->query($sql);
         return $conn->affected_rows;
     }

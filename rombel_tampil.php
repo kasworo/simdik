@@ -1,6 +1,3 @@
-<?php
-	include "config/function_siswa.php";
-?>
 <div class="modal fade" id="myRegPD" aria-modal="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
