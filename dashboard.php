@@ -1,6 +1,6 @@
 <div class="col-sm-12">
 <?php 
-		if($_COOKIE['c_login']=='1'): 
+	if($level=='1'): 
 ?>
 	<div class="card card-secondary card-outline">
 		<div class="card-header">
