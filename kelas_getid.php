@@ -1,9 +1,8 @@
 <?php
-    include "config/konfigurasi.php";
+    include "dbfunction.php";
     if (isset($_GET['k'])){
-		$qsk=$conn->query("SELECT*FROM tbkelas k INNER JOIN tbskul s USING(idjenjang)");
+		$sk=fulljoin('tbkelas','tbskul','idjenjang');
 		$sk=$qsk->fetch_array();
-		$cekjenjang=$sk['idjenjang'];
 		if($_COOKIE['c_login']=='1'){
 			$query = $conn->query("SELECT idrombel, nmrombel FROM tbrombel r INNER JOIN tbthpel t ON t.idthpel=r.idthpel WHERE r.idkelas='$_GET[k]' AND r.idthpel='$_COOKIE[c_tahun]'");
 			echo "<option selected value=''>..Pilih..</option>";

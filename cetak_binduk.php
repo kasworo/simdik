@@ -65,10 +65,12 @@
 
         function ChapterBody($nisn)
         {
-            include "config/konfigurasi.php";
-            include "config/fungsi_tgl.php";
-            $qisi=$conn->query("SELECT*FROM tbsiswa WHERE nisn='$nisn'");
-            $d=$qisi->fetch_array();
+            global $conn;
+            // $qisi=$conn->query("SELECT*FROM tbsiswa WHERE nisn='$nisn'");
+			$data=array(
+				'nisn'=>$nisn
+			);
+            $d=viewdata("tbsiswa",$data)[0];
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.575,'A.');
 			$this->Cell(11.5,0.575,'Keterangan Diri Peserta Didik');
@@ -180,8 +182,7 @@
 				case '2' : {$tggl='Wali Murid';break;}
 				case '3' : {$tggl='Kost';break;}
 				case '4' : {$tggl='Asrama';break;}
-			}
-				
+			}				
 			$this->Cell(8.25,0.575,$tggl);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
@@ -740,16 +741,16 @@
 			$this->ChapterBody($nisn);			
         }
     }
-    include "config/konfigurasi.php";
-	include "config/fungsi_tgl.php";
     $pdf = new PDF('L','cm',array(21.5,33.0));
     $pdf->SetMargins(2.75,1.75,1.25);
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-    $qsiswa=$conn->query("SELECT si.* FROM tbsiswa si LEFT JOIN tbregistrasi rg USING(idsiswa) LEFT JOIN tbrombel rb USING(idrombel) LEFT JOIN tbthpel th USING(idthpel) WHERE rg.idjreg='1' OR rg.idjreg='2' AND th.nmthpel LIKE '$_REQUEST[id]%' OR rb.idthpel=''");
-    while($ds=$qsiswa->fetch_array()){
+    $qsiswa=$conn->query("SELECT si.* FROM tbsiswa si LEFT JOIN tbregistrasi rg USING(idsiswa) LEFT JOIN tbrombel rb USING(idrombel) LEFT JOIN tbthpel th USING(idthpel) WHERE rg.idjreg='1' OR rg.idjreg='2' AND th.nmthpel LIKE '$_GET[id]%' OR rb.idthpel='$_COOKIE[c_tahun]'");
+	while($ds=$qsiswa->fetch_array()){
         $pdf->PrintChapter($ds['nis'], $ds['nisn']);
+		
     }
+	var_dump($ds);die;
     $pdf->Output();
 ?>

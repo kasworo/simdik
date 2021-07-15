@@ -29,19 +29,88 @@
         return $result;
     }
 
-    function viewdata($tbl, $key='', $id='', $ord='' ){
+    function fulljoin($field,$tbl, $join, $where='', $group=''){
         global $conn;
-        if($key=='' && $id=='' && $ord==''){
-            $sql="SELECT*FROM $tbl"; 
+        $rows=[];
+        foreach($field as $kol) {
+            $cols[]= $kol;
         }
-        else if($key=='' && $id==''){
-            $sql="SELECT*FROM $tbl ORDER BY $ord"; 
+        foreach($join as $joins=>$idjoins) {
+            $tbjoin[] = "$joins USING($idjoins)";
         }
-        elseif($ord==''){
-            $sql="SELECT*FROM $tbl WHERE $key='$id'";
+        foreach($where as $w=>$nil) {
+            $keys[]= "$w = '$nil'";
+        } 
+        if($where=='' && $group==''){
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin);
+        }     
+        else if($where==''){
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin)." GROUP BY $group";
+        }
+        else if($group==''){
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys);
         }
         else {
-            $sql="SELECT*FROM $tbl WHERE $key = '$id' ORDER BY $ord";
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys)." GROUP BY $group";
+        }
+        $result=$conn->query($sql);
+		while($row=$result->fetch_assoc()){
+			$rows[]=$row;
+		}		
+		return $rows;
+    }
+
+    function leftjoin($field,$tbl, $join, $where='', $group=''){
+        global $conn;
+        $rows=[];
+        foreach($field as $kol) {
+            $cols[]= $kol;
+        }
+        foreach($join as $joins=>$idjoins) {
+            $tbjoin[] = "$joins USING($idjoins)";
+        }
+        foreach($where as $w=>$nil) {
+            $keys[]= "$w = '$nil'";
+        } 
+       
+        if($where=='' && $group==''){
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin);
+        }     
+        else if($where==''){
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin)." GROUP BY $group";
+        }
+        else if($group==''){
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys);
+        }
+        else {
+            $sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
+        }
+       
+        $result=$conn->query($sql);
+		while($row=$result->fetch_assoc()){
+			$rows[]=$row;
+		}		
+		return $rows;
+    }
+    
+    function viewdata($tbl, $key='', $ord=''){
+        global $conn;
+        if($key=='' && $ord==''){
+            $sql="SELECT*FROM $tbl"; 
+        }
+        else if($ord==''){
+            $where=[];
+            foreach($key as $wh=>$nil) {
+                $where[] = "$wh = '$nil'";
+            }
+            $sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where);
+        }
+        else {
+            $where=[];
+            foreach($key as $wh=>$nil) {
+                $where[] = "$wh = '$nil'";
+            }
+            $sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." ORDER BY $ord";
         }
         $rows=[];
         $result=$conn->query($sql);
@@ -51,10 +120,17 @@
 		return $rows;
     }
    
-    function cekdata($tbl, $keys='',$id=''){
+    function cekdata($tbl, $keys=''){
         global $conn;
-        if($keys=='' && $id==''){
+        if($keys==''){
             $sql="SELECT*FROM $tbl";
+        }
+        else {
+            $where=[];
+            foreach($keys as $wh=>$nil) {
+                $where[] = "$wh = '$nil'";
+            }
+            $sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where);
         }
         $result=$conn->query($sql);
         return $result->num_rows;
@@ -89,4 +165,4 @@
         $conn->query($sql);
         return $conn->affected_rows;
     }
-?> 
+?>
