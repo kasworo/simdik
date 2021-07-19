@@ -1,3 +1,99 @@
+<?php
+	if(isset($_POST['simpan'])){
+		if($_POST['idreg']=='1' || $_POST['idreg']=='4'){
+			$idthn=array('idthpel'=>$_POST['kdthpel']);
+			$th=viewdata('tbthpel',$idthn)[0];
+			$tgl=$th['awal'];
+		}
+		else {
+			$tgl=date('Y-m-d');
+		}
+       	$keyreg=array(
+			'idsiswa'=>$_POST['idsiswa'],
+			'idthpel'=>$_POST['kdthpel']
+		);
+		$join=array('tbrombel'=>'idrombel');
+    	$cekregis=cekfulljoin('*', 'tbregistrasi', $join, $keyreg);
+        if($cekregis===0){
+            $data=array(
+                'idsiswa'=>$_POST['idsiswa'],
+                'idjreg'=>$_POST['idreg'],
+                'idrombel'=>$_POST['kdrombel'],
+                'tglreg'=>$tgl    
+              );
+            $rows=adddata('tbregistrasi',$data);
+            if($rows>0)
+			{
+				echo "<script>
+					    $(function() {
+                            toastr.success('Maping Rombel Untuk Peserta Didik Berhasil!','Terimakasih', {
+                                timeOut:1000,
+                                fadeOut:1000,
+                                onHidden:function(){
+                                    window.location.href='index.php?p=isikelas';
+                                }
+                            });
+				        });
+			        </script>";
+			}
+            else {
+                echo "<script>
+			            $(function() {
+                            toastr.error('Maping Rombel Untuk Peserta Didik Gagal!','Mohon Maaf', {
+                                timeOut:1000,
+                                fadeOut:1000,
+                                onHidden:function(){
+                                    window.location.href='index.php?p=isikelas';
+                                }
+                            });
+				        });
+			        </script>";    
+            }
+			//exit;
+		}
+		else {
+            $data=array(
+                'idjreg'=>$_POST['idreg'],
+                'idrombel'=>$_POST['kdrombel'],
+                'tglreg'=>$tgl    
+            );
+            $join=array('tbrombel'=>'idrombel');
+            $field=array(
+                'idsiswa'=>$_POST['idsiswa'],
+                'idthpel'=>$_POST['kdthpel']
+            );
+            $rows=editdata('tbregistrasi', $data, $join, $field);
+            if($rows>0)
+			{
+				echo "<script>
+					    $(function() {
+                            toastr.success('Update Maping Rombel Untuk Peserta Didik Berhasil!','Terimakasih', {
+                                timeOut:1000,
+                                fadeOut:1000,
+                                onHidden:function(){
+                                    window.location.href='index.php?p=isikelas';
+                                }
+                            });
+				        });
+			        </script>";
+			}
+            else {
+                echo "<script>
+			            $(function() {
+                            toastr.error('Update Maping Rombel Untuk Peserta Didik Gagal!','Mohon Maaf', {
+                                timeOut:1000,
+                                fadeOut:1000,
+                                onHidden:function(){
+                                    window.location.href='index.php?p=isikelas';
+                                }
+                            });
+				        });
+			        </script>";    
+            }
+			//exit;
+		}
+    }
+?>
 <div class="modal fade" id="myRegPD" aria-modal="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -7,68 +103,84 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="col-sm-12">
-                    <div class="form-group row mb-2">
-                        <label class="col-sm-5">Peserta Didik</label>
-                        <input type="hidden" class="form-control input-sm" id="idsiswa" name="idsiswa">
-                        <input type="text" readonly="true" class="form-control input-sm col-sm-6" id="nmsiswa"
-                            name="nmsiswa">
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label class="col-sm-5">Tahun Pelajaran</label>
-                        <select class="form-control input-sm col-sm-6" id="kdthpel" name="kdthpel">
-                            <option value="">..Pilih..</option>
-                            <?php
-									$qthpel=$conn->query("SELECT idthpel, desthpel FROM tbthpel WHERE idthpel='$_COOKIE[c_tahun]'");
-									while($tp=$qthpel->fetch_array()):
+            <form action="" method="post">
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div class="form-group row mb-2">
+                            <label class="col-sm-5">Peserta Didik</label>
+                            <input type="hidden" class="form-control input-sm" id="idsiswa" name="idsiswa">
+                            <input type="text" class="form-control input-sm col-sm-6" id="nmsiswa" name="nmsiswa"
+                                disabled="true">
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label class="col-sm-5">Tahun Pelajaran</label>
+                            <select class="form-control input-sm col-sm-6" id="kdthpel" name="kdthpel">
+                                <option value="">..Pilih..</option>
+                                <?php
+									$qtp=viewdata('tbthpel', $key);
+									foreach($qtp as $tp):
+										if($tp['idthpel']===$_COOKIE['c_tahun']){
+											$ts="selected";
+										}
+										else {$ts='';}
 								?>
-                            <option value="<?php echo $tp['idthpel'];?>"><?php echo $tp['desthpel'];?></option>
-                            <?php endwhile ?>
-                        </select>
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label class="col-sm-5">Kelas</label>
-                        <select class="form-control input-sm col-sm-6" id="kdkelas" name="kdkelas"
-                            onchange="pilrombel(this.value)">
-                            <option value="">..Pilih..</option>
-                            <?php
-									$qkls=$conn->query("SELECT idkelas,nmkelas FROM tbkelas INNER JOIN tbskul USING (idjenjang)");
-									while($kl=$qkls->fetch_array()):
+                                <option value="<?php echo $tp['idthpel'];?>" <?php echo $ts;?>>
+                                    <?php echo $tp['desthpel'];?>
+                                </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label class="col-sm-5">Kelas</label>
+                            <select class="form-control input-sm col-sm-6" id="kdkelas" name="kdkelas"
+                                onchange="pilrombel(this.value)">
+                                <option value="">..Pilih..</option>
+                                <?php
+									$fkls=array('idkelas', 'nmkelas');
+									$tbl=array('tbskul'=>'idjenjang');
+									$qkls=fulljoin($fkls,'tbkelas',$tbl);
+									foreach ($qkls as $kl):
 								?>
-                            <option value="<?php echo $kl['idkelas'];?>"><?php echo $kl['nmkelas'];?></option>
-                            <?php endwhile ?>
-                        </select>
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label class="col-sm-5">Rombongan Belajar</label>
-                        <select class="form-control input-sm col-sm-6" id="kdrombel" name="kdrombel"
-                            disabled="disabled">
-                            <option value="">..Pilih..</option>
-                        </select>
-                    </div>
-                    <div class="form-group row mb-2">
-                        <label class="col-sm-5">Terdaftar Sebagai</label>
-                        <select class="form-control input-sm col-sm-6" id="idreg" name="idreg" disabled="disabled">
-                            <option value="">..Pilih..</option>
-                            <?php
+                                <option value="<?php echo $kl['idkelas'];?>"><?php echo $kl['nmkelas'];?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label class="col-sm-5">Rombongan Belajar</label>
+                            <select class="form-control input-sm col-sm-6" id="kdrombel" name="kdrombel"
+                                disabled="disabled">
+                                <option value="">..Pilih..</option>
+                                <?php
+									$qrb=viewdata('tbrombel');
+									foreach ($qrb as $rb):
+								?>
+                                <option value="<?php echo $rb['idrombel'];?>"><?php echo $rb['nmrombel'];?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label class="col-sm-5">Terdaftar Sebagai</label>
+                            <select class="form-control input-sm col-sm-6" id="idreg" name="idreg" disabled="disabled">
+                                <option value="">..Pilih..</option>
+                                <?php
 									$qreg=$conn->query("SELECT*FROM ref_jnsregistrasi LIMIT 0,5");
 									while($rg=$qreg->fetch_array()):
 								?>
-                            <option value="<?php echo $rg['idjreg'];?>"><?php echo $rg['jnsregistrasi'];?></option>
-                            <?php endwhile?>
-                        </select>
+                                <option value="<?php echo $rg['idjreg'];?>"><?php echo $rg['jnsregistrasi'];?></option>
+                                <?php endwhile?>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-primary btn-md col-4 btn-flat" id="simpan">
-                    <i class="fas fa-save"></i> Simpan
-                </button>
-                <button type="button" class="btn btn-danger btn-md col-4 btn-flat" data-dismiss="modal">
-                    <i class="fas fa-power-off"></i> Tutup
-                </button>
-            </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="submit" class="btn btn-primary btn-md col-4 btn-flat" id="simpan" name="simpan">
+                        <i class="fas fa-save"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-danger btn-md col-4 btn-flat" data-dismiss="modal">
+                        <i class="fas fa-power-off"></i> Tutup
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -88,10 +200,10 @@
                         <select class="form-control input-sm col-sm-6" id="rombelold" name="rombelold">
                             <option value="">..Pilih..</option>
                             <?php
-									$sblm=$_COOKIE['c_tahun']-1;
-									$qrb0=$conn->query("SELECT*FROM tbrombel WHERE idthpel='$sblm'");
-									while($rb0=$qrb0->fetch_array()):
-								?>
+								$sblm=$_COOKIE['c_tahun']-1;
+								$qrb0=$conn->query("SELECT*FROM tbrombel WHERE idthpel='$sblm'");
+								while($rb0=$qrb0->fetch_array()):
+							?>
                             <option value="<?php echo $rb0['idrombel'];?>"><?php echo $rb0['nmrombel'];?></option>
                             <?php endwhile?>
                         </select>
@@ -211,19 +323,6 @@ $(function() {
         "responsive": true,
     });
 });
-$("#simpan").click(function() {
-    var idsiswa = $("#idsiswa").val();
-    var idrombel = $("#kdrombel").val();
-    var idreg = $("#idreg").val();
-    $.ajax({
-        url: "rombel_simpan.php",
-        type: 'POST',
-        data: "aksi=1&id=" + idsiswa + "&rm=" + idrombel + "&reg=" + idreg,
-        success: function(data) {
-            toastr.success(data);
-        }
-    })
-})
 $("#kdrombel").change(function() {
     var rmb = $(this).val();
     if (rmb == '' || rmb == null) {
@@ -240,11 +339,14 @@ $(".btnRegistrasi").click(function() {
         type: 'post',
         dataType: 'json',
         data: 'id=' + id,
-        success: function(data) {
-            $("#idsiswa").val(data.idsiswa);
-            $("#nmsiswa").val(data.nmsiswa);
-            $("#judule").html(data.judul);
-            $("#simpan").html(data.tmb);
+        success: function(e) {
+            $("#judule").html(e.judul);
+            $("#idsiswa").val(e.idsiswa);
+            $("#nmsiswa").val(e.nmsiswa);
+            $("#kdkelas").val(e.kelas);
+            $("#kdrombel").val(e.rombel);
+            $("#idreg").val(e.regis);
+            $("#simpan").html(e.tmb);
         }
     })
 })

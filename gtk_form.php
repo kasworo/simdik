@@ -1,60 +1,60 @@
 <?php
    if(isset($_POST['simpan'])){
-        $data=array(
-           'idskul'    =>$_POST['idskul'],
-            'nama'      =>$_POST['nmgtk'],
-            'nik'       =>$_POST['nik'],
-            'nip'       =>$_POST['nip'],
-            'tmplahir'  =>$_POST['tmplahir'],
-            'tgllahir'  =>$_POST['tgllahir'],
-            'gender'    =>$_POST['gender'],
-            'agama'     =>$_POST['agama'],
-            'kepeg'     =>$_POST['stsp'],
-            'jbtdinas'  =>$_POST['jbtd'],
-            'email'     =>$_POST['imel'],
-            'alamat'    =>$_POST['almt'],
-            'desa'      =>$_POST['desa'],
-            'kec'       =>$_POST['kec'],
-            'kab'       =>$_POST['kab'],
-            'prov'      =>$_POST['prov'],
-            'kdpos'     =>$_POST['kdpos'],
-            'nohp'      =>$_POST['nohp']
-        );
-        if($_GET['m']=='1'){
-            $rows=adddata('tbgtk',$data);
-        }
-        else {
-            $rows=editdata('tbgtk',$data,'idgtk',$_GET['id']);
-        }
-        if($rows>0){
-            echo "<script>
-                $(function() {
-                    toastr.success('Tambah atau Edit Data GTK Berhasil!','Terima Kasih',
-                    {
-                        timeOut:1000,
-                        fadeOut:1000,
-                        onHidden: function(){
-                            window.location.href='index.php?p=datagtk';
-                        }
-                    });
-                });
-            </script>";
-        }
-        else {
-            echo "<script>
-                $(function() {
-                    toastr.error('Data GTK Gagal Disimpan!','Mohon Maaf',
-                    {
-                        timeOut:1000,
-                        fadeOut:1000,
-                        onHidden: function(){
-                            window.location.href='index.php?p=datagtk';
-                        }
-                    });
-                });
-            </script>";
-        }
-    }
+		$data=array(
+		   'idskul'	=>$_POST['idskul'],
+			'nama'	  =>$_POST['nmgtk'],
+			'nik'	   =>$_POST['nik'],
+			'nip'	   =>$_POST['nip'],
+			'tmplahir'  =>$_POST['tmplahir'],
+			'tgllahir'  =>$_POST['tgllahir'],
+			'gender'	=>$_POST['gender'],
+			'agama'	 =>$_POST['agama'],
+			'kepeg'	 =>$_POST['stsp'],
+			'jbtdinas'  =>$_POST['jbtd'],
+			'email'	 =>$_POST['imel'],
+			'alamat'	=>$_POST['almt'],
+			'desa'	  =>$_POST['desa'],
+			'kec'	   =>$_POST['kec'],
+			'kab'	   =>$_POST['kab'],
+			'prov'	  =>$_POST['prov'],
+			'kdpos'	 =>$_POST['kdpos'],
+			'nohp'	  =>$_POST['nohp']
+		);
+		if($_GET['m']=='1'){
+			$rows=adddata('tbgtk',$data);
+		}
+		else {
+			$rows=editdata('tbgtk',$data,'idgtk',$_GET['id']);
+		}
+		if($rows>0){
+			echo "<script>
+				$(function() {
+					toastr.success('Tambah atau Edit Data GTK Berhasil!','Terima Kasih',
+					{
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden: function(){
+							window.location.href='index.php?p=datagtk';
+						}
+					});
+				});
+			</script>";
+		}
+		else {
+			echo "<script>
+				$(function() {
+					toastr.error('Data GTK Gagal Disimpan!','Mohon Maaf',
+					{
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden: function(){
+							window.location.href='index.php?p=datagtk';
+						}
+					});
+				});
+			</script>";
+		}
+	}
 if(isset($_GET['id'])){
 ?>
 <script type="text/javascript">

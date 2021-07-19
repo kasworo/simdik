@@ -1,16 +1,20 @@
 <?php
-	if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
-	include "config/konfigurasi.php";
+	include "dbfunction.php";
 	if($_POST['aksi']=='1'){
 		if($_POST['reg']=='1' || $_POST['reg']=='4'){
 			$qth=$conn->query("SELECT awal FROM tbthpel WHERE idthpel='$_COOKIE[c_tahun]'");
 			$th=$qth->fetch_array();
 			$tgl=$th['awal'];
 		}
-		else{
+		else {
 			$tgl=date('Y-m-d');
 		}
-		$qcek=$conn->query("SELECT*FROM tbregistrasi WHERE idsiswa='$_POST[id]' AND idrombel='$_POST[rm]' AND idjreg='$_POST[reg]' AND idthpel='$_COOKIE[c_tahun]'");
+		$keys=array(
+			'idsiswa'=>$_POST['id'],
+			'idthpel'=>$_POST['th']
+		);
+		$cek=cekdata('tbregistrasi',$keys);
+		//$conn->query("SELECT*FROM tbregistrasi WHERE idsiswa='$_POST[id]' AND idjreg='$_POST[reg]' AND idthpel='$_COOKIE[c_tahun]'");
 		$cek=$qcek->num_rows;
 		if($cek==0){
 			$sql=$conn->query("INSERT INTO tbregistrasi(idsiswa, idrombel, idjreg, tglreg) VALUES ('$_POST[id]','$_POST[rm]','$_POST[reg]','$tgl')");

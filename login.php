@@ -1,35 +1,34 @@
 <?php
 	session_start();
-	include "config/konfigurasi.php";
-	include "config/function_user.php";
+	include "dbfunction.php";
 	if(isset($_COOKIE['id'],$_COOKIE['key'])){
-		$id=$_COOKIE['id'];
-		$key=$_COOKIE['key'];
-		$sql = $conn->query("SELECT username, passwd FROM tbuser WHERE username = '$id'");
-		$data=$sql->fetch_assoc();
+        $key=$_COOKIE['key'];
+        $keys=array(
+            'username'=>$_COOKIE['id']
+        );
+        $data=viewdata('tbuser',$keys)[0];
 		if($key===hash('sha256',$data['passwd'])){
 			$_SESSION['login']=true;
 		}
 	}
-
 	if(isset($_SESSION['login'])){
 		header("Location: index.php?p=dashboard");
 		exit;
 	}
-	
 	if(isset($_POST['login'])){
 		$user=$conn->real_escape_string($_POST['user']);
 		$pass=$_POST['pass'];
-		$sql = $conn->query("SELECT username, passwd FROM tbuser WHERE username = '$user'");
-		if($sql->num_rows===1){
-			$data=$sql->fetch_assoc();
+        $keys=array(
+            'username'=>$user
+        );
+		$cekuser=cekdata('tbuser',$keys);
+		if($cekuser===1){
+			$data=viewdata('tbuser',$keys)[0];
 			if(password_verify($pass, $data['passwd'])){
 				$_SESSION['login']=true;
 				setcookie('id',$data['username'],time()+3600);
-				$qskul=$conn->query("SELECT idskul FROM tbskul");
-				$sk=$qskul->fetch_assoc();
+				$sk=viewdata('tbskul')[0];
 				setcookie('kdskul',hash('sha256',$sk['kdskul']), time()+3600);
-				
 				if(isset($_POST['ingat'])){					
 					setcookie('key',hash('sha256',$data['passwd']),time()+3600);
 				}
@@ -38,9 +37,7 @@
 			}
 		}
 		$error=true;
-	}
-
-	
+	}	
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,8 +57,13 @@
 
 <body class="hold-transition login-page" style="background:url(assets/img/boxed-bg.png)">
     <?php 
-	$admin="SELECT*FROM tbuser WHERE level='1'";
-	if(cekuser($admin)===0):?>
+        //$admin="SELECT*FROM tbuser WHERE level='1'";
+        $level=array(
+            'level'=>'1'
+        );
+        $cekadmin=cekdata('tbuser',$level);
+        if(cekadmin===0):
+    ?>
     <div class="register-box">
         <div class="register-logo">
             <span><b>Selamat Datang</b></span>
