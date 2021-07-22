@@ -72,6 +72,7 @@
 		foreach($where as $w=>$nil) {
 			$keys[]= "$w = '$nil'";
 		}
+		
 		if($field=='*'){
 			if($where=='' && $group==''){
 				$sql="SELECT*FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin);
@@ -129,7 +130,7 @@
 		else {
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
 		}
-	   
+		//var_dump($sql);die;
 		$result=$conn->query($sql);
 		while($row=$result->fetch_assoc()){
 			$rows[]=$row;
