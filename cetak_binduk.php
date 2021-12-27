@@ -8,15 +8,14 @@
 			case 'C' : {$agama ='Katholik';break;}
 			case 'D' : {$agama ='Hindu';break;}
 			case 'E' : {$agama ='Buddha';break;}
+			default : {$agama='-';break;}
 		}
 		return $agama;		
 	}
-	
 	function getgender($id){
 		if($id=='L'){$jk='Laki-laki';} else {$jk='Perempuan';}
 		return $jk;
 	}
-	
 	function getwni($id){
 		if($id=='1'){
 			$wn='Warga Negara Indonesia';
@@ -27,7 +26,57 @@
 		else {$wn='-';}
 		return $wn;
 	}
-
+	function gettinggal($id){
+		switch($id){
+			case '1' : {$tggl='Orangtua';break;}
+			case '2' : {$tggl='Wali Murid';break;}
+			case '3' : {$tggl='Kost';break;}
+			case '4' : {$tggl='Asrama';break;}
+			default:{$tggl='-';break;}
+		}
+		return $tggl;
+	}
+	function gettrans($id){
+		switch($id){
+			case '1' : {$trns='Jalan Kaki';break;}
+			case '2' : {$trns='Sepeda';break;}
+			case '3' : {$trns='Sepeda Motor';break;}
+			case '4' : {$trns='Ojek';break;}
+			case '5' : {$trns='Angkutan Umum';break;}
+			case '6' : {$trns='Angkutan Antar Jemput';break;}
+		}
+		return $trns;
+	}
+	function getpenyakit($id){
+		switch ($id){
+			case '0' : {$skt='Tidak Ada';break;}
+			case '1' : {$skt='Demam Berdarah';break;}
+			case '2' : {$skt='Malaria';break;}
+			case '3' : {$skt='Asma';break;}
+			case '4' : {$skt='Campak';break;}
+			case '5' : {$skt='TBC';break;}
+			case '6' : {$skt='Tetanus';break;}
+			case '7' : {$skt='Pneumonia';break;}
+			case '8' : {$skt='Jantung';break;}
+			default:{$skt='-';break;}
+		}
+		return $skt;
+	}
+	
+	function getkebkhusus($id){
+		switch($id){
+			case '0' : {$kbthn='Tidak Ada';break;}
+			case '1' : {$kbthn='Tuna Daksa';break;}
+			case '2' : {$kbthn='Tuna Rungu';break;}
+			case '3' : {$kbthn='Tuna Wicara';break;}
+			case '4' : {$kbthn='Tuna Netra';break;}
+			case '5' : {$kbthn='Tuna Grahita';break;}
+			case '6' : {$kbthn='Down Syndrome';break;}
+			case '7' : {$kbthn='Autisme';break;}
+			default:{$kbthn='-';break;}
+		}
+		return $kbthn;
+	}
 	function getdarah($id){
 		switch($id){
 			case '0' : {$goldarah='Tidak Tahu';break;}
@@ -38,6 +87,28 @@
 		}
 		return $goldarah;
 	}
+
+	function getskulortu($id){
+		global $conn;
+		$data=viewdata('ref_pendidikan',array('idpddk'=>$id))[0];
+		return $data['pendidikan'];
+	}
+
+	function getkerjaortu($id){
+		global $conn;
+		$data=viewdata('ref_pekerjaan',array('idkerja'=>$id))[0];
+		return $data['pekerjaan'];
+	}
+	function getgajiortu($id){
+		global $conn;
+		$data=viewdata('ref_penghasilan',array('idhsl'=>$id))[0];
+		return $data['penghasilan'];
+	}
+	function getregis($id){
+		global $conn;
+		$data=viewdata('ref_jnsregistrasi',array('idjreg'=>$id))[0];
+		return $data['jnsregistrasi'];
+	}
 	class PDF extends FPDF
     {
         protected $col = 0;
@@ -47,7 +118,6 @@
 			global $title;
 			$this->y0 = $this->GetY();
 		}
-
         function SetCol($col)
         {
             $this->col = $col;
@@ -55,7 +125,6 @@
             $this->SetLeftMargin($x);
             $this->SetX($x);
         }
-
         function AcceptPageBreak()
         {
             if($this->col<1)
@@ -155,8 +224,13 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'7.');
 			$this->Cell(4.0,0.575,'Anak Ke');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$d['anake'].' dari '.$d['saudara'].' bersaudara');
+			$this->Cell(0.25,0.575,':');
+			if($d['anake']=='' || $d['sdr']==''){
+				$anake='-';
+			} else {
+				$anake=$d['anake'].' dari '.$d['sdr'].' bersaudara';
+			}
+			$this->Cell(8.25,0.575,$anake);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'8.');
@@ -169,45 +243,21 @@
 			$this->Cell(0.75,0.575,'9.');
 			$this->Cell(4.0,0.575,'Riwayat Penyakit');
 			$this->Cell(0.25,0.575,':');
-			switch($d['rwysakit']){
-				case '0' : {$skt='Tidak Ada';break;}
-				case '1' : {$skt='Demam Berdarah';break;}
-				case '2' : {$skt='Malaria';break;}
-				case '3' : {$skt='Asma';break;}
-				case '4' : {$skt='Campak';break;}
-				case '5' : {$skt='TBC';break;}
-				case '6' : {$skt='Tetanus';break;}
-				case '7' : {$skt='Pneumonia';break;}
-				case '8' : {$skt='Jantung';break;}
-			}		
+			$skt=getpenyakit($d['rwysakit']);
 			$this->Cell(8.25,0.575,$skt);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'10.');
 			$this->Cell(4.0,0.575,'Kebutuhan Khusus');
 			$this->Cell(0.25,0.575,':');
-			switch($d['kebkhusus']){
-				case '0' : {$kbthn='Tidak Ada';break;}
-				case '1' : {$kbthn='Tuna Daksa';break;}
-				case '2' : {$kbthn='Tuna Rungu';break;}
-				case '3' : {$kbthn='Tuna Wicara';break;}
-				case '4' : {$kbthn='Tuna Netra';break;}
-				case '5' : {$kbthn='Tuna Grahita';break;}
-				case '6' : {$kbthn='Down Syndrome';break;}
-				case '7' : {$kbthn='Autisme';break;}
-			}		
+			$kbthn=getkebkhusus($d['kebkhusus']);		
 			$this->Cell(8.25,0.575,$kbthn);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'11.');
 			$this->Cell(4.0,0.575,'Tinggal Dengan');
 			$this->Cell(0.25,0.575,':');	
-			switch($d['ikuts']){
-				case '1' : {$tggl='Orangtua';break;}
-				case '2' : {$tggl='Wali Murid';break;}
-				case '3' : {$tggl='Kost';break;}
-				case '4' : {$tggl='Asrama';break;}
-			}				
+			$tggl=gettinggal($d['ikuts']);				
 			$this->Cell(8.25,0.575,$tggl);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
@@ -222,15 +272,8 @@
 			$this->Cell(0.75,0.575,'13.');
 			$this->Cell(4.0,0.575,'Mode Transportasi');
 			$this->Cell(0.25,0.575,':');
-			switch($d['transpr']){
-				case '1' : {$trns='Jalan Kaki';break;}
-				case '2' : {$trns='Sepeda';break;}
-				case '3' : {$trns='Sepeda Motor';break;}
-				case '4' : {$trns='Ojek';break;}
-				case '5' : {$trns='Angkutan Umum';break;}
-				case '6' : {$trns='Angkutan Antar Jemput';break;}
-			}		
-			$this->Cell(8.25,0.575,$trns);
+			$trans=gettrans($d['transpr']);		
+			$this->Cell(8.25,0.575,$trans);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'14.');
@@ -295,26 +338,31 @@
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.575,'B.');
 			$this->Cell(11.5,0.575,'Catatan Registrasi Peserta Didik');
-			$this->Ln();
+			$this->Ln();			
 			$this->SetFont('Times','',11);
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'1.');
 			$this->Cell(4.0,0.575,'Terdaftar Sebagai');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,'Siswa Baru');
+			$this->Cell(0.25,0.575,':');
+			
+			$qreg=$conn->query("SELECT*FROM tbregistrasi INNER JOIN tbrombel USING(idrombel) WHERE idsiswa='$d[idsiswa]' AND (idjreg='1' OR idjreg='2')");	
+			$rg=$qreg->fetch_assoc();
+			$regis=getregis($rg['idjreg']);
+			$this->Cell(8.25,0.575,$regis);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'2.');
 			$this->Cell(4.0,0.575,'Tanggal');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,indonesian_date($rg['tglreg']));
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'3.');
-			$this->Cell(4.0,0.575,'Diterima di Kelas');
+			$this->Cell(4.0,0.575,'Diterima di kelas');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,$rg['nmrombel']);
 			$this->Ln();
+			$rw=viewdata('tbriwayatskul', array('idsiswa'=>$d['idsiswa']))[0];
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'4.');
 			$this->Cell(4.0,0.575,'Lulus Dari');
@@ -325,22 +373,16 @@
 			$this->Cell(0.5,0.575,'a.');
 			$this->Cell(3.5,0.575,'Nama SD/MI');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,$rw['aslsd']);
 			$this->Ln();
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'b.');
-			$this->Cell(3.5,0.575,'Tanggal Ijazah');
+			$this->Cell(3.5,0.575,'No. Seri / Tgl Ijazah');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575,'');
 			$this->Ln();
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'c.');
-			$this->Cell(3.5,0.575,'No. Seri Ijazah');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,'');
-			$this->Ln();
-			$this->Cell(1.5,0.575);
-			$this->Cell(0.5,0.575,'d.');
 			$this->Cell(3.5,0.575,'Lama Belajar');
 			$this->Cell(0.25,0.575,':');	
 			$this->Cell(8.25,0.575,'');
@@ -377,161 +419,140 @@
 			$this->Ln(0.75);
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.575,'C.');
-			$this->Cell(11.5,0.575,'Keterangan Ayah Kandung');
+			$this->Cell(11.5,0.575,'Keterangan Orang Tua Kandung');
 			$this->Ln();
-			$qayah=$conn->query("SELECT ay.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ay INNER JOIN ref_pendidikan r1 USING(idpddk) INNER JOIN ref_pekerjaan r2 USING(idkerja) INNER JOIN ref_penghasilan r3 USING(idhsl) WHERE ay.hubkel='1' AND ay.idsiswa='$d[idsiswa]'");
+			$qayah=$conn->query("SELECT ay.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ay LEFT JOIN ref_pendidikan r1 USING(idpddk) LEFT JOIN ref_pekerjaan r2 USING(idkerja) LEFT JOIN ref_penghasilan r3 USING(idhsl) WHERE ay.hubkel='1' AND ay.idsiswa='$d[idsiswa]'");
 			$da=$qayah->fetch_array();
+			//var_dump($da);
 			$this->SetFont('Times','',11);
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'1.');
 			$this->Cell(4.0,0.575,'Nama Lengkap');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$da['nmortu']);
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'a. Ayah');
+			$this->Cell(0.25,0.575,':');		
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'b. Ibu');
+			$this->Cell(0.25,0.575,':');		
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'2.');
-			$this->Cell(4.0,0.575,'N I K');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$da['nik']);
+			$this->Cell(4.0,0.575,'Agama / Kepercayaan');
+			$this->Cell(0.25,0.575);
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'a. Ayah');
+			$this->Cell(0.25,0.575,':');
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'b. Ibu');
+			$this->Cell(0.25,0.575,':');
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'3.');
-			$this->Cell(4.0,0.575,'Tempat, Tanggal Lahir');
+			$this->Cell(4.0,0.575,'Pendidikan Terakhir');
+			$this->Cell(0.25,0.575,':');
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'a. Ayah');
+			$this->Cell(0.25,0.575,':');
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$da['tmplahir'].', '.indonesian_date($da['tgllahir']));
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'4.');
-			$this->Cell(4.0,0.575,'Agama / Kepercayaan');
-			$this->Cell(0.25,0.575,':');
-			switch($da['idagama']){
-				case 'A' : {$agm='Islam';break;}
-				case 'B' : {$agm='Kristen';break;}
-				case 'C' :
-			}
-			$this->Cell(8.25,0.575,$agm);
+			$this->Cell(4.0,0.575,'Pekerjaan');
+			$this->Cell(0.25,0.575);		
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'a. Ayah');
+			$this->Cell(0.25,0.575,':');		
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'b. Ibu');
+			$this->Cell(0.25,0.575,':');		
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'5.');
-			$this->Cell(4.0,0.575,'Pendidikan Terakhir');
+			$this->Cell(4.0,0.575,'Penghasilan Per Bulan');
+			$this->Cell(0.25,0.575);
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$da['pendidikan']);
+			$this->Cell(8.25,0.575);
+			$this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'b. Ibu');
+			$this->Cell(0.25,0.575,':');
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'6.');
-			$this->Cell(4.0,0.575,'Pekerjaan');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$da['pekerjaan']);
+			$this->Cell(4.0,0.575,'Masih Hidup / Sudah Meninggal');
+			$this->Cell(0.25,0.575);
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'7.');
-			$this->Cell(4.0,0.575,'Penghasilan Per Bulan');
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$da['penghasilan']);
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'8.');
-			$this->Cell(4.0,0.575,'Masih Hidup/Meninggal');
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$da['penghasilan']);
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'9.');
 			$this->Cell(4.0,0.575,'Alamat');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$da['alamat'].', Desa '.$da['desa']);
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575);
 			$this->Cell(0.25,0.575);		
-			$this->Cell(8.25,0.575,'Kecamatan '.str_replace('Kec. ','', $da['kec']).', Kabupaten / Kota '.$da['kab']);
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'10.');
+			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'Nomor HP');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$da['nohp']);
+			$this->Cell(8.25,0.575);
 			$this->Ln(0.75);
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.575,'D.');
-			$this->Cell(11.5,0.575,'Keterangan Ibu Kandung');
-			$this->Ln();
-			$qibu=$conn->query("SELECT ib.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ib INNER JOIN ref_pendidikan r1 USING(idpddk) INNER JOIN ref_pekerjaan r2 USING(idkerja) INNER JOIN ref_penghasilan r3 USING(idhsl) WHERE ib.hubkel='2' AND ib.idsiswa='$d[idsiswa]'");
-			$di=$qibu->fetch_array();
-			$this->SetFont('Times','',11);
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'1.');
-			$this->Cell(4.0,0.575,'Nama Lengkap');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$di['nmortu']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'2.');
-			$this->Cell(4.0,0.575,'N I K');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$di['nik']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'3.');
-			$this->Cell(4.0,0.575,'Tempat, Tanggal Lahir');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$di['tmplahir'].', '.indonesian_date($di['tgllahir']));
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'4.');
-			$this->Cell(4.0,0.575,'Agama / Kepercayaan');
-			$this->Cell(0.25,0.575,':');
-			switch($di['idagama']){
-				case 'A' : {$agm='Islam';break;}
-				case 'B' : {$agm='Kristen';break;}
-			}
-			$this->Cell(8.25,0.575,$agm);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'5.');
-			$this->Cell(4.0,0.575,'Pendidikan Terakhir');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$di['pendidikan']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'6.');
-			$this->Cell(4.0,0.575,'Pekerjaan');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$di['pekerjaan']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'7.');
-			$this->Cell(4.0,0.575,'Penghasilan Per Bulan');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$di['penghasilan']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'8.');
-			$this->Cell(4.0,0.575,'Masih Hidup/Meninggal');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$di['penghasilan']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'9.');
-			$this->Cell(4.0,0.575,'Alamat');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$di['alamat'].', Desa '.$di['desa']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575);
-			$this->Cell(0.25,0.575);		
-			$this->Cell(8.25,0.575,'Kecamatan '.str_replace('Kec. ','', $di['kec']).', Kabupaten / Kota '.$di['kab']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'10.');
-			$this->Cell(4.0,0.575,'Nomor HP');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$di['nohp']);
-			$this->Ln(0.75);
-			$this->SetFont('Times','B',11);
-			$this->Cell(0.75,0.575,'E.');
 			$this->Cell(11.5,0.575,'Keterangan Wali Peserta Didik');
 			$this->Ln();
 			$qwali=$conn->query("SELECT wa.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu wa INNER JOIN ref_pendidikan r1 USING(idpddk) INNER JOIN ref_pekerjaan r2 USING(idkerja) INNER JOIN ref_penghasilan r3 USING(idhsl) WHERE wa.hubkel<>'2' AND wa.hubkel<>'1' AND wa.idsiswa='$d[idsiswa]'");
@@ -545,70 +566,48 @@
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'2.');
-			$this->Cell(4.0,0.575,'N I K');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$dw['nik']);
+			$this->Cell(4.0,0.575,'Agama / Kepercayaan');
+			$this->Cell(0.25,0.575,':');
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'3.');
-			$this->Cell(4.0,0.575,'Tempat, Tanggal Lahir');
-			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$dw['tmplahir'].', '.indonesian_date($dw['tgllahir']));
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'4.');
-			$this->Cell(4.0,0.575,'Agama / Kepercayaan');
-			$this->Cell(0.25,0.575,':');
-			switch($dw['idagama']){
-				case 'A' : {$agm='Islam';break;}
-				case 'B' : {$agm='Kristen';break;}
-			}
-			$this->Cell(8.25,0.575,$agm);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'5.');
 			$this->Cell(4.0,0.575,'Pendidikan Terakhir');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575,$dw['pendidikan']);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'6.');
+			$this->Cell(0.75,0.575,'4.');
 			$this->Cell(4.0,0.575,'Pekerjaan');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575,$dw['pekerjaan']);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'7.');
+			$this->Cell(0.75,0.575,'5.');
 			$this->Cell(4.0,0.575,'Penghasilan Per Bulan');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575,$dw['penghasilan']);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'8.');
-			$this->Cell(4.0,0.575,'Masih Hidup/Meninggal');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,$dw['penghasilan']);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'9.');
+			$this->Cell(0.75,0.575,'6.');
 			$this->Cell(4.0,0.575,'Alamat');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$dw['alamat'].', Desa '.$dw['desa']);
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575);
 			$this->Cell(0.25,0.575);		
-			$this->Cell(8.25,0.575,'Kecamatan '.str_replace('Kec. ','', $dw['kec']).', Kabupaten / Kota '.$dw['kab']);
+			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575,'10.');
+			$this->Cell(0.75,0.575,'7.');
 			$this->Cell(4.0,0.575,'Nomor HP');
 			$this->Cell(0.25,0.575,':');		
 			$this->Cell(8.25,0.575,$dw['nohp']);
 			$this->Ln(0.75);
 			$this->SetFont('Times','B',11);
-			$this->Cell(0.75,0.575,'F.');
+			$this->Cell(0.75,0.575,'E.');
 			$this->Cell(11.5,0.575,'Catatan Perkembangan Peserta Didik');
 			$this->Ln();
 			$this->SetFont('Times','',11);
@@ -624,7 +623,7 @@
 			$this->Cell(2.0,0.575,'Berat',1,0,'C');
 			$this->Cell(3.0,0.575,'Lingkar Kepala',1,0,'C');
 			$this->Ln();
-			for($i=1;$i<=3;$i++){
+			for($i=1;$i<=8;$i++){
 				$this->Cell(0.75,0.575);
 				$this->Cell(0.75,0.575);
 				$this->Cell(1.0,0.575,$i.'.',1,0,'C');
@@ -634,6 +633,7 @@
 				$this->Cell(3.0,0.575,'',1,0,'C');
 				$this->Ln();
 			}
+			//$this->Ln(1.75);
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'2.');
 			$this->Cell(11.5,0.575,'Prestasi');
@@ -646,7 +646,7 @@
 			$this->Cell(2.0,0.575,'Juara',1,0,'C');
 			$this->Cell(3.0,0.575,'Tingkat',1,0,'C');
 			$this->Ln();
-			for($i=1;$i<=3;$i++){
+			for($i=1;$i<=4;$i++){
 				$this->Cell(0.75,0.575);
 				$this->Cell(0.75,0.575);
 				$this->Cell(1.0,0.575,$i.'.',1,0,'C');
@@ -668,7 +668,7 @@
 			$this->Cell(2.0,0.575,'Nominal',1,0,'C');
 			$this->Cell(3.0,0.575,'Keterangan',1,0,'C');
 			$this->Ln();
-			for($i=1;$i<=3;$i++){
+			for($i=1;$i<=4;$i++){
 				$this->Cell(0.75,0.575);
 				$this->Cell(0.75,0.575);
 				$this->Cell(1.0,0.575,$i.'.',1,0,'C');
@@ -678,9 +678,9 @@
 				$this->Cell(3.0,0.575,'',1,0,'C');
 				$this->Ln();
 			}
-			$this->Ln(0.15);
+			$this->Ln(0.25);
 			$this->SetFont('Times','B',11);
-			$this->Cell(0.75,0.575,'G.');
+			$this->Cell(0.75,0.575,'F.');
 			$this->Cell(11.5,0.575,'Meninggalkan Sekolah');
 			$this->Ln();
 			$this->SetFont('Times','',11);
@@ -692,25 +692,19 @@
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575,'a.  Tanggal');
+			$this->Cell(4.0,0.575,'a. Tanggal Lulus');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575,'b.  Nomor Ijazah');
+			$this->Cell(4.0,0.575,'b.  No. Seri dan Tgl. Ijazah');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575,'c.  Nomor Peserta UN');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575,'d.  Melanjutkan Ke');
+			$this->Cell(4.0,0.575,'c.  Melanjutkan Ke');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575);
 			$this->Ln();
@@ -722,19 +716,13 @@
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575,'a.  Tanggal');
+			$this->Cell(4.0,0.575,'a. No. dan Tgl. Surat Pindah');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575,'b.  Nomor Surat Pindah');
-			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575);
-			$this->Ln();
-			$this->Cell(0.75,0.575);
-			$this->Cell(0.75,0.575);
-			$this->Cell(4.0,0.575,'c.  Sekolah Tujuan');
+			$this->Cell(4.0,0.575,'b.  Sekolah Tujuan');
 			$this->Cell(0.25,0.575,':');
 			$this->Cell(8.25,0.575);
 			$this->Ln();
@@ -781,7 +769,7 @@
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-	$qsiswa=$conn->query("SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si LEFT JOIN tbregistrasi rg USING(idsiswa) LEFT JOIN tbrombel rb USING(idrombel) LEFT JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' OR rb.idthpel='$_COOKIE[c_tahun]'");
+	$qsiswa=$conn->query("SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbrombel rb USING(idrombel) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND rg.idjreg='1' OR rg.idjreg='2'");
 	while($ds=$qsiswa->fetch_assoc()){
     	$pdf->PrintChapter($ds['idsiswa']);//, $ds['nisn']);
 	}
