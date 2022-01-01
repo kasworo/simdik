@@ -182,7 +182,102 @@
 		$objPHPExcel->getSheet(0)->getColumnDimension('G')->setWidth(12);		
 	}
 	else if($_GET['d']=='2'){
-		
+		$nama="tb_riwayatskul";
+		$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A1', 'TEMPLATE DATA RIWAYAT SEKOLAH')
+			->mergeCells('A1:N1')
+			->mergeCells('A3:A4')
+			->mergeCells('B3:B4')
+			->mergeCells('C3:C4')
+			->mergeCells('D3:D4')
+			->mergeCells('E3:E4')
+			->mergeCells('F3:I3')
+			->mergeCells('J3:M3')
+			->mergeCells('N3:N4')
+			->setCellValue('A3', 'No')
+			->setCellValue('A5', '(1)')
+			->setCellValue('B3', 'N I S')
+			->setCellValue('B5', '(2)')
+			->setCellValue('C3', 'N I S N') 
+			->setCellValue('C5', '(3)') 
+			->setCellValue('D3', 'Nama Peserta Didik')
+			->setCellValue('D5', '(4)')
+			->setCellValue('E3', 'JReg')
+			->setCellValue('E5', '(5)')
+			->setCellValue('F3', 'Asal SD/MI')
+			->setCellValue('F4', 'Nama Sekolah')
+			->setCellValue('F5', '(6)')
+			->setCellValue('G4', 'No. Ijazah')
+			->setCellValue('G5', '(7)')
+			->setCellValue('H4', 'Tgl. Ijazah')
+			->setCellValue('H5', '(8)')
+			->setCellValue('I4', 'Lama')
+			->setCellValue('I5', '(9)')
+			->setCellValue('J3', 'Asal SMP/MTs')
+			->setCellValue('J4', 'Nama Sekolah')
+			->setCellValue('J5', '(10)')
+			->setCellValue('K4', 'No. Surat Pindah')
+			->setCellValue('K5', '(11)')
+			->setCellValue('L4', 'Tgl. Surat Pindah')
+			->setCellValue('L5', '(12)')
+			->setCellValue('M4', 'Alasan')
+			->setCellValue('M5', '(13)')
+			->setCellValue('N3', 'Ket.')
+			->setCellValue('N5', '(14)');
+			$field=array('idsiswa', 'nmsiswa','nisn','nis', 'jnsregistrasi', 'idjreg','rw.*');
+			$tbl=array(
+				'tbriwayatskul rw'=>'idsiswa',
+                'ref_jnsregistrasi'=>'idjreg'		
+			);
+			$where =array(
+				'deleted'=>'0'
+			); 
+			$datane=leftjoin($field,'tbsiswa', $tbl, $where);
+			foreach($datane as $row){
+				$no++;
+				$objPHPExcel->setActiveSheetIndex(0)
+					->setCellValue("A$baris", $no)
+					->setCellValue("B$baris",($row['nis']))
+					->setCellValue("C$baris",$row['nisn'])
+					->setCellValue("D$baris",ucwords(strtolower($row['nmsiswa'])))
+					->setCellValue("E$baris",$row['idjreg'])
+					->setCellValue("F$baris",$row['aslsd'])
+					->setCellValue("G$baris",$row['noijazah'])
+					->setCellValue("H$baris",$row['tglijazah'])
+					->setCellValue("I$baris",$row['lama'])
+					->setCellValue("J$baris",$row['aslsmp'])
+					->setCellValue("K$baris",$row['nosurat'])
+					->setCellValue("L$baris",$row['tglsurat'])
+					->setCellValue("M$baris",$row['alasan'])
+					->setCellValue("N$baris",$row['jnsregistrasi']);
+				$baris++;
+			}
+			$semua=$baris-1;
+			$objPHPExcel->getActiveSheet()->freezePane("A6");
+			$objPHPExcel->setActiveSheetIndex()->getStyle("A6:N$semua");
+			$objPHPExcel->setActiveSheetIndex()->getStyle("A1:N5")			->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				$center = array();
+				$center ['alignment']=array();
+				$center ['alignment']['horizontal']=PHPExcel_Style_Alignment::HORIZONTAL_CENTER;
+				$objPHPExcel->setActiveSheetIndex()->getStyle("A1:N5")->applyFromArray($center);
+				$objPHPExcel->setActiveSheetIndex()->getStyle("A6:C$semua")->applyFromArray($center);
+				$objPHPExcel->setActiveSheetIndex()->getStyle("G6:I$semua")->applyFromArray($center);
+				$objPHPExcel->setActiveSheetIndex()->getStyle("K6:L$semua")->applyFromArray($center);
+				$thick = array();
+				$thick['borders']=array();
+				$thick['borders']['allborders']=array();
+				$thick['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_THIN;
+				$objPHPExcel->setActiveSheetIndex()->getStyle("A3:N$semua")->applyFromArray($thick); 
+				$objPHPExcel->getActiveSheet()->getStyle('A3:A5')->getAlignment()->setWrapText(true);
+				$objPHPExcel->getSheet(0)->getColumnDimension('A')->setWidth(4);
+				$objPHPExcel->getSheet(0)->getColumnDimension('B')->setWidth(8);
+				$objPHPExcel->getSheet(0)->getColumnDimension('C')->setWidth(12);
+				$objPHPExcel->getSheet(0)->getColumnDimension('D')->setWidth(36);
+				$objPHPExcel->getSheet(0)->getColumnDimension('E')->setWidth(8);
+				$objPHPExcel->getSheet(0)->getColumnDimension('F')->setWidth(36);
+				$objPHPExcel->getSheet(0)->getColumnDimension('G')->setWidth(16);
+				$objPHPExcel->getSheet(0)->getColumnDimension('H')->setWidth(16);
+				$objPHPExcel->getSheet(0)->getColumnDimension('I')->setWidth(8);
 	}
 	else {
 		$objPHPExcel->setActiveSheetIndex(0)

@@ -272,7 +272,7 @@
 									case 'eksporsiswa' : {include "siswa_ekspor.php";break;}
 									case 'addrombel' : {include "form_rombel.php";break;}
 									case 'regsiswa' : {include "siswa_registrasi.php";break;}
-
+                                    case 'rwyskul' : {include "siswa_rwyskul.php";break;}
 									case 'kompetensi' : {include "kompetensi_tampil.php";break;}
 
 									case 'datarapor' : {include "rapor_tampil.php";break;}

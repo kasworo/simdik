@@ -105,7 +105,7 @@
                         <p>Tambah Data</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="fas fa-user-check nav-icon"></i>
                         <p>Perkembangan PD
@@ -114,29 +114,31 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                            <a href="index.php?p=rwyskul" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Riwayat Pendidikan</p>
                             </a>
                         </li>
-                        <a href="index.php?p=regsiswa" class="nav-link">
-                            <i class="fas fa-list nav-icon"></i>
-                            <p>Riwayat Kelas</p>
-                        </a>
                         <li class="nav-item">
-                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                            <a href="index.php?p=regsiswa" class="nav-link">
+                                <i class="fas fa-list nav-icon"></i>
+                                <p>Riwayat Kelas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?p=rwysehat" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Kesehatan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                            <a href="index.php?p=rwyprestasi" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Prestasi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                            <a href="index.php?p=rwybeasiswa" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Beasiswa</p>
                             </a>
