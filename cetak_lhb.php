@@ -1,5 +1,4 @@
 <?php
-	if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
 	require('assets/library/fpdf/fpdf.php'); 
 	class PDF extends FPDF
     {
@@ -36,8 +35,7 @@
 
         function ChapterBody($nisn)
         {
-            include "config/konfigurasi.php";
-            include "config/fungsi_tgl.php";
+            global $conn;
             $qisi=$conn->query("SELECT*FROM tbsiswa WHERE nisn='$nisn'");
             $d=$qisi->fetch_array();
             $this->SetFont('Times','',10);
@@ -253,14 +251,14 @@
             }
             $this->Ln(0.35);
             $this->Cell(4.5,1.15,'Penilaian Sikap',1,0,'L');
-            $this->Cell(5.0,0.575,'Spiritual',1,0,'L');
+            $this->Cell(4.75,0.575,'Spiritual',1,0,'L');
             $this->Cell(4.75,0.575,'',1,0,'C');
             $this->Cell(4.75,0.575,'',1,0,'C');
             $this->Cell(4.75,0.575,'',1,0,'C');
             $this->Cell(4.75,0.575,'',1,0,'C');
             $this->Ln();
             $this->Cell(4.5,0.575);
-            $this->Cell(5.0,0.575,'Sosial',1,0,'L');
+            $this->Cell(4.75,0.575,'Sosial',1,0,'L');
             $this->Cell(4.75,0.575,'',1,0,'C');
             $this->Cell(4.75,0.575,'',1,0,'C');
             $this->Cell(4.75,0.575,'',1,0,'C');	
@@ -332,14 +330,15 @@
 			$this->ChapterBody($nisn);
         }
     }
-    include "config/konfigurasi.php";
-	include "config/fungsi_tgl.php";
+    include "dbfunction.php";
     $pdf = new PDF('L','cm',array(21.5,33.0));
     $pdf->SetMargins(2.75,1.75,1.25);
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-    $qsiswa=$conn->query("SELECT si.* FROM tbsiswa si LEFT JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbrombel rb USING(idrombel) INNER JOIN tbthpel th USING(idthpel) WHERE rg.idjreg='1' OR rg.idjreg='2' AND th.nmthpel LIKE '$_REQUEST[id]%'");
+    $sql="SELECT si.* FROM tbsiswa si LEFT JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbkelas kls USING(idkelas) INNER JOIN tbthpel th USING(idthpel) WHERE rg.idjreg='1' OR rg.idjreg='2' AND th.nmthpel LIKE '$_GET[id]%'";
+   // var_dump($sql);
+    $qsiswa=$conn->query($sql);
     while($ds=$qsiswa->fetch_array()){
         $pdf->PrintChapter($ds['nmsiswa'], $ds['nis'], $ds['nisn']);
     }

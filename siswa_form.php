@@ -8,6 +8,7 @@
 	else {
 		$idsiswa=$_GET['id'];
 	}
+    
 	if(isset($_POST['simpan'])) {
         if(empty($_POST['idsiswa'])){
             $data=array(

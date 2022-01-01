@@ -1,7 +1,8 @@
 <?php
 	require_once 'assets/library/PHPExcel.php';
 	require_once 'assets/library/excel_reader.php';
-	
+	// include "dbfunction.php";
+	// var_dump($_FILES['filepd']);die;
 	if(empty($_FILES['filepd']['tmp_name'])) { 
 		echo "<script>
 			$(function() {
@@ -144,43 +145,46 @@
 
 			}
 			else {
-				$datasiswa=array(
-					'idskul'=>$idskul,
-					'nmsiswa' =>$xnama,
-					'nik' =>$xnik,
-					'nis' =>$xnis,
-					'nisn' =>$xnisn,
-					'tmplahir' => $xtmplhr,
-					'tgllahir' =>$xtgllhr,
-					'gender' =>$xjekel,
-					'agama' =>$xagama,
-					'anake' =>$xanak,
-					'saudara' =>$xsdr,
-					'warganegara' =>'1',
-					'goldarah' =>$xdrh,
-					'penyakit' =>$xsakit,
-					'kebkhusus' =>$xkeb,
-					'reftgl' =>$xikut,
-					'transpor' =>$xtrans,
-					'jarak' =>$xjrk,
-					'waktu' =>$xwkt,
-					'almt' =>$xalmt,
-					'desa' =>$xdesa,
-					'kec' =>$xkec,
-					'kab' =>$xkab,
-					'prov' =>$xprov,
-					'kdpos' =>$xkdpos,
-					'longitude' =>$xltg,
-					'latitude' =>$xbjr,
-					'nohp' =>$xnohp,
-					'olahrg' =>$xolga,
-					'seni' =>$xseni,
-					'orgns' =>$xorgn,
-					'lain' =>$xlain
+				$key=array(
+					'nisn'=>$xnisn,
+					'nis'=>$xnis
 				);
-				$qpd="SELECT*FROM tbsiswa WHERE nis='$xnis' AND nisn='$xnisn'";
-				if(ceksiswa($qpd)>0){
-					if(editsiswa($datasiswa,'2')>0){
+				$ceksiswa=cekdata('tbsiswa',$key);
+				if($ceksiswa>0){
+					$datasiswa=array(
+						'idskul'=>$idskul,
+						'nmsiswa' =>$xnama,
+						'nik' =>$xnik,
+						'tmplahir' => $xtmplhr,
+						'tgllahir' =>$xtgllhr,
+						'gender' =>$xjekel,
+						'agama' =>$xagama,
+						'anake' =>$xanak,
+						'saudara' =>$xsdr,
+						'warganegara' =>'1',
+						'goldarah' =>$xdrh,
+						'penyakit' =>$xsakit,
+						'kebkhusus' =>$xkeb,
+						'reftgl' =>$xikut,
+						'transpor' =>$xtrans,
+						'jarak' =>$xjrk,
+						'waktu' =>$xwkt,
+						'almt' =>$xalmt,
+						'desa' =>$xdesa,
+						'kec' =>$xkec,
+						'kab' =>$xkab,
+						'prov' =>$xprov,
+						'kdpos' =>$xkdpos,
+						'longitude' =>$xltg,
+						'latitude' =>$xbjr,
+						'nohp' =>$xnohp,
+						'olahrg' =>$xolga,
+						'seni' =>$xseni,
+						'orgns' =>$xorgn,
+						'lain' =>$xlain
+					);
+					
+					if(editdata('tbsiswa',$datasiswa,'',$key)>0){
 						echo "<script>
 							$(function() {
 								toastr.success('Update Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
@@ -203,7 +207,42 @@
 					}
 				} 
 				else {
-					if(addsiswa($datasiswa,'2')>0){
+					$datasiswa=array(
+						'idskul'=>$idskul,
+						'nmsiswa' =>$xnama,
+						'nik' =>$xnik,
+						'nis' =>$xnis,
+						'nisn' =>$xnisn,
+						'tmplahir' => $xtmplhr,
+						'tgllahir' =>$xtgllhr,
+						'gender' =>$xjekel,
+						'agama' =>$xagama,
+						'anake' =>$xanak,
+						'saudara' =>$xsdr,
+						'warganegara' =>'1',
+						'goldarah' =>$xdrh,
+						'penyakit' =>$xsakit,
+						'kebkhusus' =>$xkeb,
+						'reftgl' =>$xikut,
+						'transpor' =>$xtrans,
+						'jarak' =>$xjrk,
+						'waktu' =>$xwkt,
+						'almt' =>$xalmt,
+						'desa' =>$xdesa,
+						'kec' =>$xkec,
+						'kab' =>$xkab,
+						'prov' =>$xprov,
+						'kdpos' =>$xkdpos,
+						'longitude' =>$xltg,
+						'latitude' =>$xbjr,
+						'nohp' =>$xnohp,
+						'olahrg' =>$xolga,
+						'seni' =>$xseni,
+						'orgns' =>$xorgn,
+						'lain' =>$xlain
+					);
+					
+					if(adddata('tbsiswa',$datasiswa)>0){
 						echo "<script>
 							$(function() {
 								toastr.success('Tambah Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{

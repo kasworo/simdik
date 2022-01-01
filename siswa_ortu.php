@@ -58,7 +58,7 @@
 			$xkdpos = $data->val($i,18);
 			$xnohp = $data->val($i,19);
 			$xhidup = $data->val($i,20);
-			$xhubkel= $data->val($i,21);
+			$xhubkel= $hubkel;
 			if(strlen($nmagama)==1){$xagama=$nmagama;}
 				else {
 					switch ($nmagama) {
@@ -75,38 +75,61 @@
 			if($xnik==''|| $xnis==''|| strlen($xnisn)<>10 || $xnisn=='' || strlen($xnama)<1 || $xnama=='' || strlen($xtmplhr)<1 || $xtmplhr=='' || strlen($xtgllhr)<1 || $xtgllhr=='' || $xagama=='' ){
 				$gagal++;
 			}
-			else {
-
-				$dataortu=array('idsiswa' =>$idsiswa,
-					'nmortu'=>$xnama,
-					'tmplahir' => $xtmplhr,
-					'tgllahir' =>$xtgllhr,
-					'agama' =>$xagama,
-					'pddkortu'=>$xpddk,
-					'hidup'=>$xhidup,
-					'kerjaortu'=>$xkrj,
-					'hasilortu'=>$xhsl,
-					'hubkel'=>$xhubkel,
-					'almt' =>$xalmt,
-					'desa' =>$xdesa,
-					'kec' =>$xkec,
-					'kab' =>$xkab,
-					'prov' =>$xprov,
-					'kdpos' =>$xkdpos,
-					'nohp' =>$xnohp
+			else {				
+				$key=array(
+					'idsiswa'=>$idsiswa,
+					'hubkel'=>$hubkel
 				);
-				$qpd="SELECT*FROM tbortu WHERE idsiswa='$idsiswa' AND hubkel='$hubkel'";
-				if(ceksiswa($qpd)>0){
-					if(editsiswa($datasiswa,2)>0){
-						$update++;
-					}
+				$cekdata=cekdata('tbortu',$key);
+				if($cekdata>0){
+					$dataortu=array(
+						'nmortu'=>$xnama,
+						'tmplahir' => $xtmplhr,
+						'tgllahir' =>$xtgllhr,
+						'agama' =>$xagama,
+						'pddkortu'=>$xpddk,
+						'hidup'=>$xhidup,
+						'idkerja'=>$xkrj,
+						'idhsl'=>$xhsl,
+						'almt' =>$xalmt,
+						'desa' =>$xdesa,
+						'kec' =>$xkec,
+						'kab' =>$xkab,
+						'prov' =>$xprov,
+						'kdpos' =>$xkdpos,
+						'nohp' =>$xnohp
+					);
+					$editortu=editdata('tbortu',$dataortu,'',$key);
+					$update++;
 				} 
 				else {
-					if(addsiswa($datasiswa,2)>0){
+					$dataortu=array(
+						'idsiswa' =>$idsiswa,
+						'nmortu'=>$xnama,
+						'tmplahir' => $xtmplhr,
+						'tgllahir' =>$xtgllhr,
+						'agama' =>$xagama,
+						'pddkortu'=>$xpddk,
+						'hidup'=>$xhidup,
+						'idkerja'=>$xkrj,
+						'idhsl'=>$xhsl,
+						'hubkel'=>$xhubkel,
+						'almt' =>$xalmt,
+						'desa' =>$xdesa,
+						'kec' =>$xkec,
+						'kab' =>$xkab,
+						'prov' =>$xprov,
+						'kdpos' =>$xkdpos,
+						'nohp' =>$xnohp
+					);
+					$tambah=adddata('tbortu',$dataortu);
+					if($tambah>0){
 						$sukses++;
+					}					
+					else {
+						$gagal++;
 					}
-				}
-				
+				}				
 			}
 		}
 		if($gagal>0){

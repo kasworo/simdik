@@ -1,13 +1,11 @@
 <?php
 	require_once "assets/library/PHPExcel.php";
-	include "config/konfigurasi.php";
-	include "config/function_siswa.php";
-	include "config/function_skul.php";
+	include "dbfunction.php";
 	
 	$objPHPExcel = new PHPExcel();
 	$objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
 		->setLastModifiedBy("Kasworo Wardani")
-		->setTitle("TemplateGTK")
+		->setTitle("Template")
 		->setCompany("Z&N.Corp");
 	$idskul=getskul();
 	$semua=0;
@@ -105,9 +103,11 @@
 			->setCellValue('AD5', '(30)')
 			->setCellValue('AE4', 'Lainnya')
 			->setCellValue('AE5', '(31)');
-			$qsiswa="SELECT*FROM tbsiswa WHERE idskul='$idskul'";
-			if(ceksiswa($qsiswa)>0){
-				foreach(viewsiswa($qsiswa) as $s)
+			$key=array('idskul'=>$idskul);
+			$ceksiswa=cekdata('tbsiswa',$key);
+			if($ceksiswa>0){
+				$data=viewdata('tbsiswa',$key);
+				foreach($data as $s)
 				{
 					$no++;
 					$objPHPExcel->setActiveSheetIndex(0)
@@ -155,12 +155,10 @@
 						$objPHPExcel->setActiveSheetIndex(0)->setCellValue("C$baris",'');
 						$baris++; 
 				}
-			}
+			}		
 		$semua=$baris-1;
 		$objPHPExcel->getActiveSheet()->freezePane("A6");
-		$objPHPExcel->setActiveSheetIndex()->getStyle("A6:AE$semua")->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_STRING);
-		
-
+		$objPHPExcel->setActiveSheetIndex()->getStyle("A6:AE$semua");
 		$objPHPExcel->setActiveSheetIndex()->getStyle("A1:AE5")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 		$center = array();
 		$center ['alignment']=array();
@@ -181,22 +179,12 @@
 		$objPHPExcel->getSheet(0)->getColumnDimension('D')->setWidth(12);
 		$objPHPExcel->getSheet(0)->getColumnDimension('E')->setWidth(38);
 		$objPHPExcel->getSheet(0)->getColumnDimension('F')->setWidth(16);
-		$objPHPExcel->getSheet(0)->getColumnDimension('G')->setWidth(12);
-	} 
+		$objPHPExcel->getSheet(0)->getColumnDimension('G')->setWidth(12);		
+	}
+	else if($_GET['d']=='2'){
+		
+	}
 	else {
-		if($_GET['d']=='2'){
-			$nama="tb_ayah";
-			$qsiswa="SELECT a.*, s.nmsiswa, s.nisn, s.nis FROM tbsiswa s INNER JOIN tbortu a ON s.idsiswa=a.idsiswa WHERE s.idskul='$idskul' AND a.hubkel='1' ORDER BY s.nmsiswa";
-		}
-		else if($_GET['d']=='3'){
-			$nama="tb_ibu";
-			$qsiswa="SELECT a.*, s.nmsiswa, s.nisn, s.nis FROM tbsiswa s INNER JOIN tbortu a ON s.idsiswa=a.idsiswa WHERE s.idskul='$idskul' AND a.hubkel='2' ORDER BY s.nmsiswa";
-
-		}
-		else {
-			$nama="tb_wali";
-			$qsiswa="SELECT a.*, s.nmsiswa, s.nisn, s.nis FROM tbsiswa s INNER JOIN tbortu a ON s.idsiswa=a.idsiswa WHERE s.idskul='$idskul' AND a.hubkel<>'1' AND a.hubkel<>'2' ORDER BY s.nmsiswa";
-		}
 		$objPHPExcel->setActiveSheetIndex(0)
 			->mergeCells('A1:U1')
 			->mergeCells('A3:A4')
@@ -214,18 +202,17 @@
 			->mergeCells('S3:S4')
 			->mergeCells('T3:T4')
 			->mergeCells('U3:U4')
-			->setCellValue('A1', 'TEMPLATE DATA ORANG TUA/WALI PESERTA DIDIK')
 			->setCellValue('A3', 'No')
 			->setCellValue('A5', '(1)')
-			->setCellValue('B3', 'NIS')
+			->setCellValue('B3', 'N I S')
 			->setCellValue('B5', '(2)')
-			->setCellValue('C3', 'NISN') 
-			->setCellValue('C5', '(3)')
-			->setCellValue('D3', 'Nama Peserta Didik') 
-			->setCellValue('D5', '(4)') 
-			->setCellValue('E3', 'Nama Orang Tua/Wali')
-			->setCellValue('E5', '(5)') 
-			->setCellValue('F3', 'NIK Orang Tua/Wali')
+			->setCellValue('C3', 'N I S N') 
+			->setCellValue('C5', '(3)') 
+			->setCellValue('D3', 'Nama Peserta Didik')
+			->setCellValue('D5', '(4)')
+			->setCellValue('E3', 'Nama Orang Tua')
+			->setCellValue('E5', '(5)')
+			->setCellValue('F3', 'N I K')
 			->setCellValue('F5', '(6)')
 			->setCellValue('G3', 'Tempat Dan Tanggal Lahir')
 			->setCellValue('G4', 'Tempat')
@@ -240,7 +227,7 @@
 			->setCellValue('K5', '(11)')
 			->setCellValue('L3', 'Penghasilan')
 			->setCellValue('L5', '(12)')
-			->setCellValue('M3', 'Alamat Orang Tua/Wali')
+			->setCellValue('M3', 'Alamat ')
 			->setCellValue('M4', 'Alamat')
 			->setCellValue('M5', '(13)')
 			->setCellValue('N4', 'Desa')
@@ -255,116 +242,115 @@
 			->setCellValue('R5', '(18)')
 			->setCellValue('S3', 'No. HP')
 			->setCellValue('S5', '(19)')
-			->setCellValue('T3', 'Masih Hidup')
+			->setCellValue('T3', 'Hidup')
 			->setCellValue('T5', '(20)')
-			->setCellValue('U3', 'Hubungan Keluarga')
+			->setCellValue('U3', 'Ket.')
 			->setCellValue('U5', '(21)');
-			if(ceksiswa($qsiswa)>0){
-				foreach(viewsiswa($qsiswa) as $s)
-				{
-					$no++;
-					$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue("A$baris", $no)
-						->setCellValue("B$baris",$s['nis'])
-						->setCellValue("C$baris",$s['nisn'])
-						->setCellValue("D$baris",$s['nmsiswa'])						
-						->setCellValue("E$baris",$s['nmortu'])
-						->setCellValue("F$baris",$s['nik'])
-						->setCellValue("G$baris",$s['tmplahir'])
-						->setCellValue("H$baris",$s['tgllahir'])
-						->setCellValue("I$baris",$s['idagama'])
-						->setCellValue("J$baris",$s['idppdk'])
-						->setCellValue("K$baris",$s['idkerja'])
-						->setCellValue("L$baris",$s['idhsl'])
-						->setCellValue("M$baris",$s['alamat'])
-						->setCellValue("N$baris",$s['desa'])
-						->setCellValue("O$baris",$s['kec'])
-						->setCellValue("P$baris",$s['kab'])
-						->setCellValue("Q$baris",$s['prov'])
-						->setCellValue("R$baris",$s['kdpos'])
-						->setCellValue("S$baris",$s['nohp'])
-						->setCellValue("T$baris",$s['hidup'])
-						->setCellValue("U$baris",$s['hubkel']);
-					$baris++;
-				}
+		$key=array('idskul'=>$idskul);
+		$ceksiswa=cekdata('tbsiswa',$key);
+		if($_GET['d']=='3'){
+			$nama="tb_ayah";
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A1', 'TEMPLATE DATA AYAH');			
+			$keya=array(
+				'idskul'=>$idskul,
+				'hubkel'=>'1'
+			);
+			$joina=array('tbortu ay'=>'idsiswa');
+			$cekayah=cekfulljoin('ay.*','tbsiswa',$joina,$keya);
+			if($cekayah==$ceksiswa) {
+				$fielda=array('nis', 'nisn', 'nmsiswa', 'ay.*');
+				$datane=fulljoin($fielda,'tbsiswa',$joina,$keya);
 			}
 			else {
-				$sql="SELECT a.*, s.nmsiswa, s.nisn, s.nis FROM tbsiswa s LEFT JOIN tbortu a ON s.idsiswa=a.idsiswa WHERE s.idskul='$idskul' ORDER BY s.nmsiswa";
-				foreach(viewsiswa($sql) as $s)
-				{
-					$no++;
-					$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue("A$baris", $no)
-						->setCellValue("B$baris",$s['nis'])
-						->setCellValue("C$baris",$s['nisn'])
-						->setCellValue("D$baris",$s['nmsiswa'])						
-						->setCellValue("E$baris",$s['nmortu'])
-						->setCellValue("F$baris",$s['nik'])
-						->setCellValue("G$baris",$s['tmplahir'])
-						->setCellValue("H$baris",$s['tgllahir'])
-						->setCellValue("I$baris",$s['idagama'])
-						->setCellValue("J$baris",$s['idppdk'])
-						->setCellValue("K$baris",$s['idkerja'])
-						->setCellValue("L$baris",$s['idhsl'])
-						->setCellValue("M$baris",$s['alamat'])
-						->setCellValue("N$baris",$s['desa'])
-						->setCellValue("O$baris",$s['kec'])
-						->setCellValue("P$baris",$s['kab'])
-						->setCellValue("Q$baris",$s['prov'])
-						->setCellValue("R$baris",$s['kdpos'])
-						->setCellValue("S$baris",$s['nohp'])
-						->setCellValue("T$baris",$s['hidup'])
-						->setCellValue("U$baris",$s['hubkel']);
-					$baris++;
-				}
+				$datane=vquery("SELECT nis, nisn, nmsiswa FROM tbsiswa WHERE idskul='$idskul'");
 			}
+		}
+		if($_GET['d']=='4'){
+			$nama="tb_ibu";
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A1', 'TEMPLATE DATA IBU');		
+			$keya=array(
+				'idskul'=>$idskul,
+				'hubkel'=>'2'
+			);
+			$joina=array('tbortu ay'=>'idsiswa');
+			$cekayah=cekfulljoin('ay.*','tbsiswa',$joina,$keya);
+			if($cekayah==$ceksiswa) {
+				$fielda=array('nis', 'nisn', 'nmsiswa', 'ay.*');
+				$datane=fulljoin($fielda,'tbsiswa',$joina,$keya);
+			}
+			else {
+				$datane=vquery("SELECT nis, nisn, nmsiswa FROM tbsiswa WHERE idskul='$idskul'");
+			}
+		}
+		if($_GET['d']=='5'){
+			$nama="tb_wali";
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A1', 'TEMPLATE DATA WALI');			
+			$cekayah=cquery("SELECT nis, nisn, nmsiswa FROM tbsiswa INNER JOIN tbortu USING(idsiswa) WHERE idskul='$idskul' AND hubkel<>'1' AND hubkel<>'2'");
+			if($cekayah>0) {
+				$datane=vquery("SELECT nis, nisn, nmsiswa, ay.* FROM tbsiswa INNER JOIN tbortu ay USING(idsiswa) WHERE idskul='$idskul' AND hubkel<>'1' AND hubkel<>'2'");
+			}
+			else {
+				$datane=vquery("SELECT nis, nisn, nmsiswa FROM tbsiswa WHERE idskul='$idskul'");
+			}
+		}
+		foreach($datane as $row){
+			$no++;
+			$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue("A$baris", $no)
+				->setCellValue("B$baris",($row['nis']))
+				->setCellValue("C$baris",$row['nisn'])
+				->setCellValue("D$baris",ucwords(strtolower($row['nmsiswa'])))
+				->setCellValue("E$baris",ucwords(strtolower($row['nmortu'])))
+				->setCellValue("F$baris",$row['nik'])
+				->setCellValue("I$baris",$row['idagama'])
+				->setCellValue("J$baris",$row['idpddk'])
+				->setCellValue("K$baris",$row['idkerja'])
+				->setCellValue("L$baris",$row['idhsl'])
+				->setCellValue("M$baris",$row['alamat'])
+				->setCellValue("N$baris",$row['desa'])
+				->setCellValue("O$baris",$row['kec'])
+				->setCellValue("P$baris",$row['kab'])
+				->setCellValue("Q$baris",$row['prov'])
+				->setCellValue("R$baris",$row['kdpos'])
+				->setCellValue("S$baris",$row['nohp'])
+				->setCellValue("T$baris",$row['hidup'])
+				->setCellValue("U$baris",$row['hubkel']);
+				$baris++; 
+		}			
 		$semua=$baris-1;
-		$objPHPExcel->getActiveSheet()->freezePane('A6');
-
-		$objPHPExcel->setActiveSheetIndex()->getStyle('A1:T5')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-
-		$center = array();
-		$center ['alignment']=array();
-		$center ['alignment']['horizontal']=PHPExcel_Style_Alignment::HORIZONTAL_CENTER;
-		$objPHPExcel->setActiveSheetIndex()->getStyle('A3:T5')->applyFromArray($center);
-
-		$thick = array();
-		$thick['borders']=array();
-		$thick['borders']['allborders']=array();
-		$thick['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_THIN;
-		$objPHPExcel->setActiveSheetIndex()->getStyle("A3:T$semua")->applyFromArray($thick); 
-
-		$objPHPExcel->getActiveSheet()->getStyle('A3:A5')->getAlignment()->setWrapText(true);
-
-		$objPHPExcel->getSheet(0)->getColumnDimension('A')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('B')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('C')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('D')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('E')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('F')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('G')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('H')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('I')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('J')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('K')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('L')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('M')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('N')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('O')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('P')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('Q')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('R')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('S')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('T')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('U')->setAutoSize(true);	
-	}
-
+		$objPHPExcel->getActiveSheet()->freezePane("A6");
+		$objPHPExcel->setActiveSheetIndex()->getStyle("A6:U$semua");
+		$objPHPExcel->setActiveSheetIndex()->getStyle("A1:U5")			->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$center = array();
+			$center ['alignment']=array();
+			$center ['alignment']['horizontal']=PHPExcel_Style_Alignment::HORIZONTAL_CENTER;
+			$objPHPExcel->setActiveSheetIndex()->getStyle("A1:U5")->applyFromArray($center);
+			$objPHPExcel->setActiveSheetIndex()->getStyle("A6:C$semua")->applyFromArray($center);
+			$objPHPExcel->setActiveSheetIndex()->getStyle("F6:F$semua")->applyFromArray($center);
+			$objPHPExcel->setActiveSheetIndex()->getStyle("H6:L$semua")->applyFromArray($center);
+			$objPHPExcel->setActiveSheetIndex()->getStyle("S6:U$semua")->applyFromArray($center);
+			$thick = array();
+			$thick['borders']=array();
+			$thick['borders']['allborders']=array();
+			$thick['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_THIN;
+			$objPHPExcel->setActiveSheetIndex()->getStyle("A3:U$semua")->applyFromArray($thick); 
+			$objPHPExcel->getActiveSheet()->getStyle('A3:A5')->getAlignment()->setWrapText(true);
+			$objPHPExcel->getSheet(0)->getColumnDimension('A')->setWidth(4);
+			$objPHPExcel->getSheet(0)->getColumnDimension('B')->setWidth(8);
+			$objPHPExcel->getSheet(0)->getColumnDimension('C')->setWidth(12);
+			$objPHPExcel->getSheet(0)->getColumnDimension('D')->setWidth(36);
+			$objPHPExcel->getSheet(0)->getColumnDimension('E')->setWidth(24);
+			$objPHPExcel->getSheet(0)->getColumnDimension('F')->setWidth(16);
+			$objPHPExcel->getSheet(0)->getColumnDimension('G')->setWidth(12);
+	}	
 	$objPHPExcel->getActiveSheet()->setTitle($nama);
 	$objPHPExcel->setActiveSheetIndex(0);
 	header('Content-Type: application/vnd.ms-excel');
 	header('Content-Disposition: attachment;filename="'.$nama.'.xls"');
 	header('Cache-Control: max-age=0');
-	
 	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	$objWriter->save('php://output');
 	exit;

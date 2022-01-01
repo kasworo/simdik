@@ -1,114 +1,7 @@
 <?php
 	require('assets/library/fpdf/fpdf.php'); 
 	include "dbfunction.php";
-	function getagama($idagm){
-		switch($idagm){
-			case 'A' : {$agama ='Islam';break;}
-			case 'B' : {$agama ='Kristen';break;}
-			case 'C' : {$agama ='Katholik';break;}
-			case 'D' : {$agama ='Hindu';break;}
-			case 'E' : {$agama ='Buddha';break;}
-			default : {$agama='-';break;}
-		}
-		return $agama;		
-	}
-	function getgender($id){
-		if($id=='L'){$jk='Laki-laki';} else {$jk='Perempuan';}
-		return $jk;
-	}
-	function getwni($id){
-		if($id=='1'){
-			$wn='Warga Negara Indonesia';
-		}
-		else if($id=='2'){
-			$wn='Warga Negara Asing';
-		} 
-		else {$wn='-';}
-		return $wn;
-	}
-	function gettinggal($id){
-		switch($id){
-			case '1' : {$tggl='Orangtua';break;}
-			case '2' : {$tggl='Wali Murid';break;}
-			case '3' : {$tggl='Kost';break;}
-			case '4' : {$tggl='Asrama';break;}
-			default:{$tggl='-';break;}
-		}
-		return $tggl;
-	}
-	function gettrans($id){
-		switch($id){
-			case '1' : {$trns='Jalan Kaki';break;}
-			case '2' : {$trns='Sepeda';break;}
-			case '3' : {$trns='Sepeda Motor';break;}
-			case '4' : {$trns='Ojek';break;}
-			case '5' : {$trns='Angkutan Umum';break;}
-			case '6' : {$trns='Angkutan Antar Jemput';break;}
-		}
-		return $trns;
-	}
-	function getpenyakit($id){
-		switch ($id){
-			case '0' : {$skt='Tidak Ada';break;}
-			case '1' : {$skt='Demam Berdarah';break;}
-			case '2' : {$skt='Malaria';break;}
-			case '3' : {$skt='Asma';break;}
-			case '4' : {$skt='Campak';break;}
-			case '5' : {$skt='TBC';break;}
-			case '6' : {$skt='Tetanus';break;}
-			case '7' : {$skt='Pneumonia';break;}
-			case '8' : {$skt='Jantung';break;}
-			default:{$skt='-';break;}
-		}
-		return $skt;
-	}
 	
-	function getkebkhusus($id){
-		switch($id){
-			case '0' : {$kbthn='Tidak Ada';break;}
-			case '1' : {$kbthn='Tuna Daksa';break;}
-			case '2' : {$kbthn='Tuna Rungu';break;}
-			case '3' : {$kbthn='Tuna Wicara';break;}
-			case '4' : {$kbthn='Tuna Netra';break;}
-			case '5' : {$kbthn='Tuna Grahita';break;}
-			case '6' : {$kbthn='Down Syndrome';break;}
-			case '7' : {$kbthn='Autisme';break;}
-			default:{$kbthn='-';break;}
-		}
-		return $kbthn;
-	}
-	function getdarah($id){
-		switch($id){
-			case '0' : {$goldarah='Tidak Tahu';break;}
-			case '1' : {$goldarah='A';break;}
-			case '2' : {$goldarah='B';break;}
-			case '3' : {$goldarah='AB';break;}
-			case '4' : {$goldarah='O';break;}
-		}
-		return $goldarah;
-	}
-
-	function getskulortu($id){
-		global $conn;
-		$data=viewdata('ref_pendidikan',array('idpddk'=>$id))[0];
-		return $data['pendidikan'];
-	}
-
-	function getkerjaortu($id){
-		global $conn;
-		$data=viewdata('ref_pekerjaan',array('idkerja'=>$id))[0];
-		return $data['pekerjaan'];
-	}
-	function getgajiortu($id){
-		global $conn;
-		$data=viewdata('ref_penghasilan',array('idhsl'=>$id))[0];
-		return $data['penghasilan'];
-	}
-	function getregis($id){
-		global $conn;
-		$data=viewdata('ref_jnsregistrasi',array('idjreg'=>$id))[0];
-		return $data['jnsregistrasi'];
-	}
 	class PDF extends FPDF
     {
         protected $col = 0;
@@ -297,7 +190,7 @@
 			$this->Cell(0.75,0.575,'16.');
 			$this->Cell(4.0,0.575,'Koordinat');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575);
+			$this->Cell(8.25,0.575,$d['lintang'].' / '.$d['bujur']);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'17.');
@@ -345,7 +238,7 @@
 			$this->Cell(4.0,0.575,'Terdaftar Sebagai');
 			$this->Cell(0.25,0.575,':');
 			
-			$qreg=$conn->query("SELECT*FROM tbregistrasi INNER JOIN tbrombel USING(idrombel) WHERE idsiswa='$d[idsiswa]' AND (idjreg='1' OR idjreg='2')");	
+			$qreg=$conn->query("SELECT idjreg, nmkelas, tglreg FROM tbregistrasi INNER JOIN tbkelas USING(idkelas) WHERE idsiswa='$idsiswa' AND (idjreg='1' OR idjreg='2')");	
 			$rg=$qreg->fetch_assoc();
 			$regis=getregis($rg['idjreg']);
 			$this->Cell(8.25,0.575,$regis);
@@ -360,9 +253,9 @@
 			$this->Cell(0.75,0.575,'3.');
 			$this->Cell(4.0,0.575,'Diterima di kelas');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$rg['nmrombel']);
+			$this->Cell(8.25,0.575,$rg['nmkelas']);
 			$this->Ln();
-			$rw=viewdata('tbriwayatskul', array('idsiswa'=>$d['idsiswa']))[0];
+			$rw=viewdata('tbriwayatskul', array('idsiswa'=>$idsiswa))[0];
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'4.');
 			$this->Cell(4.0,0.575,'Lulus Dari');
@@ -377,15 +270,21 @@
 			$this->Ln();
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'b.');
-			$this->Cell(3.5,0.575,'No. Seri / Tgl Ijazah');
+			$this->Cell(3.5,0.575,'No. Seri Ijazah');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,$rw['noijazah']);
 			$this->Ln();
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'c.');
+			$this->Cell(3.5,0.575,'Tanggal Ijazah');
+			$this->Cell(0.25,0.575,':');
+			$this->Cell(8.25,0.575,indonesian_date($rw['tglijazah']));
+			$this->Ln();
+			$this->Cell(1.5,0.575);
+			$this->Cell(0.5,0.575,'d.');
 			$this->Cell(3.5,0.575,'Lama Belajar');
 			$this->Cell(0.25,0.575,':');	
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,$rw['lama'].' tahun');
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'5.');
@@ -478,7 +377,7 @@
 			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');		
 			$this->Cell(8.25,0.575);
-			$this->Ln();
+			$this->Ln(0.75);
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'4.');
 			$this->Cell(4.0,0.575,'Pekerjaan');
@@ -614,7 +513,7 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'1.');
 			$this->Cell(11.5,0.575,'Perkembangan Kesehatan');
-			$this->Ln();
+			$this->Ln(0.65);
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(1.0,0.575,'No.',1,0,'C');
@@ -623,7 +522,7 @@
 			$this->Cell(2.0,0.575,'Berat',1,0,'C');
 			$this->Cell(3.0,0.575,'Lingkar Kepala',1,0,'C');
 			$this->Ln();
-			for($i=1;$i<=8;$i++){
+			for($i=1;$i<=6;$i++){
 				$this->Cell(0.75,0.575);
 				$this->Cell(0.75,0.575);
 				$this->Cell(1.0,0.575,$i.'.',1,0,'C');
@@ -633,7 +532,7 @@
 				$this->Cell(3.0,0.575,'',1,0,'C');
 				$this->Ln();
 			}
-			//$this->Ln(1.75);
+			$this->Ln(0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'2.');
 			$this->Cell(11.5,0.575,'Prestasi');
@@ -769,7 +668,9 @@
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-	$qsiswa=$conn->query("SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbrombel rb USING(idrombel) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND rg.idjreg='1' OR rg.idjreg='2'");
+	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND rg.idjreg='1' OR rg.idjreg='2'";
+	//var_dump($sql);
+	$qsiswa=$conn->query($sql);
 	while($ds=$qsiswa->fetch_assoc()){
     	$pdf->PrintChapter($ds['idsiswa']);//, $ds['nisn']);
 	}

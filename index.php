@@ -271,7 +271,7 @@
 									case 'addibu' : {include "siswa_ibu.php";break;}
 									case 'eksporsiswa' : {include "siswa_ekspor.php";break;}
 									case 'addrombel' : {include "form_rombel.php";break;}
-									case 'regissiswa' : {include "rombel_tampil.php";break;}
+									case 'regsiswa' : {include "siswa_registrasi.php";break;}
 
 									case 'kompetensi' : {include "kompetensi_tampil.php";break;}
 

@@ -160,7 +160,7 @@ $(document).ready(function() {
                                 <input class="form-control form-control-sm" name="nik" id="nik">
                             </div>
                         </div>
-                        <div class="form-group row mb-2">
+                        <!-- <div class="form-group row mb-2">
                             <label class="col-sm-5 offset-sm-1">Tempat Lahir</label>
                             <div class="col-sm-6">
                                 <input class="form-control form-control-sm" name="tmplahir" id="tmplahir">
@@ -171,7 +171,7 @@ $(document).ready(function() {
                             <div class="col-sm-6">
                                 <input class="form-control form-control-sm" name="tgllahir" id="tgllahir">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row mb-2">
                             <label class="col-sm-5 offset-sm-1">Agama</label>
                             <div class="col-sm-6">

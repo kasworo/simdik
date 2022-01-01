@@ -213,10 +213,10 @@ $(document).ready(function() {
     </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function()) {
-$("#idjreg").change(function() {
-    var reg = this.val();
-    alert(reg);
-})
+$(document).ready(function() {
+    $("#idjreg").change(function() {
+        var reg = this.val();
+        alert(reg);
+    })
 })
 </script>

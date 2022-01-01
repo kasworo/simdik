@@ -1,10 +1,8 @@
 <?php
-	include "config/konfigurasi.php";
-    include "config/function_siswa.php";
+	include "dbfunction.php";
+	$id=$_POST['id'];
 	if($_POST['d']=='1'){
-		$id=$_POST['id'];
-		$qm="SELECT*FROM tbsiswa WHERE idsiswa='$id'";
-		$data=ceksiswa($qm);
+		$data=cekdata('tbsiswa', array('idsiswa'=>$id));
 		if($data==0){
 			$dir='assets/img/';
 			$foto='avatar.gif';
@@ -50,9 +48,8 @@
 			);
 		}
 		else {
-			$row=viewsiswa($qm);
-			foreach ($row as $m){
-				if($m['fotosiswa']==''){
+			$m=viewdata('tbsiswa', array('idsiswa'=>$id))[0];
+			if($m['fotosiswa']==''){
 					$dir='assets/img/';
 					$foto='avatar.gif';
 					$fotolama='';
@@ -100,14 +97,11 @@
 					'dir'=>$dir,
 					'judul'=>'Update Data Peserta Didik',
 					'tmbl'=>'<i class="fas fa-save"></i> Update'
-				);
-			}
+				);			
 		}
 	}
 	else if($_POST['d']=='2'){
-		$id=$_POST['id'];
-		$qm="SELECT*FROM tbriwayatskul WHERE idsiswa='$id'";
-		$data=ceksiswa($qm);
+		$data=cekdata('tbriwayatskul', array('idsiswa'=>$id));
 		if($data==0){
 			$rows=array(
 				'idsiswa'=>'',
@@ -125,8 +119,7 @@
 			);
 		}
 		else {
-			$row=viewsiswa($qm);
-			foreach ($row as $m){
+			$m=viewdata('tbriwayatskul', array('idsiswa'=>$id))[0];
 				$rows=array(
 					'idsiswa'=>$m['idsiswa'],
 					'idreg' =>$m['idjreg'],
@@ -141,28 +134,24 @@
 					'judul'=>'Update Data Riwayat Pendidikan Peserta Didik',
 					'tmbl'=>'<i class="fas fa-save"></i> Update'
 				);
-			}
 		}
-		
 	}
 	else {
-		$id=$_POST['id'];
 		if($_POST['j']=='1'){
 			$hubkel='1';
-			$qpg="SELECT*FROM tbortu WHERE idsiswa='$id' AND hubkel='1'";
+			$keys=array('idsiswa'=>$id,'hubkel'=>$hubkel);			
 			$deshubkel='Ayah Kandung';
 		}
 		else if($_POST['j']=='2'){
 			$hubkel='2';
-			$qpg="SELECT*FROM tbortu WHERE idsiswa='$id' AND hubkel='2'";
-			$deshubkel='Ibu Kandung';
+			$keys=array('idsiswa'=>$id,'hubkel'=>$hubkel);
+			$deshubkel='Ibu Kandung';			
 		}
 		else {
-			$hubkel='';
-			$qpg="SELECT*FROM tbortu WHERE idsiswa='$id' AND hubkel<>'2' OR hubkel<>'1'";
-			$deshubkel='Wali';
+			$keys=array('idsiswa'=>$id,'hubkel<>2 OR hubkel<>1');	
+			$deshubkel='Wali';	
 		}
-		$data=ceksiswa($qpg);
+		$data=cekdata('tbortu',$keys);
 		if($data==0){
 			$pesan='Tambah Data '.$deshubkel.' Peserta Didik';
 			$tmb='<i class="fas fa-save"></i> Simpan';
@@ -191,9 +180,8 @@
 		else {
 			$pesan='Update Data '.$deshubkel.' Peserta Didik';
 			$tmb='<i class="fas fa-save"></i> Update';
-			$pd=viewsiswa($qpg);
-			foreach ($pd as $m){
-				$rows= array(
+			$m=viewdata('tbortu',$keys)[0];
+			$rows= array(
 						'nmortu'=>$m['nmortu'],
 						'nik'=>$m['nik'],
 						'tmplahir'=>$m['tmplahir'],
@@ -214,8 +202,7 @@
 						'tmb'=>$tmb,
 						'psn'=>$pesan
 					);
-				}
-			}
+				}		
 				
 	}
 	echo json_encode($rows);

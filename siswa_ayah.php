@@ -11,8 +11,8 @@
 				'idsiswa'   => $_POST['idsiswa'],
 				'nmortu'	=>$_POST['nmortu'],
 				'nik'	   =>$_POST['nik'],
-				'tmplahir'  =>$_POST['tmplahir'],
-				'tgllahir'  =>$_POST['tgllahir'],
+				// 'tmplahir'  =>$_POST['tmplahir'],
+				// 'tgllahir'  =>$_POST['tgllahir'],
 				'idagama'   =>$_POST['agama'],
 				'idpddk'	=>$_POST['pddkortu'],
 				'hidup'	 =>$_POST['hidup'],
@@ -59,8 +59,8 @@
 			$ortu=array(
 				'nmortu'=>$_POST['nmortu'],
 				'nik'=>$_POST['nik'],
-				'tmplahir'=>$_POST['tmplahir'],
-				'tgllahir'=>$_POST['tgllahir'],
+				// 'tmplahir'=>$_POST['tmplahir'],
+				// 'tgllahir'=>$_POST['tgllahir'],
 				'idagama'=>$_POST['agama'],
 				'idpddk'=>$_POST['pddkortu'],
 				'hidup'=>$_POST['hidup'],
@@ -150,32 +150,33 @@ $(document).ready(function() {
                                 id="idsiswa" value="<?php echo $idsiswa;?>">
                             <input type="hidden" class="form-control form-control-sm col-sm-6" name="hubkel"
                                 id="hubkel">
-                            <label class="col-sm-5 offset-sm-1">Nama Ayah</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Nama Ayah</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="nmortu" id="nmortu">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">NIK</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">NIK</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="nik" id="nik">
                             </div>
                         </div>
+                        <!-- 
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Tempat Lahir</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Tempat Lahir</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="tmplahir" id="tmplahir">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Tanggal Lahir</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Tanggal Lahir</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="tgllahir" id="tgllahir">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Agama</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Agama</label>
+                            <div class="col-sm-5">
                                 <select class="form-control form-control-sm" name="agama" id="agama">
                                     <option value="">..Pilih..</option>
                                     <option value="A">Islam</option>
@@ -188,8 +189,8 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Pendidikan Terakhir</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Pendidikan Terakhir</label>
+                            <div class="col-sm-5">
                                 <select class="form-control form-control-sm" name="pddkortu" id="pddkortu">
                                     <option value="">..Pilih..</option>
                                     <?php
@@ -202,8 +203,8 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Masih Hidup / Sudah Meninggal</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Masih Hidup / Sudah Meninggal</label>
+                            <div class="col-sm-5">
                                 <select class="form-control form-control-sm" name="hidup" id="hidup">
                                     <option value="">..Pilih..</option>
                                     <option value="1">Masih Hidup</option>
@@ -212,8 +213,8 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Pekerjaan</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Pekerjaan</label>
+                            <div class="col-sm-5">
                                 <select class="form-control form-control-sm" name="krjortu" id="krjortu">
                                     <option value="">..Pilih..</option>
                                     <?php
@@ -226,8 +227,8 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Penghasilan / Bulan</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Penghasilan / Bulan</label>
+                            <div class="col-sm-5">
                                 <select class="form-control form-control-sm" name="hslortu" id="hslortu">
                                     <option value="">..Pilih..</option>
                                     <?php
@@ -242,44 +243,44 @@ $(document).ready(function() {
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Alamat</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Alamat</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="almt" id="almt">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Desa / Kelurahan</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Desa / Kelurahan</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="desa" id="desa">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Kecamatan</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Kecamatan</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="kec" id="kec">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Kabupaten</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Kabupaten</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="kab" id="kab">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Provinsi</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Provinsi</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="prov" id="prov">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Kode Pos</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Kode Pos</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="kdpos" id="kdpos">
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Nomor HP</label>
-                            <div class="col-sm-6">
+                            <label class="col-sm-6 offset-sm-1">Nomor HP</label>
+                            <div class="col-sm-5">
                                 <input class="form-control form-control-sm" name="nohp" id="nohp">
                             </div>
                         </div>

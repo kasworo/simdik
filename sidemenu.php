@@ -105,18 +105,51 @@
                         <p>Tambah Data</p>
                     </a>
                 </li>
-                <!-- <li class="nav-item">
-						<a href="index.php?p=riwayatsiswa" class="nav-link">
-							<i class="fas fa-user-check nav-icon"></i>
-							<p>Riwayat Pendidikan</p>
-						</a>
-					</li> -->
                 <li class="nav-item">
-                    <a href="index.php?p=mutasisiswa" class="nav-link">
-                        <i class="fas fa-user-minus nav-icon"></i>
-                        <p>Mutasi</p>
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-user-check nav-icon"></i>
+                        <p>Perkembangan PD
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Mutasi Masuk</p>
+                            </a>
+                        </li>
+                        <a href="index.php?p=regsiswa" class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Riwayat Kelas</p>
+                        </a>
+                        <li class="nav-item">
+                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Mutasi Keluar</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Kesehatan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Prestasi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?p=mutasisiswa" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Beasiswa</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
+
                 <li class="nav-item">
                     <a href="index.php?p=eksporsiswa" class="nav-link">
                         <i class="fas fa-sync-alt nav-icon"></i>
@@ -157,6 +190,8 @@
                         <p>Kompetensi Dasar</p>
                     </a>
                 </li>
+
+                <!--
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="fas fa-list nav-icon"></i>
@@ -184,7 +219,7 @@
                         <i class="fas fa-chalkboard-teacher nav-icon"></i>
                         <p>Pengampu</p>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a href="index.php?p=datakkm" class="nav-link">
                         <i class="fas fa-chart-line nav-icon"></i>
