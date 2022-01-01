@@ -116,19 +116,13 @@
                         <li class="nav-item">
                             <a href="index.php?p=mutasisiswa" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
-                                <p>Mutasi Masuk</p>
+                                <p>Riwayat Pendidikan</p>
                             </a>
                         </li>
                         <a href="index.php?p=regsiswa" class="nav-link">
                             <i class="fas fa-list nav-icon"></i>
                             <p>Riwayat Kelas</p>
                         </a>
-                        <li class="nav-item">
-                            <a href="index.php?p=mutasisiswa" class="nav-link">
-                                <i class="fas fa-user-minus nav-icon"></i>
-                                <p>Mutasi Keluar</p>
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a href="index.php?p=mutasisiswa" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
@@ -149,7 +143,6 @@
                         </li>
                     </ul>
                 </li>
-
                 <li class="nav-item">
                     <a href="index.php?p=eksporsiswa" class="nav-link">
                         <i class="fas fa-sync-alt nav-icon"></i>
