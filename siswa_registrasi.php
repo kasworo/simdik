@@ -98,13 +98,116 @@
 			//exit;
 		}
     }
+    if(isset($_POST['upload'])){
+        require_once 'assets/library/PHPExcel.php';
+	    require_once 'assets/library/excel_reader.php';
+	    if(empty($_FILES['filereg']['tmp_name'])) { 
+		    echo "<script>
+			        $(function() {
+				        toastr.error('File Template Registrasi Peserta Didik Kosong!','Mohon Maaf!',{
+					        timeOut:1000,
+					        fadeOut:1000
+				    });
+			    });
+		    </script>";	
+	    } else {
+            $data = new Spreadsheet_Excel_Reader($_FILES['filereg']['tmp_name']);        
+            $baris = $data->rowcount($sheet_index=0);
+            $isidata=$baris-5;        
+            $sukses = 0;
+            $gagal = 0;
+            $update=0;
+            for ($i=6; $i<=$baris; $i++)
+            {
+                $xnis=$data->val($i,2);           
+                $xnisn=$data->val($i,3);
+                $xidreg=$data->val($i,5);
+                $xidkelas=$data->val($i,6);
+                $xthpel=$data->val($i,7);
+                $ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
+                $idsiswa=$ds['idsiswa'];
+                $dreg=viewdata('tbthpel',array('idthpel'=>$xthpel))[0];
+                //var_dump($dreg);die;
+                $xtglreg=$dreg['awal'];             
+                $key=array(
+                    'idsiswa'=>$idsiswa,
+                    'idthpel'=>$xthpel
+                );                         
+                $cekdata=cekdata('tbregistrasi',$key);
+                if($cekdata>0){
+                    $datane=array(
+                        'idjreg'=>$xidreg,
+                        'idkelas'=>$xidkelas,
+                        'tglreg'=>$xtglreg
+                    );                    
+                    $edit=editdata('tbriwayatskul',$datane,'',$key);
+                    $update++;
+                } else {
+                    $datane=array(
+                        'idjreg'=>$xidreg,
+                        'idsiswa'=>$idsiswa,
+                        'idkelas'=>$xidkelas,
+                        'idthpel'=>$xthpel,
+                        'tglreg'=>$xtglreg  
+                    );
+                    $tambah=adddata('tbregistrasi',$datane);
+                    if($tambah>0){
+                        $sukses++;
+                    }					
+                    else {
+                        $gagal++;
+                    }
+                }
+                if($gagal>0){
+                    echo "<script>
+                        $(function() {
+                            toastr.error('Ada ".$gagal." Data Gagal Ditambahkan','Mohon Maaf!',{
+                                timeOut:1000,
+                                fadeOut:1000,
+                                onHidden:function(){
+                                    location.(reload);
+                                }
+                            });
+                        });
+                    </script>";
+                } 
+                if($sukses>0){ 
+                    echo "<script>
+                        $(function() {
+                            toastr.success('Ada ".$sukses." Data Berhasil Ditambahkan','Terima Kasih',{
+                                timeOut:1000,
+                                fadeOut:1000,
+                                onHidden:function(){
+                                    location.reload();
+                                }
+                            });
+                        });
+                    </script>";
+                } 
+                if($update>0)
+                { 
+                    echo "<script>
+                        $(function() {
+                            toastr.warning('Ada ".$update." Data Berhasil Diupdate!','Terima Kasih',{
+                                timeOut:1000,
+                                fadeOut:1000,
+                                onHidden:function(){
+                                    location.reload;
+                                }
+                            });
+                        });
+                    </script>";
+                }            
+            } 
+        }
+    }
 ?>
 <div class="modal fade" id="myImportReg" aria-modal="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" enctype="multipart/form-data" action="index.php?p=datasiswa&d=1">
+            <form method="POST" enctype="multipart/form-data" action="">
                 <div class="modal-header">
-                    <h5 class="modal-title">Import Data Peserta Didik</h5>
+                    <h5 class="modal-title">Import Data Registrasi Peserta Didik</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -112,10 +215,10 @@
                 <div class="modal-body">
                     <div class="col-sm-12">
                         <div class="row">
-                            <label for="filepd">Pilih File Template</label>
+                            <label for="filereg">Pilih File Template</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input file" id="filepd" name="filepd">
-                                <label class="custom-file-label" for="filepd">Pilih file</label>
+                                <input type="file" class="custom-file-input file" id="filereg" name="filereg">
+                                <label class="custom-file-label" for="filereg">Pilih file</label>
                             </div>
                             <p style="color:red;margin-top:10px"><em>Hanya mendukung file *.xls (Microsoft Excel
                                     97-2003)</em></p>
@@ -123,7 +226,7 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <a href="siswa_template.php?d=1" class="btn btn-success btn-sm btn-flat" target="_blank"><i
+                    <a href="siswa_registmp.php" class="btn btn-success btn-sm btn-flat" target="_blank"><i
                             class="fas fa-download"></i> Download</a>
                     <button type="submit" name="upload" class="btn btn-primary btn-sm btn-flat">
                         <i class="fas fa-upload"></i>&nbsp;Upload
@@ -252,10 +355,11 @@
 							$field=array('idsiswa', 'idthpel','nmsiswa','nisn','nis', 'nmkelas', 'idjreg');
 							$tbl=array(
 								'tbregistrasi'=>'idsiswa',
-								'tbkelas'=>'idkelas'
+								'tbkelas'=>'idkelas',
+                                'tbthpel tp'=>'idthpel'
 							);
 							$where =array(
-								//'idthpel'=>$_COOKIE['c_tahun'],
+								'tp.aktif'=>'1',
 								'deleted'=>'0'
 							); 
 							//$qs=$conn->query("SELECT s.idsiswa, s.idthpel as thmasuk, s.nmsiswa, s.nisn, s.nis,  rb.nmrombel,rg.idjreg FROM tbsiswa s LEFT JOIN tbregistrasi rg USING(idsiswa) LEFT JOIN tbrombel rb USING(idrombel) WHERE s.deleted='0' OR rb.idthpel='$_COOKIE[c_tahun]' AND (rg.idjreg<7 OR rg.idjreg is NULL) ORDER BY s.idsiswa, rg.idrombel");

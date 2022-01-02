@@ -23,7 +23,7 @@
         $idskul=getskul();	
 		for ($i=6; $i<=$baris; $i++)
 		{
-			$xnik=$data->val($i,2);		
+			$xnik=$data->val($i,2);
 			$xnis=$data->val($i,3);
 			$xnisn=$data->val($i,4);
 			$xnama= $conn->real_escape_string($data->val($i,5));

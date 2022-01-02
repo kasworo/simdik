@@ -668,10 +668,9 @@
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND rg.idjreg='1' OR rg.idjreg='2'";
-	//var_dump($sql);
-	$qsiswa=$conn->query($sql);
-	while($ds=$qsiswa->fetch_assoc()){
+	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND (rg.idjreg='1' OR rg.idjreg='2')";
+	$data=vquery($sql);
+	foreach ($data as $ds){
     	$pdf->PrintChapter($ds['idsiswa']);//, $ds['nisn']);
 	}
 	$pdf->Output();

@@ -274,6 +274,6 @@
 					fadeOut:2000
 				});
 			});
-		</script>";		
+		</script>";
 	}
 ?>
