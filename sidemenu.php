@@ -124,6 +124,7 @@
                                 <i class="fas fa-list nav-icon"></i>
                                 <p>Riwayat Kelas</p>
                             </a>
+                            s
                         </li>
                         <li class="nav-item">
                             <a href="index.php?p=rwysehat" class="nav-link">

@@ -120,18 +120,32 @@
 	}
 
 	function getskulortu($id){
-		global $conn;
-		$data=viewdata('ref_pendidikan',array('idpddk'=>$id))[0];
-		return $data['pendidikan'];
+		if(isset($id)) {
+			$data=viewdata('ref_pendidikan',array('idpddk'=>$id))[0];
+			return $data['pendidikan'];
+		}
+		else {
+			return "-";
+		}		
 	}
 
 	function getkerjaortu($id){
-		$data=viewdata('ref_pekerjaan',array('idkerja'=>$id))[0];
-		return $data['pekerjaan'];
+		if(isset($id)) {
+			$data=viewdata('ref_pekerjaan',array('idkerja'=>$id))[0];
+			return $data['pekerjaan'];
+		}
+		else {
+			return "-";
+		}			
 	}
 	function getgajiortu($id){
-		$data=viewdata('ref_penghasilan',array('idhsl'=>$id))[0];
-		return $data['penghasilan'];
+		if(isset($id)) {
+			$data=viewdata('ref_penghasilan',array('idhsl'=>$id))[0];
+			return $data['penghasilan'];
+		}
+		else {
+			return "-";
+		}		
 	}
 	function getregis($id){
 		$data=viewdata('ref_jnsregistrasi',array('idjreg'=>$id))[0];
@@ -141,7 +155,15 @@
         $data=viewdata('tbskul')[0];
         return $data['idskul'];
     }
-
+	function getidsiswa($nis,$nisn){
+		global $conn;
+		$sql=$conn->query("SELECT idsiswa FROM tbsiswa WHERE nis='$nis' OR nisn='$nisn'");
+		$rows=[];
+		while($row=$sql->fetch_assoc()){
+			$rows[]=$row;
+		}
+		return $rows;
+	}
     // function getthpel(){
     //     global $conn;
     //     $sql=mysqli_query($conn, "SELECT*FROM tb_thpel WHERE aktif='Y'");

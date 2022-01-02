@@ -61,25 +61,7 @@
     <script type="text/javascript" src="assets/js/dropzone.js"></script>
     <script type="text/javascript" src="assets/js/jquery-1.4.js"></script>
     <script type="text/javascript" src="assets/js/ajaxupload.3.5.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-        toastr.options = {
-            "closeButton": false,
-            "positionClass": "toast-top-center",
-            "preventDuplicates": true,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "1000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-        bsCustomFileInput.init();
-    });
-    </script>
+
 </head>
 
 <body class="sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -363,6 +345,25 @@
     <script src="assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        toastr.options = {
+            "closeButton": false,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+        bsCustomFileInput.init();
+    });
+    </script>
 </body>
 
 </html>

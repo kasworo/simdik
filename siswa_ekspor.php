@@ -1,12 +1,11 @@
 <?php
-	include "config/function_siswa.php";
+	
 	if(isset($_POST['tmpsiswa'])){
 		include "siswa_upload.php";
 	}
-	if(isset($_POST['tmpayah']) || isset($_POST['tmpibu']) || isset($_POST['tmpwali']))
-	{
-		include "siswa_ortu.php";
-	}
+	if(isset($_POST['tmportu'])){
+        include "siswa_ortu.php";
+    }
 
 ?> <div class="card card-secondary card-outline">
     <div class="card-header">
@@ -51,8 +50,8 @@
                         <div class="form-group mb-2">
                             <p><strong>Petunjuk:</strong></p>
                             <p>
-                                Klik tombol <strong>Download</strong> untuk mengunduh file template data ayah
-                                kandung peserta
+                                Klik tombol <strong>Download</strong> untuk mengunduh file template data orangtua/wali
+                                peserta
                                 didik.<br />
                                 Editlah kemudian Upload ke database melalui tool di bawah ini.
                             </p>
@@ -60,9 +59,8 @@
                     </div>
                     <div class="card-footer">
                         <form method="POST" enctype="multipart/form-data" action="">
-                            <input type="file" class="col-sm-6" name="fileayah">
-                            <input type="hidden" name="nmfile" value="1">
-                            <button type="submit" class="btn btn-primary btn-sm ml-2" name="tmpayah">
+                            <input type="file" class="col-sm-6" name="fileortu">
+                            <button type="submit" class="btn btn-primary btn-sm ml-2" name="tmportu">
                                 <i class="fas fa-cloud-upload-alt"></i>&nbsp;Upload
                             </button>
                             <a href="siswa_template.php?d=3" class="btn btn-sm btn-success ml-2">

@@ -12,18 +12,15 @@ if(isset($_POST['upload'])) {
         });
         </script>"; 
     } else {
-        $data = new Spreadsheet_Excel_Reader($_FILES['filerwy']['tmp_name']);
-        
+        $data = new Spreadsheet_Excel_Reader($_FILES['filerwy']['tmp_name']);        
 		$baris = $data->rowcount($sheet_index=0);
-		$isidata=$baris-5;
-        
+		$isidata=$baris-5;        
 		$sukses = 0;
 		$gagal = 0;
 		$update=0;
         for ($i=6; $i<=$baris; $i++)
 		{
-            $xnis=$data->val($i,2);
-           
+            $xnis=$data->val($i,2);           
 			$xnisn=$data->val($i,3);
             $xidreg=$data->val($i,5);
             $xaslsd=$data->val($i,6);
