@@ -1,63 +1,15 @@
 <?php
-	
 	require_once "assets/library/PHPExcel.php";
-	include "config/konfigurasi.php";
-	include "config/function_nilai.php";
-	include "config/function_skul.php";	
-	
+	include "dbfunction.php";
 	function getmapel($id){
-		global $conn;
-		$sql=$conn->query("SELECT*FROM tbmapel WHERE idmapel='$id'");
-		while($row=$sql->fetch_assoc()){
-			$rows=array(
-				'idmapel'=>$row['idmapel'],
-				'nmmapel'=>$row['nmmapel']
-			);
-		}
+		$rows=viewdata('tbmapel',array('idmapel'=>$id))[0];
 		return $rows;
 	}
 
 	function getthn($id){
-		global $conn;
-		$sql=$conn->query("SELECT*FROM tbthpel WHERE idthpel='$id'");
-		$rows=[];
-		while($row=$sql->fetch_assoc()){
-			$rows=array(
-				'idthpel'=>$row['idthpel'],
-				'nmthpel'=>$row['nmthpel'],
-				'desthpel'=>$row['desthpel']
-			);
-		}
+		$rows=viewdata('tbthpel', array('idthpel'=>$id))[0];		
 		return $rows;
 	}
-
-	function getsiswa($rb,$th){
-		global $conn;
-		if($rb=='' || $th==''){
-			$sql=$conn->query("SELECT nis, nisn, nmsiswa FROM tbsiswa pd LEFT JOIN tbregistrasi rg ON rg.idsiswa=pd.idsiswa LEFT JOIN tbrombel rb ON rb.idrombel=rg.idrombel LEFT JOIN tbthpel tp ON tp.idthpel=rb.idthpel WHERE pd.deleted='0'");
-		}
-		else {
-			$sql=$conn->query("SELECT nis, nisn, nmsiswa FROM tbsiswa pd LEFT JOIN tbregistrasi rg ON rg.idsiswa=pd.idsiswa LEFT JOIN tbrombel rb ON rb.idrombel=rg.idrombel LEFT JOIN tbthpel tp ON tp.idthpel=rb.idthpel WHERE pd.deleted='0' AND rg.idrombel='$rb' AND rb.idthpel='$th'");
-		}
-		$rows=[];
-		while($row=$sql->fetch_assoc()){
-			$rows[]=$row;
-		}
-		return $rows;
-	}
-
-	function getrombel($id){
-		global $conn;
-		$sql=$conn->query("SELECT idrombel, nmrombel FROM tbrombel WHERE deleted='0'");
-		$rows=[];
-		while($row=$sql->fetch_assoc()){
-			$rows[]=$row;
-		}
-		return $rows;
-	}
-
-	$mp=getmapel($_GET['m']);
-	$th=getthn($_GET['t']);
 	$objPHPExcel = new PHPExcel();
 	$objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
 		->setTitle("Template")->setLastModifiedBy("Kasworo Wardani");
@@ -101,15 +53,24 @@
 		->setCellValue('H8', 'Nilai')
 		->setCellValue('I8', 'Predikat')
 		->setCellValue('J8', 'Deskripsi');
-		foreach (getsiswa() as $s){
+		$field=array('nis', 'nisn', 'nmsiswa');
+		$where=array(
+			'deleted'=>'0',
+		);
+		$joins=array(
+			'tbregistrasi'=>'idsiswa',
+			'tbthpel'=>'idthpel',
+			'tbkelas'=>'idkelas, idthpel'
+		);
+		$ds=fulljoin($field,'tbsiswa',$joins, $where);
+		foreach ($ds as $s){
 			$no++;
 			$baris++;
 			$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue("A$baris", $no)
 				->setCellValue("B$baris",$s['nis'])
 				->setCellValue("C$baris",$s['nisn'])
-				->setCellValue("G$baris",$s['nmsiswa'])
-				->mergeCells("C$baris:F$baris");
+				->setCellValue("G$baris",$s['nmsiswa']);
 		}
 		$objPHPExcel->getSheet(0)->getColumnDimension('A')->setAutoSize(true);
 		$objPHPExcel->getSheet(0)->getColumnDimension('B')->setAutoSize(true);

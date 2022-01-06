@@ -156,13 +156,9 @@
         return $data['idskul'];
     }
 	function getidsiswa($nis,$nisn){
-		global $conn;
-		$sql=$conn->query("SELECT idsiswa FROM tbsiswa WHERE nis='$nis' OR nisn='$nisn'");
-		$rows=[];
-		while($row=$sql->fetch_assoc()){
-			$rows[]=$row;
-		}
-		return $rows;
+		$sql="SELECT idsiswa FROM tbsiswa WHERE nis='$nis' OR nisn='$nisn'";
+		$data=vquery($sql)[0];
+		return $data['idsiswa'];
 	}
     // function getthpel(){
     //     global $conn;
@@ -212,6 +208,7 @@
 		else {
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys)." GROUP BY $group";
 		}
+		//var_dump($sql);die;
 		$result=$conn->query($sql);
 		while($row=$result->fetch_assoc()){
 			$rows[]=$row;

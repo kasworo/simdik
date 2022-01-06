@@ -129,7 +129,7 @@
                 <?php include "sidemenu.php";?>
             </div>
         </aside>
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="background:url(assets/img/boxed-bg.png)">
             <?php
 				switch ($_GET['p']){
 					case 'dashboard' : {

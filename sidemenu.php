@@ -105,6 +105,18 @@
                         <p>Tambah Data</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="index.php?p=regsiswa" class="nav-link">
+                        <i class="fas fa-list nav-icon"></i>
+                        <p>Registrasi</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.php?p=rwyskul" class="nav-link">
+                        <i class="fas fa-user-minus nav-icon"></i>
+                        <p>Riwayat Pendidikan</p>
+                    </a>
+                </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="fas fa-user-check nav-icon"></i>
@@ -113,19 +125,6 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="index.php?p=rwyskul" class="nav-link">
-                                <i class="fas fa-user-minus nav-icon"></i>
-                                <p>Riwayat Pendidikan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="index.php?p=regsiswa" class="nav-link">
-                                <i class="fas fa-list nav-icon"></i>
-                                <p>Riwayat Kelas</p>
-                            </a>
-                            s
-                        </li>
                         <li class="nav-item">
                             <a href="index.php?p=rwysehat" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
