@@ -75,7 +75,7 @@
 						$qs=vquery($sql);
 						$no=0;
 						foreach($qs as $s):
-						$no++;
+			        	$no++;
 					?>
                     <tr>
                         <td style="text-align:center"><?php echo $no.'.';?></td>

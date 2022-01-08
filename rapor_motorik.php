@@ -9,7 +9,7 @@
             <h5 class="card-title m-0" id="judul">Input Nilai Pengetahuan</h5>
             <div class="card-tools">
                 <a href="index.php?p=datarapor&d=4" class="btn btn-tool">
-                    <i class="fas fa-arrow-circle-left"></i> <span>&nbsp;Kembali</span>
+                    <i class="fas fa-arrow-circle-left"></i><span>&nbsp;Kembali</span>
                 </a>
             </div>
         </div>

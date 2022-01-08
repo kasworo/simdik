@@ -1,16 +1,17 @@
 <?php
 	session_start();
 	include "dbfunction.php";
-	if(isset($_COOKIE['id'],$_COOKIE['key'])){
-        $key=$_COOKIE['key'];
+	if(isset($_COOKIE['id']) && isset($_COOKIE['key'])){
+        $pwd=$_COOKIE['key'];
         $keys=array(
             'username'=>$_COOKIE['id']
         );
         $data=viewdata('tbuser',$keys)[0];
-		if($key===hash('sha256',$data['passwd'])){
+		if($pwd===hash('sha256',$data['passwd'])){
 			$_SESSION['login']=true;
 		}
 	}
+    
 	if(isset($_SESSION['login'])){
 		header("Location: index.php?p=dashboard");
 		exit;
@@ -24,11 +25,10 @@
 		$cekuser=cekdata('tbuser',$keys);
 		if($cekuser===1){
 			$data=viewdata('tbuser',$keys)[0];
+            //var_dump(password_verify($pass, $data['passwd']));die;
 			if(password_verify($pass, $data['passwd'])){
 				$_SESSION['login']=true;
 				setcookie('id',$data['username'],time()+3600);
-				$sk=viewdata('tbskul')[0];
-				setcookie('kdskul',hash('sha256',$sk['kdskul']), time()+3600);
 				if(isset($_POST['ingat'])){					
 					setcookie('key',hash('sha256',$data['passwd']),time()+3600);
 				}
@@ -62,8 +62,9 @@
             'level'=>'1'
         );
         $cekadmin=cekdata('tbuser',$level);
-        if(cekadmin===0):
+        if($cekadmin===0):
     ?>
+
     <div class="register-box">
         <div class="register-logo">
             <span><b>Selamat Datang</b></span>
@@ -138,7 +139,20 @@
     </script>
     <?php
 	if(isset($_POST['regis'])){
-		if(addadmin($_POST)>0){
+        $password=$_POST['paswd'];
+        $passconf=$_POST['conf'];
+        if($password==$passconf){
+            $pwd=password_hash($password,PASSWORD_DEFAULT);
+          // var_dump($password);
+           // var_dump($pwd);die;
+            $data=array(
+                'namatmp'=>$_POST['nama'],
+                'username'=>$_POST['user'],
+                'passwd'=>$pwd,
+                'aktif'=>'1'
+            );
+            $tambah=adddata('tbuser',$data);
+		if($tambah>0){
 			echo "<script>
                     $(function() {
                         toastr.success('Administrator Berhasil Ditambahkan!','Terima Kasih...',{
@@ -154,6 +168,20 @@
 		else {
 			mysqli_error($conn);
 		}
+        }
+        else {
+            echo "<script>
+                    $(function() {
+                        toastr.error('Password Konfirmasi Tidak Sama!','Mohon Maaf',{
+                            timeOut:1000,
+                            fadeOut:1000,
+                            onHidden:function(){
+                                this.location.reload();
+                            }
+                        });
+                    });
+                </script>";
+        }        
 
 	}
 	?>

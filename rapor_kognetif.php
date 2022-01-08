@@ -1,14 +1,31 @@
-<?php $idsiswa=$_GET['id']; ?>
+<?php 
+    $idsiswa=$_GET['id'];
+?>
 <script type="text/javascript">
 $(document).ready(function() {
     $(".txtNilai").attr('disabled', 'disabled');
     $(".txtDeskripsi").attr('disabled', 'disabled');
+    $(".txtHuruf").attr('disabled', 'disabled');
     $("#txtThpel").change(function() {
+        let id = "<?php echo $idsiswa;?>";
+        $.ajax({
+            url: "rapor_json.php",
+            type: "POST",
+            dataType: 'json',
+            data: "id=" + id + "&d=3",
+            success: function(e) {
+                $("#idsiswa").val(e.idsiswa);
+                $("#nmsiswa").val(e.nmsiswa);
+                $("#simpan").html(data.tmbl);
+            }
+        })
         if ($(this).val() == '' || $(this).val() == null) {
             $(".txtNilai").attr('disabled', 'disabled');
+            $(".txtHuruf").attr('disabled', 'disabled');
             $(".txtDeskripsi").attr('disabled', 'disabled');
         } else {
             $(".txtNilai").removeAttr('disabled');
+            $(".txtHuruf").removeAttr('disabled');
             $(".txtDeskripsi").removeAttr('disabled');
         }
     })
@@ -61,6 +78,7 @@ $(document).ready(function() {
                                 <th style="text-align:center;width:2.5%">No</th>
                                 <th style="text-align:center;">Mata Pelajaran</th>
                                 <th style="text-align:center;width:10%">Nilai</th>
+                                <th style="text-align:center;width:10%">Predikat</th>
                                 <th style="text-align:center;width:35%">Deskripsi</th>
                             </tr>
                         </thead>
@@ -80,6 +98,10 @@ $(document).ready(function() {
                                         id="nilai<?php echo $no;?>" style="text-align:center;height:42px">
                                 </td>
                                 <td>
+                                    <input class="form-control txtHuruf" name="predik<?php echo $no;?>"
+                                        id="predik<?php echo $no;?>" style="text-align:center;height:42px">
+                                </td>
+                                <td>
                                     <textarea class="form-control txtDeskripsi" name="des<?php echo $no;?>"
                                         id="des<?php echo $no;?>" style="height:42px"></textarea>
                                 </td>
@@ -97,24 +119,47 @@ $(document).ready(function() {
                                         "&nil=" + nilai,
                                     cache: false,
                                     success: function(data) {
-                                        toastr.success(data);
+                                        //toastr.success(data);
+                                        alert(data);
                                     }
                                 });
                             })
+
+                            $("#predik<?php echo $no;?>").change(function() {
+                                var thpel = $("#txtThpel").val();
+                                var kdmapel = "<?php echo $n['idmapel'];?>";
+                                var idsiswa = "<?php echo $idsiswa;?>";
+                                var nilai = $("#nilai<?php echo $no;?>").val();
+                                var huruf = $(this).val();
+                                $.ajax({
+                                    url: "rapor_simpan.php",
+                                    type: "POST",
+                                    data: "as=3&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
+                                        "&nil=" + nilai + "&hrf=" + huruf,
+                                    cache: false,
+                                    success: function(data) {
+                                        //toastr.success(data);
+                                        alert(nilai);
+                                    }
+                                });
+                            })
+
                             $("#des<?php echo $no;?>").change(function() {
                                 var thpel = $("#txtThpel").val();
                                 var kdmapel = "<?php echo $n['idmapel'];?>";
                                 var idsiswa = "<?php echo $idsiswa;?>";
                                 var nilai = $("#nilai<?php echo $no;?>").val();
+                                var huruf = $("#pred<?php echo $no;?>").val();
                                 var des = $(this).val();
                                 $.ajax({
                                     url: "rapor_simpan.php",
                                     type: "POST",
                                     data: "as=3&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
-                                        "&nil=" + nilai + "&des=" + des,
+                                        "&nil=" + nilai + "&hrf=" + huruf + "&des=" + des,
                                     cache: false,
                                     success: function(data) {
-                                        toastr.success(data);
+                                        //toastr.success(data);
+                                        alert(data);
                                     }
                                 });
                             })

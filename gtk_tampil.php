@@ -1,6 +1,3 @@
-<?php
-	include "config/function_gtk.php";
-?>
 <div class="modal fade" id="myImportguru" aria-modal="true">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -1,32 +1,44 @@
 <?php
-	include "config/function_nilai.php";
-	$nilai=array(
-		'id'=>$_POST['id'],
-		'th'=>$_POST['th'],
-		'mp'=>$_POST['mp'],
-		'nil'=>$_POST['nil'],
-		'as'=>$_POST['as'],
-		'des'=>$_POST['des']
+	include "dbfunction.php";
+	$key=array(
+		'idsiswa'=>$_POST['id'],
+		'idthpel'=>$_POST['th'],
+		'idmapel'=>$_POST['mp'],
+		'aspek'=>$_POST['as']
 	);
-	$sql="SELECT*FROM tbnilairapor WHERE idsiswa='$_POST[id]' AND idmapel='$_POST[mp]' AND idthpel='$_POST[th]' AND aspek='$_POST[as]'";
-	$ceknilai=ceknilai($sql);
+	$ceknilai=cekdata('tbnilairapor',$key);
+	//var_dump($ceknilai);die;
 	if($ceknilai>0){
-		if(isinilai($nilai,2)>0){
+		$nilai=array(
+			'nilairapor'=>$_POST['nil'],
+			'predikat'=>$_POST['hrf'],			
+			'deskripsi'=>$_POST['des']
+		);
+		$editnilai=editdata('tbnilairapor',$nilai,'',$key);
+		if($editnilai>0){
 			$pesan="Data Nilai Berhasil Diupdate!";
 		}
-		else{
+		else {
 			return false;
 		}
 	}
 	else {
-		if(isinilai($nilai,1)>0){
+		$nilai=array(
+			'idsiswa'=>$_POST['id'],
+			'idthpel'=>$_POST['th'],
+			'idmapel'=>$_POST['mp'],
+			'aspek'=>$_POST['as'],
+			'nilairapor'=>$_POST['nil'],
+			'predikat'=>$_POST['hrf'],			
+			'deskripsi'=>$_POST['des']
+		);
+		$tambahnilai=adddata('tbnilairapor',$nilai);
+		if($tambahnilai>0){
 			$pesan="Data Nilai Berhasil Diupdate!";
 		}
 		else{
 			return false;
 		}
-	}
-	
+	}	
 	echo $pesan;
-	
 ?>

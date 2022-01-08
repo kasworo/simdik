@@ -35,7 +35,6 @@
 	);
 
 	$tp=viewdata("tbthpel", $tahun)[0];
-	setcookie('c_tahun', $tp['idthpel'],time()+3600);
 	$tapel=$tp['desthpel'];	
 ?>
 <!DOCTYPE html>

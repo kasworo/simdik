@@ -334,6 +334,7 @@
 			}
 			$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where);
 		}
+		//var_dump($sql);die;
 		$result=$conn->query($sql);
 		return $result->num_rows;
 	}

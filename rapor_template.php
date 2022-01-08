@@ -1,94 +1,145 @@
 <?php
 	require_once "assets/library/PHPExcel.php";
 	include "dbfunction.php";
-	function getmapel($id){
-		$rows=viewdata('tbmapel',array('idmapel'=>$id))[0];
-		return $rows;
-	}
+    // var_dump($_POST);die;
+    function getsiswa($kls,$th){
+        $field=array('nis', 'nisn', 'nmsiswa');
+		    $where=array(
+			    'deleted'=>'0',
+                'idkelas'=>$kls,
+                'idthpel'=>$th
+		    );
+		    $joins=array(
+			    'tbregistrasi'=>'idsiswa',
+			    'tbthpel'=>'idthpel',
+			    'tbkelas'=>'idkelas'
+		    );
+		    $ds=fulljoin($field,'tbsiswa',$joins, $where);
+            return $ds;
+    }
 
-	function getthn($id){
-		$rows=viewdata('tbthpel', array('idthpel'=>$id))[0];		
-		return $rows;
-	}
-	$objPHPExcel = new PHPExcel();
-	$objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
-		->setTitle("Template")->setLastModifiedBy("Kasworo Wardani");
-	$nama="rapor_template";
-	if($_GET['d']=='1'){$aspek='Sikap Spiritual';}
-	if($_GET['d']=='2'){$aspek='Sikap Sosial';}
-	if($_GET['d']=='3'){$aspek='Pengetahuan';}
-	if($_GET['d']=='4'){$aspek='Keterampilan';}
-	$baris=8;
-	$no=0;
-	$objPHPExcel->setActiveSheetIndex(0)
-		->mergeCells('A1:J1')
-		->mergeCells('A3:C3')
-		->mergeCells('A4:C4')
-		->mergeCells('A5:C5')
-		->mergeCells('A6:C6')
-		->mergeCells('C8:F8')
-		->mergeCells('F3:J3')
-		->mergeCells('F4:J4')
-		->mergeCells('F5:J5')
-		->mergeCells('F6:J6')
-		->setCellValue('A1', 'TEMPLATE INPUT NILAI RAPOR')
-		->setCellValue('A3', 'Tahun Pelajaran')
-		->setCellValue('D3', ':')
-		->setCellValue('E3', $th['idthpel'])
-		->setCellValue('F3', ' - '.$th['desthpel'])
-		->setCellValue('A4', 'Kelas')
-		->setCellValue('D4', ':')
-		->setCellValue('E4', $th['idthpel'])
-		->setCellValue('F4', ' - '.$th['desthpel'])
-		->setCellValue('A5', 'Mata Pelajaran')
-		->setCellValue('D5', ':')
-		->setCellValue('E5', $mp['idmapel'])
-		->setCellValue('F5', ' - '.$mp['nmmapel'])
-		->setCellValue('A6', 'Penilaian')
-		->setCellValue('D6', ':')
-		->setCellValue('A8', 'No.')
-		->setCellValue('B8', 'NIS')
-		->setCellValue('C8', 'NISN')
-		->setCellValue('G8', 'Nama Peserta Didik')
-		->setCellValue('H8', 'Nilai')
-		->setCellValue('I8', 'Predikat')
-		->setCellValue('J8', 'Deskripsi');
-		$field=array('nis', 'nisn', 'nmsiswa');
-		$where=array(
-			'deleted'=>'0',
-		);
-		$joins=array(
-			'tbregistrasi'=>'idsiswa',
-			'tbthpel'=>'idthpel',
-			'tbkelas'=>'idkelas, idthpel'
-		);
-		$ds=fulljoin($field,'tbsiswa',$joins, $where);
-		foreach ($ds as $s){
-			$no++;
-			$baris++;
-			$objPHPExcel->setActiveSheetIndex(0)
-				->setCellValue("A$baris", $no)
-				->setCellValue("B$baris",$s['nis'])
-				->setCellValue("C$baris",$s['nisn'])
-				->setCellValue("G$baris",$s['nmsiswa']);
-		}
-		$objPHPExcel->getSheet(0)->getColumnDimension('A')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('B')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('C')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('D')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('E')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('F')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('G')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('H')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('I')->setAutoSize(true);
-		$objPHPExcel->getSheet(0)->getColumnDimension('J')->setAutoSize(true);
-	$objPHPExcel->getActiveSheet()->setTitle($nama);
+    function gettahun($th){
+        $where=array('idthpel'=>$th);
+        $tp=viewdata('tbthpel',$where)[0];
+        return $tp;
+    }
+    
+    function getkelas($kls){
+        $fkls=array('idkelas', 'nmkelas');
+        $tbl=array('tbskul'=>'idjenjang');
+        $where=array('idkelas'=>$kls);
+        $qkls=fulljoin($fkls,'tbkelas',$tbl,$where)[0];
+        return $qkls;
+    } 
+    
+    if(isset($_POST['downloadspr'])){
+        $aspek='1 - Sikap Spriritual';           
+        $data=getsiswa($_POST['kls1'],$_POST['thpel1']);
+        $thn=gettahun($_POST['thpel1']);
+        $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
+        $kls=getkelas($_POST['kls1']);
+        $nmkelas=$kls['idkelas'].' - '.$kls['nmkelas'];
+        $namafile='spiritual_'.$kls['idkelas'].'_'.$thn['nmthpel'];
+    } 
+
+    if(isset($_POST['downloadsos'])){
+        $aspek='2 - Sikap Sosial';           
+        $data=getsiswa($_POST['kls2'],$_POST['thpel2']);
+        $thn=gettahun($_POST['thpel2']);
+        $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
+        $kls=getkelas($_POST['kls2']);
+        $nmkelas=$kls['idkelas'].' - '.$kls['nmkelas'];
+        $namafile='sosial_'.$kls['idkelas'].'_'.$thn['nmthpel'];
+    }
+
+    if(isset($_POST['downloadkog'])){
+        $aspek='3 - Pengetahuan';           
+        $data=getsiswa($_POST['kls3'],$_POST['thpel3']);
+        $thn=gettahun($_POST['thpel3']);
+        $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
+        $kls=getkelas($_POST['kls3']);
+        $nmkelas=$kls['idkelas'].' - '.$kls['nmkelas'];
+        $namafile='pengetahuan_'.$kls['idkelas'].'_'.$thn['nmthpel'];
+    }
+
+    if(isset($_POST['downloadmot'])){
+        $aspek='4 - Motorik';           
+        $data=getsiswa($_POST['kls4'],$_POST['thpel4']);
+        $thn=gettahun($_POST['thpel4']);
+        $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
+        $kls=getkelas($_POST['kls4']);
+        $nmkelas=$kls['idkelas'].' - '.$kls['nmkelas'];
+        $namafile='pengetahuan_'.$kls['idkelas'].'_'.$thn['nmthpel'];
+    }
+    
+    $objPHPExcel = new PHPExcel();
+    $objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
+        ->setTitle("Template")->setLastModifiedBy("Kasworo Wardani");
+    $objPHPExcel->setActiveSheetIndex(0)        
+        ->mergeCells('A1:H1')
+        ->mergeCells('A3:C3')
+        ->mergeCells('A4:C4')
+        ->mergeCells('A5:C5')
+        ->mergeCells('A6:C6')
+        ->mergeCells('F3:J3')
+        ->mergeCells('F4:J4')
+        ->mergeCells('F5:J5')
+        ->mergeCells('F6:J6')        
+        ->setCellValue('A1', 'TEMPLATE INPUT NILAI RAPOR')
+        ->setCellValue('A3', 'Tahun Pelajaran')
+        ->setCellValue('A4', 'Kelas')
+        ->setCellValue('A5', 'Aspek')
+        ->setCellValue('D3', ': '.$tahun)
+        ->setCellValue('D4', ': '.$nmkelas)
+        ->setCellValue('D5', ': '.$aspek)
+        ->setCellValue('A7', 'No.')->setCellValue('A8', '(1)')
+		->setCellValue('B7', 'NIS')->setCellValue('B8', '(2)')
+		->setCellValue('C7', 'NISN')->setCellValue('C8', '(3)')
+		->setCellValue('D7', 'Nama Peserta Didik')->setCellValue('D8', '(4)')
+		->setCellValue('E7', 'Nilai')->setCellValue('E8', '(5)')
+		->setCellValue('F7', 'Predikat')->setCellValue('F8', '(6)')
+		->setCellValue('G7', 'Deskripsi')->setCellValue('G8', '(7)')
+        ->setCellValue('H7', 'Keterangan')->setCellValue('H8', '(8)'); 
+    $baris=8;
+	$no=0;  
+    foreach ($data as $s){
+        $no++;
+        $baris++;
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue("A$baris", $no)
+            ->setCellValue("B$baris",$s['nis'])
+            ->setCellValue("C$baris",$s['nisn'])
+            ->setCellValue("D$baris",$s['nmsiswa']);
+    }
+    $semua=$baris-1;
+    $objPHPExcel->getActiveSheet()->freezePane("A9");
+	$objPHPExcel->setActiveSheetIndex()->getStyle("A8:H$semua");
+	$objPHPExcel->setActiveSheetIndex()->getStyle("A1:H1")->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+	$center = array();
+	$center ['alignment']=array();
+	$center ['alignment']['horizontal']=PHPExcel_Style_Alignment::HORIZONTAL_CENTER;
+	$objPHPExcel->setActiveSheetIndex()->getStyle("A7:H8")->applyFromArray($center);
+	$objPHPExcel->setActiveSheetIndex()->getStyle("A8:C$semua")->applyFromArray($center);
+	$objPHPExcel->setActiveSheetIndex()->getStyle("E8:H$semua")->applyFromArray($center);
+	$thick = array();
+	$thick['borders']=array();
+	$thick['borders']['allborders']=array();
+	$thick['borders']['allborders']['style']=PHPExcel_Style_Border::BORDER_THIN;
+	$objPHPExcel->setActiveSheetIndex()->getStyle("A7:H$semua")->applyFromArray($thick); 
+	$objPHPExcel->getSheet(0)->getColumnDimension('A')->setWidth(4);
+	$objPHPExcel->getSheet(0)->getColumnDimension('B')->setWidth(8);
+	$objPHPExcel->getSheet(0)->getColumnDimension('C')->setWidth(12);
+	$objPHPExcel->getSheet(0)->getColumnDimension('D')->setWidth(36);
+	$objPHPExcel->getSheet(0)->getColumnDimension('E')->setWidth(24);
+	$objPHPExcel->getSheet(0)->getColumnDimension('F')->setWidth(16);
+	$objPHPExcel->getSheet(0)->getColumnDimension('G')->setWidth(22);
+    $objPHPExcel->getSheet(0)->getColumnDimension('H')->setWidth(12);
+	$objPHPExcel->getActiveSheet()->setTitle($namafile);
 	$objPHPExcel->setActiveSheetIndex(0);
 	header('Content-Type: application/vnd.ms-excel');
-	header('Content-Disposition: attachment;filename="'.$nama.'.xls"');
+	header('Content-Disposition: attachment;filename="'.$namafile.'.xls"');
 	header('Cache-Control: max-age=0');
 	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 	$objWriter->save('php://output');
 	exit;
-	
 ?>

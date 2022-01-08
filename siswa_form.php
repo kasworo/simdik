@@ -140,7 +140,7 @@
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
-    var id = "<?php echo $idsiswa;?>";
+    let id = "<?php echo $idsiswa;?>";
     $.ajax({
         url: "siswa_json.php",
         type: "POST",

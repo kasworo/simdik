@@ -263,12 +263,9 @@
                                 <?php
 									$qtp=viewdata('tbthpel', $key);
 									foreach($qtp as $tp):
-										if($tp['idthpel']===$_COOKIE['c_tahun']){
-											$ts="selected";
-										}
-										else {$ts='';}
 								?>
-                                <option value="<?php echo $tp['idthpel'];?>" <?php echo $ts;?>>
+                                <option value="<?php echo $tp['idthpel'];?>"
+                                    <?php echo $tp['aktif']=='1' ? "selected" : "";?>>
                                     <?php echo $tp['desthpel'];?>
                                 </option>
                                 <?php endforeach ?>
