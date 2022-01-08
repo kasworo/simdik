@@ -7,19 +7,28 @@
 		'aspek'=>$_POST['as']
 	);
 	$ceknilai=cekdata('tbnilairapor',$key);
-	//var_dump($ceknilai);die;
 	if($ceknilai>0){
-		$nilai=array(
-			'nilairapor'=>$_POST['nil'],
-			'predikat'=>$_POST['hrf'],			
-			'deskripsi'=>$_POST['des']
-		);
+		if($_POST['m']=='1'){
+			$nilai=array(
+				'nilairapor'=>$_POST['nil'],
+			);
+		}
+		if($_POST['m'] == '2'){
+			$nilai=array(
+				'predikat'=>$_POST['hrf']
+			);
+		}
+		if($_POST['m'] == '3'){
+			$nilai=array(
+				'deskripsi'=>$_POST['des']
+			);
+		}		
 		$editnilai=editdata('tbnilairapor',$nilai,'',$key);
 		if($editnilai>0){
-			$pesan="Data Nilai Berhasil Diupdate!";
+			$jns='3';
 		}
 		else {
-			return false;
+			$jns='4';
 		}
 	}
 	else {
@@ -28,17 +37,15 @@
 			'idthpel'=>$_POST['th'],
 			'idmapel'=>$_POST['mp'],
 			'aspek'=>$_POST['as'],
-			'nilairapor'=>$_POST['nil'],
-			'predikat'=>$_POST['hrf'],			
-			'deskripsi'=>$_POST['des']
+			'nilairapor'=>$_POST['nil']
 		);
-		$tambahnilai=adddata('tbnilairapor',$nilai);
+		$tambahnilai=adddata('tbnilairapor',$nilai);		
 		if($tambahnilai>0){
-			$pesan="Data Nilai Berhasil Diupdate!";
+			$jns='1';
 		}
-		else{
-			return false;
+		else {
+			$jns='2';
 		}
 	}	
-	echo $pesan;
+	echo $jns;
 ?>

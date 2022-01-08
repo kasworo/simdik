@@ -107,15 +107,16 @@ $(document).ready(function() {
                                 </td>
                             </tr>
                             <script type="text/javascript">
-                            $("#nilai<?php echo $no;?>").change(function() {
-                                var thpel = $("#txtThpel").val();
-                                var kdmapel = "<?php echo $n['idmapel'];?>";
-                                var idsiswa = "<?php echo $idsiswa;?>";
-                                var nilai = $(this).val();
+                            $("#nilai<?php echo $no;?>").change(function(e) {
+                                e.preventDefault();
+                                let thpel = $("#txtThpel").val();
+                                let kdmapel = "<?php echo $n['idmapel'];?>";
+                                let idsiswa = "<?php echo $idsiswa;?>";
+                                let nilai = $(this).val();
                                 $.ajax({
                                     url: "rapor_simpan.php",
                                     type: "POST",
-                                    data: "as=3&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
+                                    data: "as=3&m=1&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
                                         "&nil=" + nilai,
                                     cache: false,
                                     success: function(data) {
@@ -125,36 +126,38 @@ $(document).ready(function() {
                                 });
                             })
 
-                            $("#predik<?php echo $no;?>").change(function() {
-                                var thpel = $("#txtThpel").val();
-                                var kdmapel = "<?php echo $n['idmapel'];?>";
-                                var idsiswa = "<?php echo $idsiswa;?>";
-                                var nilai = $("#nilai<?php echo $no;?>").val();
-                                var huruf = $(this).val();
+                            $("#predik<?php echo $no;?>").change(function(e) {
+                                e.preventDefault();
+                                let thpel = $("#txtThpel").val();
+                                let kdmapel = "<?php echo $n['idmapel'];?>";
+                                let idsiswa = "<?php echo $idsiswa;?>";
+                                let nilai = $("#nilai<?php echo $no;?>").val();
+                                let huruf = $(this).val();
                                 $.ajax({
                                     url: "rapor_simpan.php",
                                     type: "POST",
-                                    data: "as=3&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
+                                    data: "as=3&m=2&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
                                         "&nil=" + nilai + "&hrf=" + huruf,
                                     cache: false,
                                     success: function(data) {
                                         //toastr.success(data);
-                                        alert(nilai);
+                                        alert(data);
                                     }
                                 });
                             })
 
-                            $("#des<?php echo $no;?>").change(function() {
-                                var thpel = $("#txtThpel").val();
-                                var kdmapel = "<?php echo $n['idmapel'];?>";
-                                var idsiswa = "<?php echo $idsiswa;?>";
-                                var nilai = $("#nilai<?php echo $no;?>").val();
-                                var huruf = $("#pred<?php echo $no;?>").val();
-                                var des = $(this).val();
+                            $("#des<?php echo $no;?>").change(function(e) {
+                                e.preventDefault();
+                                let thpel = $("#txtThpel").val();
+                                let kdmapel = "<?php echo $n['idmapel'];?>";
+                                let idsiswa = "<?php echo $idsiswa;?>";
+                                let nilai = $("#nilai<?php echo $no;?>").val();
+                                let huruf = $("#pred<?php echo $no;?>").val();
+                                let des = $(this).val();
                                 $.ajax({
                                     url: "rapor_simpan.php",
                                     type: "POST",
-                                    data: "as=3&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
+                                    data: "as=3&m=3&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
                                         "&nil=" + nilai + "&hrf=" + huruf + "&des=" + des,
                                     cache: false,
                                     success: function(data) {
