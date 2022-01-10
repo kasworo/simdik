@@ -1,21 +1,15 @@
 <?php
 	require_once "assets/library/PHPExcel.php";
 	include "dbfunction.php";
-    // var_dump($_POST);die;
-    function getsiswa($kls,$th){
-        $field=array('nis', 'nisn', 'nmsiswa');
-		    $where=array(
-			    'deleted'=>'0',
-                'idkelas'=>$kls,
-                'idthpel'=>$th
-		    );
-		    $joins=array(
-			    'tbregistrasi'=>'idsiswa',
-			    'tbthpel'=>'idthpel',
-			    'tbkelas'=>'idkelas'
-		    );
-		    $ds=fulljoin($field,'tbsiswa',$joins, $where);
-            return $ds;
+    function getsiswa($kls,$th,$as){
+        if($as=='1' || $as=='2'){
+            $sql="SELECT s.nis, s.nisn, s.nmsiswa, nr.nilaisikap as nilairapor, nr.predikat, nr.deskripsi FROM tbsiswa s INNER JOIN tbregistrasi r ON r.idsiswa=s.idsiswa LEFT JOIN tbnilaisikap nr ON nr.idsiswa=s.idsiswa AND r.idthpel=nr.idthpel  WHERE r.idkelas='$kls' AND r.idthpel='$th' ORDER BY s.idsiswa";
+        }
+        if($as=='3' || $as=='4'){
+            $sql="SELECT s.nis, s.nisn, s.nmsiswa, nr.nilairapor, nr.predikat, nr.deskripsi, nr.idmapel FROM tbsiswa s INNER JOIN tbregistrasi r ON r.idsiswa=s.idsiswa LEFT JOIN tbnilairapor nr ON nr.idsiswa=s.idsiswa AND r.idthpel=nr.idthpel  WHERE r.idkelas='$kls' AND r.idthpel='$th' ORDER BY s.idsiswa";
+        }
+        $ds=vquery($sql);
+        return $ds;
     }
 
     function gettahun($th){
@@ -34,7 +28,7 @@
     
     if(isset($_POST['downloadspr'])){
         $aspek='1 - Sikap Spriritual';           
-        $data=getsiswa($_POST['kls1'],$_POST['thpel1']);
+        $data=getsiswa($_POST['kls1'],$_POST['thpel1'],1);
         $thn=gettahun($_POST['thpel1']);
         $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
         $kls=getkelas($_POST['kls1']);
@@ -44,7 +38,7 @@
 
     if(isset($_POST['downloadsos'])){
         $aspek='2 - Sikap Sosial';           
-        $data=getsiswa($_POST['kls2'],$_POST['thpel2']);
+        $data=getsiswa($_POST['kls2'],$_POST['thpel2'],2);
         $thn=gettahun($_POST['thpel2']);
         $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
         $kls=getkelas($_POST['kls2']);
@@ -54,7 +48,7 @@
 
     if(isset($_POST['downloadkog'])){
         $aspek='3 - Pengetahuan';           
-        $data=getsiswa($_POST['kls3'],$_POST['thpel3']);
+        $data=getsiswa($_POST['kls3'],$_POST['thpel3'],3);
         $thn=gettahun($_POST['thpel3']);
         $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
         $kls=getkelas($_POST['kls3']);
@@ -64,7 +58,7 @@
 
     if(isset($_POST['downloadmot'])){
         $aspek='4 - Motorik';           
-        $data=getsiswa($_POST['kls4'],$_POST['thpel4']);
+        $data=getsiswa($_POST['kls4'],$_POST['thpel4'],4);
         $thn=gettahun($_POST['thpel4']);
         $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
         $kls=getkelas($_POST['kls4']);
@@ -100,16 +94,20 @@
 		->setCellValue('F7', 'Predikat')->setCellValue('F8', '(6)')
 		->setCellValue('G7', 'Deskripsi')->setCellValue('G8', '(7)')
         ->setCellValue('H7', 'Keterangan')->setCellValue('H8', '(8)'); 
-    $baris=8;
+    $baris=9;
 	$no=0;  
     foreach ($data as $s){
-        $no++;
-        $baris++;
+        $no++;        
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue("A$baris", $no)
             ->setCellValue("B$baris",$s['nis'])
             ->setCellValue("C$baris",$s['nisn'])
-            ->setCellValue("D$baris",$s['nmsiswa']);
+            ->setCellValue("D$baris",$s['nmsiswa'])
+            ->setCellValue("E$baris",$s['nilairapor'])
+            ->setCellValue("F$baris",$s['predikat'])
+            ->setCellValue("G$baris",$s['deskripsi'])
+            ->setCellValue("H$baris",$s['idmapel']);
+        $baris++;
     }
     $semua=$baris-1;
     $objPHPExcel->getActiveSheet()->freezePane("A9");

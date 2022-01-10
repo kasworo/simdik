@@ -2,101 +2,72 @@
 	if(isset($_POST['upload'])) {
         require_once 'assets/library/PHPExcel.php';
 	    require_once 'assets/library/excel_reader.php';
-	// include "dbfunction.php";
-	// var_dump($_FILES['filepd']);die;
-	if(empty($_FILES['filerapor']['tmp_name'])) { 
-		echo "<script>
-			$(function() {
-				toastr.error('File Template Peserta Didik Kosong!','Mohon Maaf!',{
-					timeOut:1000,
-					fadeOut:1000
+	
+		if(empty($_FILES['filerapor']['tmp_name'])) { 
+			echo "<script>
+				$(function() {
+					toastr.error('File Template Peserta Didik Kosong!','Mohon Maaf!',{
+						timeOut:1000,
+						fadeOut:1000
+					});
 				});
-			});
-		</script>";	
-	} else {
-		$data = new Spreadsheet_Excel_Reader($_FILES['filerapor']['tmp_name']);
-		$baris = $data->rowcount($sheet_index=0);       
-        $thpel=substr($data->val(3,4),2,1);
-        $aspek=substr($data->val(5,4),2,1);
-		$isidata=$baris-8;
-		$sukses = 0;
-		$gagal = 0;
-		$update=0;	
-		for ($i=6; $i<=$baris; $i++)
-		{
-			$xnis=$data->val($i,2);
-			$xnisn=$data->val($i,3);
-			$xnilai = $data->val($i,5); 
-			$xpred = $data->val($i,6); 
-			$xdes = $data->val($i,7); 
-			$xmapel = $data->val($i,8);
-			$ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
-            $idsiswa=$ds['idsiswa'];
-			
-            if($xnis==''){
-				echo "<script>
-					$(function() {
-						toastr.error('Cek Kolom NIS a.n ".$xnama."','Mohon Maaf!',{
-							timeOut:10000,
-							fadeOut:10000
+			</script>";	
+		} else {
+			$data = new Spreadsheet_Excel_Reader($_FILES['filerapor']['tmp_name']);
+			$baris = $data->rowcount($sheet_index=0);       
+        	$thpel=substr($data->val(3,4),2,1);
+        	$aspek=substr($data->val(5,4),2,1);
+			$isidata=$baris-8;
+			$sukses = 0;
+			$gagal = 0;
+			$update=0;	
+			for ($i=6; $i<=$baris; $i++)
+			{
+				$xnis=$data->val($i,2);
+				$xnisn=$data->val($i,3);
+				$xnama=$data->val($i,4);
+				$xnilai = $data->val($i,5); 
+				$xpred = $data->val($i,6); 
+				$xdes = $data->val($i,7); 
+				$xmapel = $data->val($i,8);
+				$ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
+            	$idsiswa=$ds['idsiswa'];
+				if($xnis==''){
+					echo "<script>
+						$(function() {
+							toastr.error('Cek Kolom NIS a.n ".$xnama."','Mohon Maaf!',{
+								timeOut:10000,
+								fadeOut:10000
+							});
 						});
-					});
-				</script>";
-			}
-			else if(strlen($xnisn)<>10 || $xnisn==''){
-				echo "<script>
-					$(function() {
-						toastr.error('Cek Kolom NISN a.n ".$xnama."','Mohon Maaf!',{
-							timeOut:10000,
-							fadeOut:10000
+					</script>";
+				}
+				else if(strlen($xnisn)<>10 || $xnisn==''){
+					echo "<script>
+						$(function() {
+							toastr.error('Cek Kolom NISN a.n ".$xnama."','Mohon Maaf!',{
+								timeOut:10000,
+								fadeOut:10000
+							});
 						});
-					});
-				</script>";
-			}
-			
-			
-			else {
-				$key=array(
-					'idsiswa'=>$idsiswa,
-					'idthpel'=>$thpel,
-					'idmapel'=>$xmapel
-				); 
-				$ceksiswa=cekdata('tbnilairapor',$key);
-				if($ceksiswa>0){
-					$datasiswa=array(
-						'idskul'=>$idskul,
-						'nmsiswa' =>$xnama,
-						'nik' =>$xnik,
-						'tmplahir' => $xtmplhr,
-						'tgllahir' =>$xtgllhr,
-						'gender' =>$xjekel,
-						'idagama' =>$xagama,
-						'anake' =>$xanak,
-						'sdr' =>$xsdr,
-						'warganegara' =>'1',
-						'goldarah' =>$xdrh,
-						'rwysakit' =>$xsakit,
-						'kebkhusus' =>$xkeb,
-						'ikuts' =>$xikut,
-						'transpr' =>$xtrans,
-						'jarak' =>$xjrk,
-						'waktu' =>$xwkt,
-						'alamat' =>$xalmt,
-						'desa' =>$xdesa,
-						'kec' =>$xkec,
-						'kab' =>$xkab,
-						'prov' =>$xprov,
-						'kdpos' =>$xkdpos,
-						'lintang' =>$xltg,
-						'bujur' =>$xbjr,
-						'nohp' =>$xnohp,
-						'hobi1' =>$xolga,
-						'hobi2' =>$xseni,
-						'hobi3' =>$xorgn,
-						'hobi4' =>$xlain
-					);
-					
-					if(editdata('tbsiswa',$datasiswa,'',$key)>0){
+					</script>";
+				}
+				else {
+					$key=array(
+						'idsiswa'=>$idsiswa,
+						'idthpel'=>$xthpel,
+						'idmapel'=>$xmapel,
+						'aspek'=>$aspek
+					); 
+					$cekrapor=cekdata('tbnilairapor',$key);
+					if($cekrapor>0){
+						$nilai=array(
+							'nilairapor'=>$xnilai,
+							'predikat'=>$xpred,
+							'deskripsi'=>$xdes
+						);
+						$editnilai=editdata('tbnilairapor',$nilai,'',$key);
+						if($editnilai>0){
 						echo "<script>
 							$(function() {
 								toastr.success('Update Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
@@ -119,42 +90,17 @@
 					}
 				} 
 				else {
-					$datasiswa=array(
-						'idskul'=>$idskul,
-						'nmsiswa' =>$xnama,
-						'nik' =>$xnik,
-						'nis' =>$xnis,
-						'nisn' =>$xnisn,
-						'tmplahir' => $xtmplhr,
-						'tgllahir' =>$xtgllhr,
-						'gender' =>$xjekel,
-						'idagama' =>$xagama,
-						'anake' =>$xanak,
-						'sdr' =>$xsdr,
-						'warganegara' =>'1',
-						'goldarah' =>$xdrh,
-						'rwysakit' =>$xsakit,
-						'kebkhusus' =>$xkeb,
-						'ikuts' =>$xikut,
-						'transpr' =>$xtrans,
-						'jarak' =>$xjrk,
-						'waktu' =>$xwkt,
-						'alamat' =>$xalmt,
-						'desa' =>$xdesa,
-						'kec' =>$xkec,
-						'kab' =>$xkab,
-						'prov' =>$xprov,
-						'kdpos' =>$xkdpos,
-						'lintang' =>$xltg,
-						'bujur' =>$xbjr,
-						'nohp' =>$xnohp,
-						'olahrg' =>$xolga,
-						'seni' =>$xseni,
-						'orgns' =>$xorgn,
-						'lain' =>$xlain
+					$nilai=array(
+						'idsiswa'=>$idsiswa,
+						'idthpel'=>$xthpel,
+						'idmapel'=>$xmapel,
+						'aspek'=>$aspek,
+						'nilairapor'=>$xnilai,
+						'predikat'=>$xpred,
+						'deskripsi'=>$xdes
 					);
-					
-					if(adddata('tbsiswa',$datasiswa)>0){
+					$tambahnilai=adddata('tbnilairapor',$nilai);
+					if($tambahnilai>0){
 						echo "<script>
 							$(function() {
 								toastr.success('Tambah Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{

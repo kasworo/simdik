@@ -35,7 +35,7 @@
 
         function ChapterTitle($idsiswa)
         {
-			global $conn;
+			//global $conn;
 			$ds=viewdata('tbsiswa',array('idsiswa'=>$idsiswa))[0];
 			$nis=$ds['nis'];
 			$nisn=$ds['nisn'];

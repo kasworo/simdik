@@ -1,15 +1,14 @@
-<?php
-	
-	if(isset($_POST['tmpsiswa'])){
-		include "siswa_upload.php";
-	}
-	if(isset($_POST['tmportu'])){
-        include "siswa_ortu.php";
-    }
+<?php	
+	if(isset($_POST['tmpsiswa'])){include "siswa_upload.php";}
+	if(isset($_POST['tmportu'])){include "siswa_ortu.php";    }
 
-?> <div class="card card-secondary card-outline">
+?>
+<div class="card card-secondary card-outline">
     <div class="card-header">
         <h4 class="card-title">Ekspor dan Impor Data Terkait Peserta Didik</h4>
+        <div class="card-tools">
+
+        </div>
     </div>
     <div class="card-body">
         <div class="row d-flex align-items-stretch justify-content-start">
