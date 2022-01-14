@@ -241,13 +241,7 @@
                         <li class="nav-item">
                             <a href="index.php?p=datarapor&d=1" class="nav-link">
                                 <i class="fas fa-check-square nav-icon"></i>
-                                <p>Nilai Sikap Spiritual</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="index.php?p=datarapor&d=2" class="nav-link">
-                                <i class="fas fa-check-square  nav-icon"></i>
-                                <p>Nilai Sikap Sosial</p>
+                                <p>Nilai Sikap</p>
                             </a>
                         </li>
                         <li class="nav-item">

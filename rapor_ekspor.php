@@ -2,7 +2,6 @@
 	if(isset($_POST['upload'])) {
         require_once 'assets/library/PHPExcel.php';
 	    require_once 'assets/library/excel_reader.php';
-	
 		if(empty($_FILES['filerapor']['tmp_name'])) { 
 			echo "<script>
 				$(function() {
@@ -21,9 +20,9 @@
 			$sukses = 0;
 			$gagal = 0;
 			$update=0;	
-			for ($i=6; $i<=$baris; $i++)
+			for ($i=9; $i<=$baris; $i++)
 			{
-				$xnis=$data->val($i,2);
+				$xnis=$data->val($i,2);                
 				$xnisn=$data->val($i,3);
 				$xnama=$data->val($i,4);
 				$xnilai = $data->val($i,5); 
@@ -55,7 +54,7 @@
 				else {
 					$key=array(
 						'idsiswa'=>$idsiswa,
-						'idthpel'=>$xthpel,
+						'idthpel'=>$thpel,
 						'idmapel'=>$xmapel,
 						'aspek'=>$aspek
 					); 
@@ -68,31 +67,31 @@
 						);
 						$editnilai=editdata('tbnilairapor',$nilai,'',$key);
 						if($editnilai>0){
-						echo "<script>
-							$(function() {
-								toastr.success('Update Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
-									timeOut:3000,
-									fadeOut:3000
-								});
-							});
-						</script>";
+						// echo "<script>
+						// 	$(function() {
+						// 		toastr.success('Update Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
+						// 			timeOut:3000,
+						// 			fadeOut:3000
+						// 		});
+						// 	});
+						// </script>";
 						$update++;
 					}
-					else {
-						echo "<script>
-							$(function() {
-								toastr.error('Update Data Peserta Didik a.n ".$xnama." Gagal!','Terima Kasih',{
-									timeOut:3000,
-									fadeOut:3000
-								});
-							});
-						</script>";
-					}
+					// else {
+					// 	// echo "<script>
+					// 	// 	$(function() {
+					// 	// 		toastr.error('Update Data Peserta Didik a.n ".$xnama." Gagal!','Terima Kasih',{
+					// 	// 			timeOut:3000,
+					// 	// 			fadeOut:3000
+					// 	// 		});
+					// 	// 	});
+					// 	// </script>";
+					// }
 				} 
 				else {
 					$nilai=array(
 						'idsiswa'=>$idsiswa,
-						'idthpel'=>$xthpel,
+						'idthpel'=>$thpel,
 						'idmapel'=>$xmapel,
 						'aspek'=>$aspek,
 						'nilairapor'=>$xnilai,
@@ -101,25 +100,25 @@
 					);
 					$tambahnilai=adddata('tbnilairapor',$nilai);
 					if($tambahnilai>0){
-						echo "<script>
-							$(function() {
-								toastr.success('Tambah Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
-									timeOut:3000,
-									fadeOut:3000
-								});
-							});
-						</script>";
+						// echo "<script>
+						// 	$(function() {
+						// 		toastr.success('Tambah Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
+						// 			timeOut:3000,
+						// 			fadeOut:3000
+						// 		});
+						// 	});
+						// </script>";
 						$sukses++;
 					}
 					else {
-						echo "<script>
-							$(function() {
-								toastr.error('Tambah Data Peserta Didik a.n ".$xnama." Gagal!','Mohon Maaf',{
-									timeOut:4000,
-									fadeOut:3000
-								});
-							});
-						</script>";
+						// echo "<script>
+						// 	$(function() {
+						// 		toastr.error('Tambah Data Peserta Didik a.n ".$xnama." Gagal!','Mohon Maaf',{
+						// 			timeOut:4000,
+						// 			fadeOut:3000
+						// 		});
+						// 	});
+						// </script>";
 						$gagal++;
 					}
 				}
@@ -134,7 +133,7 @@
 			});
 		</script>";
 	}
-    }
+}
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -216,11 +215,11 @@ $(document).ready(function() {
                 <select class="form-control input-sm" id="txtKls">
                     <option value="">..Pilih..</option>
                     <?php
-									$fkls=array('idkelas', 'nmkelas');
-									$tbl=array('tbskul'=>'idjenjang');
-									$qkls=fulljoin($fkls,'tbkelas',$tbl);
-									foreach ($qkls as $kl):
-								?>
+						$fkls=array('idkelas', 'nmkelas');
+						$tbl=array('tbskul'=>'idjenjang');
+						$qkls=fulljoin($fkls,'tbkelas',$tbl);
+						foreach ($qkls as $kl):
+					?>
                     <option value="<?php echo $kl['idkelas'];?>"><?php echo $kl['nmkelas'];?></option>
                     <?php endforeach ?>
                 </select>
@@ -247,7 +246,7 @@ $(document).ready(function() {
                 <thead>
                     <tr>
                         <th style="text-align:center;width:7.5%">No.</th>
-                        <th style="text-align:center">Template <?php echo $rombel;?></th>
+                        <th style="text-align:center">Template</th>
                         <th style="text-align:center;width:27.5%">Download Format</th>
                     </tr>
                 </thead>

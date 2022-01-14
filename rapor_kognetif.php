@@ -1,36 +1,108 @@
-<?php 
-    $idsiswa=$_GET['id'];
-?>
+<?php $idsiswa=$_GET['id'];?>
 <script type="text/javascript">
-$(document).ready(function() {
-    $(".txtNilai").attr('disabled', 'disabled');
-    $(".txtDeskripsi").attr('disabled', 'disabled');
-    $(".txtHuruf").attr('disabled', 'disabled');
-    $("#txtThpel").change(function() {
-        let id = "<?php echo $idsiswa;?>";
-        $.ajax({
-            url: "rapor_json.php",
-            type: "POST",
-            dataType: 'json',
-            data: "id=" + id + "&d=3",
-            success: function(e) {
-                $("#idsiswa").val(e.idsiswa);
-                $("#nmsiswa").val(e.nmsiswa);
-                $("#simpan").html(data.tmbl);
-            }
-        })
-        if ($(this).val() == '' || $(this).val() == null) {
-            $(".txtNilai").attr('disabled', 'disabled');
-            $(".txtHuruf").attr('disabled', 'disabled');
-            $(".txtDeskripsi").attr('disabled', 'disabled');
-        } else {
-            $(".txtNilai").removeAttr('disabled');
-            $(".txtHuruf").removeAttr('disabled');
-            $(".txtDeskripsi").removeAttr('disabled');
+function isitable(id, th) {
+    $.ajax({
+        url: 'rapor_data.php',
+        type: 'POST',
+        data: "as=3&id=" + id + "&th=" + th,
+        success: function(data) {
+            $("#datane").html(data);
         }
+    });
+}
+$(document).ready(function() {
+    let id = "<?php echo $idsiswa;?>";
+    let th = $("#txtThpel").val();
+
+    $("#simpan").hide();
+    isitable(id, th);
+
+    $("#txtThpel").change(function(e) {
+        e.preventDefault();
+        let id = "<?php echo $idsiswa;?>";
+        let th = $("#txtThpel").val();
+        isitable(id, th);
+    })
+    $("#pilih").click(function(e) {
+        e.preventDefault();
+        $(".txtNilai").removeAttr('disabled');
+        $(".txtDeskripsi").removeAttr('disabled');
+        $(".txtPredikat").removeAttr('disabled');
+        $(this).hide();
+        $("#simpan").show();
     })
 })
 </script>
+<?php 
+    if(isset($_POST['kognetif'])){
+        $rows = isset($_POST['mapel']) ? $_POST['mapel'] : 1;
+        $i=0;
+        $gagal=0;
+        $tambah=0;
+        $edit=0;
+        $batal=0;
+        foreach ($rows as $row){
+            $key=array(
+                'idsiswa'=>$idsiswa,
+                'idthpel'=>$_POST['thpel'],
+                'idmapel'=>$_POST['mapel'][$i],
+                'aspek'=>'3'
+            ); 
+            $ceknilai=cekdata('tbnilairapor',$key);
+		    if($ceknilai>0){
+			    $nilai=array(
+				    'nilairapor'=>$_POST['nilai'][$i],
+			        'predikat'=>$_POST['predikat'][$i],
+				    'deskripsi'=>$_POST['deskripsi'][$i]
+			    );				
+			    $editnilai=editdata('tbnilairapor',$nilai,'',$key);
+			    if($editnilai>0){$edit++;}
+			    else {$batal++;}
+		    }
+		    else {
+			    $nilai=array(
+				    'idsiswa'=>$idsiswa,
+				    'idthpel'=>$_POST['thpel'],
+				    'idmapel'=>$_POST['mapel'][$i],				    
+				    'nilairapor'=>$_POST['nilai'][$i],
+                    'predikat'=>$_POST['predikat'][$i],
+				    'deskripsi'=>$_POST['deskripsi'][$i],
+                    'aspek'=>'3',
+			    );
+			    $tambahnilai=adddata('tbnilairapor',$nilai);		
+			    if($tambahnilai>0){$tambah++;}
+			    else {$gagal++;}
+		    }
+          $i++;  
+       }
+       if($tambah>0 || $edit>0){
+            echo "<script>
+				    $(function() {
+					    toastr.info('Ada ".$tambah." data ditambah, ".$edit." data diupdate, ".$gagal." data gagal ditambahkan, ".$batal." data gagal diupdate!','Terima Kasih',{
+					    timeOut:2000,
+					    fadeOut:2000
+				    });
+			    });
+	    	</script>";
+        } 
+        else {
+            echo "<script>
+				    $(function() {
+					    toastr.error('Tidak ada data yang berhasil ditambahkan atau diupdate!','Mohon Maaf',{
+					    timeOut:2000,
+					    fadeOut:2000
+				    });
+			    });
+	    	</script>";
+        }         
+    }		
+?>
+<div class="alert alert-danger">
+    <p><strong>Petunjuk:</strong></p>
+    <p>Silahkan pilih Tahun Pelajaran, kemudian isikan nilai lengkap dengan deskripsinya.<br />Nilai
+        Akan tersimpan otomatis jika kursor keluar dari kotak isian, setelah selesai melakukan pengisian
+        klik tombol <strong>Refresh</strong></p>
+</div>
 <div class="card card-primary card-outline">
     <div class="card-header">
         <h5 class="card-title m-0" id="judul">Input Nilai Pengetahuan</h5>
@@ -41,147 +113,59 @@ $(document).ready(function() {
             </a>
         </div>
     </div>
-    <div class="card-body">
-        <div class="col-sm-12">
-            <div class="alert alert-warning">
-                <p><strong>Petunjuk:</strong></p>
-                <p>Silahkan pilih Tahun Pelajaran, kemudian isikan nilai lengkap dengan deskripsinya.<br />Nilai
-                    Akan tersimpan otomatis jika kursor keluar dari kotak isian, setelah selesai melakukan pengisian
-                    klik tombol <strong>Refresh</strong></p>
-            </div>
-            <hr />
-            <div class="form-group row mt-2">
-                <div class="col-sm-4">
-                    <label for="txtThpel">Pilih Tahun Pelajaran</label>
+    <form action="" method="post">
+        <div class="card-body">
+            <div class="form-group row mt-2 mb-0">
+                <div class="col-sm-12">
+                    <label>
+                        Pilih Kelas dan Tahun Pelajaran
+                    </label>
                 </div>
-                <div class="col-sm-4">
-                    <select class="form-control input-sm col-sm-10" id="txtThpel" name="thpel">
-                        <option value="">..Pilih..</option>
+            </div>
+            <div class="form-group row mt-2 mb-4">
+                <div class="col-sm-3">
+                    <script type="text/javascript" src="js/get_thpel.js"></script>
+                    <select class="form-control input-sm" id="txtKls" onchange="getthpel(this.value)">
+                        <option value=""> ..Pilih.. </option>
                         <?php
-                            $qtp=viewdata('tbthpel');
-                            $qtp=$conn->query("SELECT*FROM tbthpel");
-                            foreach($qtp as $tp):
-                        ?>
-                        <option value="<?php echo $tp['idthpel'];?>">
-                            <?php echo $tp['desthpel'];?>
+						$fkls=array('idkelas', 'nmkelas');
+						$tbl=array('tbskul'=>'idjenjang');
+						$qkls=fulljoin($fkls,'tbkelas',$tbl);
+						foreach ($qkls as $kl):
+					?>
+                        <option value="<?php echo $kl['idkelas'].'&id='.$idsiswa;?>"> <?php echo $kl['nmkelas'];?>
                         </option>
                         <?php endforeach ?>
                     </select>
                 </div>
-                <div class="col-sm-2">
-                    <button type="submit" class="btn btn-warning btn-block" id="pilih">Pilih</button>
+                <div class="col-sm-3">
+                    <select class="form-control" id="txtThpel" name="thpel" disabled>
+                        <option value=""> ..Pilih.. </option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-success col-6 mt-0 ml-2" id="pilih" disabled>
+                        <i class="fas fa-check-circle">
+                        </i> Pilih</button>
+                    <button type="submit" class="btn btn-info col-6 mt-0 ml-2" id="simpan" name="kognetif">
+                        <i class="fas fa-save">
+                        </i>
+                        Simpan</button>
                 </div>
             </div>
-
             <br />
-            <div class="table-responsive">
-                <table class="table table-bordered table-condensed table-striped">
-                    <thead>
-                        <tr>
-                            <th style="text-align:center;width:2.5%">No</th>
-                            <th style="text-align:center;">Mata Pelajaran</th>
-                            <th style="text-align:center;width:10%">Nilai</th>
-                            <th style="text-align:center;width:10%">Predikat</th>
-                            <th style="text-align:center;width:35%">Deskripsi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                                $col=array('idmapel', 'nmmapel');
-                                $qnil=fulljoin($col,'tbmapel', array('tbkurikulum'=>'idkur'));
-                                $no=0;
-                                foreach($qnil as $n):
-                                $no++;
-                            ?>
-                        <tr>
-                            <td><?php echo $no.'.';?></td>
-                            <td><?php echo $n['nmmapel'];?></td>
-                            <td>
-                                <input class="form-control txtNilai" name="nilai<?php echo $no;?>"
-                                    id="nilai<?php echo $no;?>" style="text-align:center;height:42px">
-                            </td>
-                            <td>
-                                <input class="form-control txtHuruf" name="predik<?php echo $no;?>"
-                                    id="predik<?php echo $no;?>" style="text-align:center;height:42px">
-                            </td>
-                            <td>
-                                <textarea class="form-control txtDeskripsi" name="des<?php echo $no;?>"
-                                    id="des<?php echo $no;?>" style="height:42px"></textarea>
-                            </td>
-                        </tr>
-                        <script type="text/javascript">
-                        $("#nilai<?php echo $no;?>").change(function(e) {
-                            e.preventDefault();
-                            let thpel = $("#txtThpel").val();
-                            let kdmapel = "<?php echo $n['idmapel'];?>";
-                            let idsiswa = "<?php echo $idsiswa;?>";
-                            let nilai = $(this).val();
-                            $.ajax({
-                                url: "rapor_simpan.php",
-                                type: "POST",
-                                data: "as=3&m=1&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
-                                    "&nil=" + nilai,
-                                cache: false,
-                                success: function(data) {
-                                    //toastr.success(data);
-                                    alert(data);
-                                }
-                            });
-                        })
-
-                        $("#predik<?php echo $no;?>").change(function(e) {
-                            e.preventDefault();
-                            let thpel = $("#txtThpel").val();
-                            let kdmapel = "<?php echo $n['idmapel'];?>";
-                            let idsiswa = "<?php echo $idsiswa;?>";
-                            let nilai = $("#nilai<?php echo $no;?>").val();
-                            let huruf = $(this).val();
-                            $.ajax({
-                                url: "rapor_simpan.php",
-                                type: "POST",
-                                data: "as=3&m=2&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
-                                    "&nil=" + nilai + "&hrf=" + huruf,
-                                cache: false,
-                                success: function(data) {
-                                    //toastr.success(data);
-                                    alert(data);
-                                }
-                            });
-                        })
-
-                        $("#des<?php echo $no;?>").change(function(e) {
-                            e.preventDefault();
-                            let thpel = $("#txtThpel").val();
-                            let kdmapel = "<?php echo $n['idmapel'];?>";
-                            let idsiswa = "<?php echo $idsiswa;?>";
-                            let nilai = $("#nilai<?php echo $no;?>").val();
-                            let huruf = $("#pred<?php echo $no;?>").val();
-                            let des = $(this).val();
-                            $.ajax({
-                                url: "rapor_simpan.php",
-                                type: "POST",
-                                data: "as=3&m=3&th=" + thpel + "&mp=" + kdmapel + "&id=" + idsiswa +
-                                    "&nil=" + nilai + "&hrf=" + huruf + "&des=" + des,
-                                cache: false,
-                                success: function(data) {
-                                    //toastr.success(data);
-                                    alert(data);
-                                }
-                            });
-                        })
-                        </script>
-                        <?php endforeach ?>
-                    </tbody>
-
-                </table>
-            </div>
+            <div class="table-responsive" id="datane"></div>
         </div>
-    </div>
+    </form>
 </div>
 <script type="text/javascript">
-function validAngka(a) {
+function
+validAngka(a) {
     if (!/^[0-9.]+$/.test(a.value)) {
-        a.value = a.value.substring(0, a.value.length - 1000);
+        a.value =
+            a.value.substring(0,
+                a.value.length -
+                1000);
     }
 }
 </script>

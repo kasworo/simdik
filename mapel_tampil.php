@@ -292,18 +292,17 @@ $("#btnrefresh").click(function() {
                     </thead>
                     <tbody>
                         <?php
-					$qk=$conn->query("SELECT*FROM tbmapel");
+					$mp=viewdata('tbmapel');
 					$no=0;
-					while($m=$qk->fetch_array())
-					{
-						$no++;
+					foreach ($mp as $m):
+                    $no++;
 				?>
                         <tr>
                             <td style="text-align:center"><?php echo $no.'.';?></td>
                             <td style="text-align:center"><?php echo $m['akmapel'];?></td>
                             <td><?php echo $m['nmmapel'];?></td>
                         </tr>
-                        <?php } ?>
+                        <?php endforeach ?>
                     </tbody>
                 </table>
             </div>

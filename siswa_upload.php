@@ -1,8 +1,6 @@
 <?php
 	require_once 'assets/library/PHPExcel.php';
 	require_once 'assets/library/excel_reader.php';
-	// include "dbfunction.php";
-	// var_dump($_FILES['filepd']);die;
 	if(empty($_FILES['filepd']['tmp_name'])) { 
 		echo "<script>
 			$(function() {
@@ -82,6 +80,7 @@
 						});
 					});
 				</script>";
+				exit;
 			}
 			else if(strlen($xnisn)<>10 || $xnisn==''){
 				echo "<script>
@@ -92,6 +91,7 @@
 						});
 					});
 				</script>";
+				exit;
 			}
 			else if(strlen($xnama)<1 || $xnama==''){
 				echo "<script>
@@ -102,6 +102,7 @@
 						});
 					});
 				</script>";
+				exit;
 			}
 			else if(strlen($xtmplhr)<1 || $xtmplhr==''){
 				echo "<script>
@@ -112,6 +113,7 @@
 						});
 					});
 				</script>";
+				exit;
 			}
 			else if(strlen($xtgllhr)<1 || $xtgllhr==''){
 				echo "<script>
@@ -122,6 +124,7 @@
 						});
 					});
 				</script>";
+				exit;
 			}
 			else if(strlen($xjekel)>1 || $xjekel==''){
 				echo "<script>
@@ -132,6 +135,7 @@
 						});
 					});
 				</script>";
+				exit;
 			}
 			else if($xagama==''){
 				echo "<script>
@@ -142,7 +146,7 @@
 						});
 					});
 				</script>";
-
+				exit;
 			}
 			else {
 				$key=array(

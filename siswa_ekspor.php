@@ -11,6 +11,64 @@
         </div>
     </div>
     <div class="card-body">
+        <div class="row table-responsive">
+            <table class="table table-sm table-striped table-bordered table-condensed" id="tb_template">
+                <thead>
+                    <tr>
+                        <th style="text-align:center;width:7.5%">No.</th>
+                        <th style="text-align:center">Template</th>
+                        <th style="text-align:center;width:27.5%">Download Format</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center;">1.</td>
+                        <td>Data Utama Peserta Didik</td>
+                        <td style="text-align:center;">
+                            <a href="siswa_template.php?d=1" class="btn btn-xs btn-success ml-2">
+                                <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">2.</td>
+                        <td>Data Riwayat Pendidikan Peserta Didik</td>
+                        <td style="text-align:center;">
+                            <a href="siswa_template.php?d=2" class="btn btn-xs btn-success ml-2">
+                                <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">3.</td>
+                        <td>Data Ayah Kandung Peserta Didik</td>
+                        <td style="text-align:center;">
+                            <a href="siswa_template.php?d=3" class="btn btn-xs btn-success ml-2">
+                                <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">4.</td>
+                        <td>Data Ibu Kandung Peserta Didik</td>
+                        <td style="text-align:center;">
+                            <a href="siswa_template.php?d=4" class="btn btn-xs btn-success ml-2">
+                                <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">4.</td>
+                        <td>Data Wali Peserta Didik</td>
+                        <td style="text-align:center;">
+                            <a href="siswa_template.php?d=5" class="btn btn-xs btn-success ml-2">
+                                <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="row d-flex align-items-stretch justify-content-start">
             <div class="col-sm-6">
                 <div class="card card-info card-outline">

@@ -62,10 +62,10 @@
             $this->Ln(0.575);
             $this->Cell(9.25,0.575);
             foreach($dreg as $reg){
-                $this->Cell(1.20,0.575,'Angka','BR',0,'C');
-                $this->Cell(1.20,0.575,'Huruf','BR',0,'C');
-                $this->Cell(1.20,0.575,'Angka','BR',0,'C');
-                $this->Cell(1.20,0.575,'Huruf','BR',0,'C');
+                $this->Cell(1.0,0.575,'Nilai','BR',0,'C');
+                $this->Cell(1.40,0.575,'Predikat','BR',0,'C');
+                $this->Cell(1.0,0.575,'Nilai','BR',0,'C');
+                $this->Cell(1.40,0.575,'Predikat','BR',0,'C');
             }           
             $this->Ln();
             $no=0;
@@ -79,12 +79,12 @@
                 foreach($dreg as $reg){
                     $qkog="SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$reg[idthpel]'AND aspek='3'";                   
                     $kog=vquery($qkog)[0];
-                    $this->Cell(1.20,0.575,$kog['nilairapor'],'BR',0,'C');
-                    $this->Cell(1.20,0.575,$kog['predikat'],'BR',0,'C');
+                    $this->Cell(1.0,0.575,$kog['nilairapor'],'BR',0,'C');
+                    $this->Cell(1.40,0.575,$kog['predikat'],'BR',0,'C');
                     $qmot="SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$reg[idthpel]'AND aspek='4'";                   
                     $mot=vquery($qmot)[0];
-                    $this->Cell(1.20,0.575,$mot['nilairapor'],'BR',0,'C');
-                    $this->Cell(1.20,0.575,$mot['predikat'],'BR',0,'C');
+                    $this->Cell(1.0,0.575,$mot['nilairapor'],'BR',0,'C');
+                    $this->Cell(1.40,0.575,$mot['predikat'],'BR',0,'C');
                 }                
                 $this->Ln();                
             }
@@ -160,9 +160,7 @@
             $this->Cell(5.0,0.575,'Catatan ',1,0,'L');
             $this->Cell(9.5,0.575,'',1,0,'C');
             $this->Cell(9.5,0.575,'',1,0,'C');
-
-            $this->Ln();
-            
+            $this->Ln();            
             $this->Cell(1.0,1.725,'No.',1,0,'C');
             $this->Cell(7.0,1.725,'Mata Pelajaran',1,0,'C');
             $this->Cell(1.25,1.725,'KKM',1,0,'C');
@@ -185,23 +183,23 @@
             $this->Cell(2.25,0.575,'Keterampilan',1,0,'C');
             $this->Ln(0.575);
             $this->Cell(9.25,0.575);
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
             $this->Cell(1.25,1.15);
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
-            $this->Cell(1.125,0.575,'Angka',1,0,'C');
-            $this->Cell(1.125,0.575,'Huruf',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
+            $this->Cell(1.125,0.575,'Nilai',1,0,'C');
+            $this->Cell(1.125,0.575,'Predikat',1,0,'C');
             $this->Ln();
             $no=0;
             $qmp=viewdata('tbmapel');

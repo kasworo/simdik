@@ -3,12 +3,19 @@
 	include "dbfunction.php";
     function getsiswa($kls,$th,$as){
         if($as=='1' || $as=='2'){
-            $sql="SELECT s.nis, s.nisn, s.nmsiswa, nr.nilaisikap as nilairapor, nr.predikat, nr.deskripsi FROM tbsiswa s INNER JOIN tbregistrasi r ON r.idsiswa=s.idsiswa LEFT JOIN tbnilaisikap nr ON nr.idsiswa=s.idsiswa AND r.idthpel=nr.idthpel  WHERE r.idkelas='$kls' AND r.idthpel='$th' ORDER BY s.idsiswa";
+            $sql="SELECT s.nis, s.nisn, s.nmsiswa, nr.nilaisikap as nilairapor, nr.predikat, nr.deskripsi FROM tbsiswa s INNER JOIN tbregistrasi r ON r.idsiswa=s.idsiswa LEFT JOIN tbnilaisikap nr ON nr.idsiswa=s.idsiswa AND r.idthpel=nr.idthpel  WHERE r.idkelas='$kls' AND r.idthpel='$th' AND nr.aspek='$as' ORDER BY s.idsiswa";
         }
         if($as=='3' || $as=='4'){
-            $sql="SELECT s.nis, s.nisn, s.nmsiswa, nr.nilairapor, nr.predikat, nr.deskripsi, nr.idmapel FROM tbsiswa s INNER JOIN tbregistrasi r ON r.idsiswa=s.idsiswa LEFT JOIN tbnilairapor nr ON nr.idsiswa=s.idsiswa AND r.idthpel=nr.idthpel  WHERE r.idkelas='$kls' AND r.idthpel='$th' ORDER BY s.idsiswa";
+            $sql="SELECT s.nis, s.nisn, s.nmsiswa, nr.nilairapor, nr.predikat, nr.deskripsi, nr.idmapel FROM tbsiswa s INNER JOIN tbregistrasi r ON r.idsiswa=s.idsiswa LEFT JOIN tbnilairapor nr ON nr.idsiswa=s.idsiswa AND r.idthpel=nr.idthpel  WHERE r.idkelas='$kls' AND r.idthpel='$th' AND nr.aspek='$as' GROUP BY s.idsiswa ORDER BY s.idsiswa";            
         }
-        $ds=vquery($sql);
+        $cek=cquery($sql);
+        if($cek>0){
+            $ds=vquery($sql);
+        }
+        else {
+            $query="SELECT s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r ON r.idsiswa=s.idsiswa WHERE r.idkelas='$kls' AND r.idthpel='$th' GROUP BY s.idsiswa ORDER BY s.idsiswa";  
+            $ds=vquery($query);
+        }         
         return $ds;
     }
 
@@ -57,13 +64,13 @@
     }
 
     if(isset($_POST['downloadmot'])){
-        $aspek='4 - Motorik';           
+        $aspek='4 - Keterampilan';           
         $data=getsiswa($_POST['kls4'],$_POST['thpel4'],4);
         $thn=gettahun($_POST['thpel4']);
         $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
         $kls=getkelas($_POST['kls4']);
         $nmkelas=$kls['idkelas'].' - '.$kls['nmkelas'];
-        $namafile='pengetahuan_'.$kls['idkelas'].'_'.$thn['nmthpel'];
+        $namafile='keterampilan_'.$kls['idkelas'].'_'.$thn['nmthpel'];
     }
     
     $objPHPExcel = new PHPExcel();
