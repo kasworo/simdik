@@ -129,6 +129,18 @@
 		}		
 	}
 
+	function getkethdp($id){
+		if($id=='0') {
+			return 'Masih Hidup';
+		}
+		else if ($id=='1'){
+			return "Sudah Meninggal";
+		}
+		else {
+			return "-";
+		}		
+	}
+
 	function getkerjaortu($id){
 		if(isset($id)) {
 			$data=viewdata('ref_pekerjaan',array('idkerja'=>$id))[0];
@@ -138,6 +150,7 @@
 			return "-";
 		}			
 	}
+	
 	function getgajiortu($id){
 		if(isset($id)) {
 			$data=viewdata('ref_penghasilan',array('idhsl'=>$id))[0];
@@ -147,6 +160,7 @@
 			return "-";
 		}		
 	}
+
 	function getregis($id){
 		$data=viewdata('ref_jnsregistrasi',array('idjreg'=>$id))[0];
 		return $data['jnsregistrasi'];

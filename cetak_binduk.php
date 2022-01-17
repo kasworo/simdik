@@ -35,7 +35,6 @@
 
         function ChapterTitle($idsiswa)
         {
-			//global $conn;
 			$ds=viewdata('tbsiswa',array('idsiswa'=>$idsiswa))[0];
 			$nis=$ds['nis'];
 			$nisn=$ds['nisn'];
@@ -186,11 +185,17 @@
 			$this->Cell(0.25,0.575);		
 			$this->Cell(8.25,0.575,'Provinsi '.$d['prov'].', Kode Pos '.$d['kdpos']);
 			$this->Ln();
+			if($d['lintang']==null || $d['lintang']=='' || $d['bujur']==null || $d['bujur']==''){
+				$koordinat='-';
+			}
+			else {
+				$koordinat=number_format($d['lintang'],4,'.','.').' / '.number_format($d['bujur'],4,'.','.');
+			}
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'16.');
 			$this->Cell(4.0,0.575,'Koordinat');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$d['lintang'].' / '.$d['bujur']);
+			$this->Cell(8.25,0.575,$koordinat);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'17.');
@@ -204,29 +209,33 @@
 			$this->Cell(0.25,0.575,':');		
 			$this->Cell(8.25,0.575);
 			$this->Ln();
+			if($d['hobi1']=='' || $d['hobi1']==null){$hobi1='-';} else {$hobi1=$d['hobi1'];}			
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'a.');
 			$this->Cell(3.5,0.575,'Bidang Olahraga');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,$hobi1);
 			$this->Ln();
+			if($d['hobi2']=='' || $d['hobi2']==null){$hobi2='-';} else {$hobi2=$d['hobi3'];}
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'b.');
 			$this->Cell(3.5,0.575,'Bidang Seni');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,$hobi2);
 			$this->Ln();
+			if($d['hobi3']=='' || $d['hobi3']==null){$hobi3='-';} else {$hobi3=$d['hobi3'];}
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'c.');
 			$this->Cell(3.5,0.575,'Organisasi');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,'');
+			$this->Cell(8.25,0.575,$hobi3);
 			$this->Ln();
+			if($d['hobi4']=='' || $d['hobi4']==null){$hobi4='-';} else {$hobi4=$d['hobi4'];}
 			$this->Cell(1.5,0.575);
 			$this->Cell(0.5,0.575,'d.');
 			$this->Cell(3.5,0.575,'Lainnya');
 			$this->Cell(0.25,0.575,':');		
-            $this->Cell(8.25,0.575,'');
+            $this->Cell(8.25,0.575,$hobi4);
             $this->Ln(1.25);
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.575,'B.');
@@ -341,10 +350,59 @@
 			$this->Cell(11.5,0.575,'Keterangan Orang Tua Kandung');
 			$this->Ln();
 			$qayah="SELECT ay.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ay LEFT JOIN ref_pendidikan r1 USING(idpddk) LEFT JOIN ref_pekerjaan r2 USING(idkerja) LEFT JOIN ref_penghasilan r3 USING(idhsl) WHERE ay.hubkel='1' AND ay.idsiswa='$idsiswa'";
-			$da=vquery($qayah)[0];
+			if(cquery($qayah)==0){
+				$nmayah='-';
+				$agmayah='-';
+				$pddkayah='-';
+				$krjayah='-';
+				$gajiayah='-';
+				$hdpayah='-';
+				$alamat1='-';
+				$alamat2='-';
+				$alamat3='-';
+				$nohp='-';
+			}
+			else {
+				$da=vquery($qayah)[0];
+				$nmayah=$da['nmortu'];
+				$agmayah=getagama($da['idagama']);
+				$pddkayah=getskulortu($da['idpddk']);
+				$krjayah=getkerjaortu($da['idkerja']);
+				$gajiayah=getgajiortu($da['idhsl']);
+				$hdpayah=getkethdp($da['hidup']);
+				$alamat1=$da['alamat'].', Desa '.$da['desa'];
+				$alamat2='Kecamatan '.$da['kec'].', Kabupaten '.$d['kab'];	
+				$alamat3='Provinsi '.$da['prov'].', Kode Pos '.$da['kdpos'];
+				$nohp=$da['nohp'];
+			}
+			
 
 			$qibu="SELECT ay.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ay LEFT JOIN ref_pendidikan r1 USING(idpddk) LEFT JOIN ref_pekerjaan r2 USING(idkerja) LEFT JOIN ref_penghasilan r3 USING(idhsl) WHERE ay.hubkel='2' AND ay.idsiswa='$idsiswa'";
-			$di=vquery($qibu)[0];
+			if(cquery($qibu)==0){
+				$nmibu='-';
+				$agmibu='-';
+				$pddkibu='-';
+				$krjibu='-';
+				$gajiibu='-';
+				$hdpibu='-';
+				$alamat1='-';
+				$alamat2='-';
+				$alamat3='-';
+				$nohp='-';
+			}
+			else {
+				$di=vquery($qibu)[0];
+				$nmibu=$di['nmortu'];
+				$agmibu=getagama($di['idagama']);
+				$pddkibu=getskulortu($di['idpddk']);
+				$krjibu=getkerjaortu($di['idkerja']);
+				$gajiibu=getgajiortu($di['idhsl']);
+				$hdpibu=getkethdp($di['hidup']);
+				$alamat1=$di['alamat'].', Desa '.$di['desa'];
+				$alamat2='Kecamatan '.$di['kec'].', Kabupaten '.$d['kab'];	
+				$alamat3='Provinsi '.$di['prov'].', Kode Pos '.$di['kdpos'];
+				$nohp=$di['nohp'];
+			}
 			
 			$qwali="SELECT ay.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ay LEFT JOIN ref_pendidikan r1 USING(idpddk) LEFT JOIN ref_pekerjaan r2 USING(idkerja) LEFT JOIN ref_penghasilan r3 USING(idhsl) WHERE (ay.hubkel<>'1' OR ay.hubkel<>'2') AND ay.idsiswa='$idsiswa'";
 			$dw=vquery($qwali)[0];
@@ -359,13 +417,13 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$da['nmortu']);
+			$this->Cell(8.25,0.575,$nmayah);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$di['nmortu']);
+			$this->Cell(8.25,0.575,$nmibu);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'2.');
@@ -377,13 +435,13 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,getagama($da['idagama']));
+			$this->Cell(8.25,0.575,$agmayah);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,getagama($di['idagama']));
+			$this->Cell(8.25,0.575,$agmibu);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'3.');
@@ -395,13 +453,13 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,getskulortu($da['idpddk']));
+			$this->Cell(8.25,0.575,$pddkayah);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,getskulortu($di['idpddk']));
+			$this->Cell(8.25,0.575,$pddkibu);
 			$this->Ln(0.75);
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'4.');
@@ -413,13 +471,13 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575, getkerjaortu($da['idkerja']));
+			$this->Cell(8.25,0.575, $krjayah);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575, getkerjaortu($di['idkerja']));
+			$this->Cell(8.25,0.575, $krjibu);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'5.');
@@ -431,7 +489,7 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,getgajiortu($da['idhsl']));
+			$this->Cell(8.25,0.575,$gajiayah);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
@@ -449,37 +507,37 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'a. Ayah');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,);
+			$this->Cell(8.25,0.575,$hdpayah);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575);
+			$this->Cell(8.25,0.575,$hdpibu);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'7.');
 			$this->Cell(4.0,0.575,'Alamat');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$da['alamat'].', Desa '.$da['desa']);
+			$this->Cell(8.25,0.575,$alamat1);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575);
 			$this->Cell(0.25,0.575);		
-			$this->Cell(8.25,0.575,'Kecamatan '.$da['kec'].', Kabupaten '.$d['kab']);
+			$this->Cell(8.25,0.575,$alamat2);
 			$this->Ln();
-			// $this->Cell(0.75,0.575);
-			// $this->Cell(0.75,0.575);
-			// $this->Cell(4.0,0.575);
-			// $this->Cell(0.25,0.575);		
-			// $this->Cell(8.25,0.575,'Provinsi '.$da['prov'].', Kode Pos '.$da['kdpos']);
-			// $this->Ln();
+			$this->Cell(0.75,0.575);
+			$this->Cell(0.75,0.575);
+			$this->Cell(4.0,0.575);
+			$this->Cell(0.25,0.575);		
+			$this->Cell(8.25,0.575,$alamat3);
+			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'8.');
 			$this->Cell(4.0,0.575,'Nomor HP');
 			$this->Cell(0.25,0.575,':');		
-			$this->Cell(8.25,0.575,$da['nohp']);
+			$this->Cell(8.25,0.575,$nohp);
 			$this->Ln(0.75);
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.575,'D.');
