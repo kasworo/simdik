@@ -1,96 +1,171 @@
-<?php
-include "../config/konfigurasi.php";
-$idsiswa=$_REQUEST['id'];
-$qt=mysqli_query($sqlconn,"SELECT COUNT(*) as akhir FROM tb_thpel");
-$t=mysqli_fetch_array($qt);
-$akhir=$t['akhir'];
-$awal=$akhir-6;
+<?php $idsiswa=$_GET['id'];?>
+<script type="text/javascript">
+function isitable(id, th) {
+    $.ajax({
+        url: 'rapor_data.php',
+        type: 'POST',
+        data: "as=3&id=" + id + "&th=" + th,
+        success: function(data) {
+            $("#datane").html(data);
+        }
+    });
+}
+$(document).ready(function() {
+    let id = "<?php echo $idsiswa;?>";
+    let th = $("#txtThpel").val();
+
+    $("#simpan").hide();
+    isitable(id, th);
+
+    $("#txtThpel").change(function(e) {
+        e.preventDefault();
+        let id = "<?php echo $idsiswa;?>";
+        let th = $("#txtThpel").val();
+        isitable(id, th);
+    })
+    $("#pilih").click(function(e) {
+        e.preventDefault();
+        $(".txtNilai").removeAttr('disabled');
+        $(".txtDeskripsi").removeAttr('disabled');
+        $(".txtPredikat").removeAttr('disabled');
+        $(this).hide();
+        $("#simpan").show();
+    })
+})
+</script>
+<?php 
+    if(isset($_POST['kognetif'])){
+        $rows = isset($_POST['mapel']) ? $_POST['mapel'] : 1;
+        $i=0;
+        $gagal=0;
+        $tambah=0;
+        $edit=0;
+        $batal=0;
+        foreach ($rows as $row){
+            $key=array(
+                'idsiswa'=>$idsiswa,
+                'idthpel'=>$_POST['thpel'],
+                'idmapel'=>$_POST['mapel'][$i],
+                'aspek'=>'3'
+            ); 
+            $ceknilai=cekdata('tbnilairapor',$key);
+		    if($ceknilai>0){
+			    $nilai=array(
+				    'nilairapor'=>$_POST['nilai'][$i],
+			        'predikat'=>$_POST['predikat'][$i],
+				    'deskripsi'=>$_POST['deskripsi'][$i]
+			    );				
+			    $editnilai=editdata('tbnilairapor',$nilai,'',$key);
+			    if($editnilai>0){$edit++;}
+			    else {$batal++;}
+		    }
+		    else {
+			    $nilai=array(
+				    'idsiswa'=>$idsiswa,
+				    'idthpel'=>$_POST['thpel'],
+				    'idmapel'=>$_POST['mapel'][$i],				    
+				    'nilairapor'=>$_POST['nilai'][$i],
+                    'predikat'=>$_POST['predikat'][$i],
+				    'deskripsi'=>$_POST['deskripsi'][$i],
+                    'aspek'=>'3',
+			    );
+			    $tambahnilai=adddata('tbnilairapor',$nilai);		
+			    if($tambahnilai>0){$tambah++;}
+			    else {$gagal++;}
+		    }
+          $i++;  
+       }
+       if($tambah>0 || $edit>0){
+            echo "<script>
+				    $(function() {
+					    toastr.info('Ada ".$tambah." data ditambah, ".$edit." data diupdate, ".$gagal." data gagal ditambahkan, ".$batal." data gagal diupdate!','Terima Kasih',{
+					    timeOut:2000,
+					    fadeOut:2000
+				    });
+			    });
+	    	</script>";
+        } 
+        else {
+            echo "<script>
+				    $(function() {
+					    toastr.error('Tidak ada data yang berhasil ditambahkan atau diupdate!','Mohon Maaf',{
+					    timeOut:2000,
+					    fadeOut:2000
+				    });
+			    });
+	    	</script>";
+        }         
+    }		
 ?>
-<div class="col-sm-12">
-<div class="alert alert-warning">
-	<p><strong>Petunjuk:</strong></p>
-	<p>Silahkan isikan data nilai pengetahuan yang diperoleh tiap semester.<br/>Nilai Akan tersimpan otomatis jika kursor keluar dari kotak isian, setelah selesai melakukan pengisian klik tombol <strong>Refresh</strong></p>
+<div class="alert alert-danger">
+    <p><strong>Petunjuk:</strong></p>
+    <p>Silahkan pilih Tahun Pelajaran, kemudian isikan nilai lengkap dengan deskripsinya.<br />Nilai
+        Akan tersimpan otomatis jika kursor keluar dari kotak isian, setelah selesai melakukan pengisian
+        klik tombol <strong>Refresh</strong></p>
 </div>
 <div class="card card-primary card-outline">
-	<div class="card-header">
-		<h5 class="m-0">Form Data Nilai Ujian Sekolah</h5>
-	</div>
-	<div class="card-body">
-			<div class="col-sm-12">
-				<?php
-						$no=0;
-						$rerata=0;
-						$qnil=mysqli_query($sqlconn, "SELECT idmapel, nmmapel FROM tb_mapel m INNER JOIN tb_kurikulum k USING(idkurikulum) WHERE statkurikulum='Y'");
-						while($n=mysqli_fetch_array($qnil))
-						{
-							$no++;
-                            $qus=mysqli_query($sqlconn,"SELECT nilai FROM tbus WHERE idmapel='$n[idmapel]' AND idsiswa='$idsiswa'");
-                            $us=mysqli_fetch_array($qus);
-						?>
-							<div class="row" style="padding-bottom:5px">
-								<label class="col-sm-6 offset-sm-2"><?php echo $n['nmmapel'];?></label>
-								<div class="col-sm-2" style="padding-bottom:5px">
-									<input class="form-control form-control-sm" id="nilai<?php echo $no;?>" style="text-align:center" placeholder="Nilai Ujian Sekolah" value="<?php echo $us['nilai'];?>"/>
-                                </div>
-                                    <script type="text/javascript">								
-                                        $("#nilai<?php echo $no;?>").change(function(){
-											var kdmapel = "<?php echo $n['idmapel'];?>";
-                                            var idsiswa = "<?php echo $idsiswa;?>";
-                                            var nilai = $("#nilai<?php echo $no;?>").val();
-                                            $.ajax({
-                                                url: "us_simpan.php",
-                                                data: "aksi=simpan&kdmapel="+kdmapel+"&id="+idsiswa + "&nilai="+nilai,
-                                                cache: false,
-                                                success: function(data){
-													toastr.success(data);
-                                                }
-                                            });
-                                        })
-                                    </script>				
-							</div>
-						<?php } ?>
-			</div>
-	</div>
-	<div class="card-footer">
-		<div class="row" align="center">
-			<div class="col-sm-4 col-md-4 col-lg-4" style="padding-bottom:5px">
-				<a href="?p=nilaius" class="btn btn-lg btn-default btn-flat btn-block col-8">
-					<i class="fas fa-fw fa-arrow-left"></i>
-					<span>&nbsp;Sebelumnya</span>
-				</a>
-			</div>
-			<div class="col-sm-4 col-md-4 col-lg-4" style="padding-bottom:5px">
-				<button class="btn btn-lg btn-primary btn-flat btn-block col-8" id="simpan">
-					<i class="fas fa-fw fa-sync-alt"></i>
-					<span>&nbsp;Refresh</span>
-				</button>
-			</div>
-			<div class="col-sm-4 col-md-4 col-lg-4" style="padding-bottom:5px">
-				<a href="?p=nilaiun" class="btn btn-lg btn-success btn-flat btn-block col-8">
-					<i class="fas fa-fw fa-arrow-right"></i>
-					<span>&nbsp;Berikutnya</span>
-				</a>
-			</div>
-		</div>
-	</div>
-</div>
+    <div class="card-header">
+        <h5 class="card-title m-0" id="judul">Input Nilai Pengetahuan</h5>
+        <div class="card-tools">
+            <a href="index.php?p=datarapor&d=3" class="btn btn-tool">
+                <i class="fas fa-arrow-circle-left"></i>
+                <span>&nbsp;Kembali</span>
+            </a>
+        </div>
+    </div>
+    <form action="" method="post">
+        <div class="card-body">
+            <div class="form-group row mt-2 mb-0">
+                <div class="col-sm-12">
+                    <label>
+                        Pilih Kelas dan Tahun Pelajaran
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row mt-2 mb-4">
+                <div class="col-sm-3">
+                    <script type="text/javascript" src="js/get_thpel.js"></script>
+                    <select class="form-control input-sm" id="txtKls" onchange="getthpel(this.value)">
+                        <option value=""> ..Pilih.. </option>
+                        <?php
+						$fkls=array('idkelas', 'nmkelas');
+						$tbl=array('tbskul'=>'idjenjang');
+						$qkls=fulljoin($fkls,'tbkelas',$tbl);
+						foreach ($qkls as $kl):
+					?>
+                        <option value="<?php echo $kl['idkelas'].'&id='.$idsiswa;?>"> <?php echo $kl['nmkelas'];?>
+                        </option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" id="txtThpel" name="thpel" disabled>
+                        <option value=""> ..Pilih.. </option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <button class="btn btn-success col-6 mt-0 ml-2" id="pilih" disabled>
+                        <i class="fas fa-check-circle">
+                        </i> Pilih</button>
+                    <button type="submit" class="btn btn-info col-6 mt-0 ml-2" id="simpan" name="kognetif">
+                        <i class="fas fa-save">
+                        </i>
+                        Simpan</button>
+                </div>
+            </div>
+            <br />
+            <div class="table-responsive" id="datane"></div>
+        </div>
+    </form>
 </div>
 <script type="text/javascript">
-	function validAngka(a)
-	{
-		if(!/^[0-9.]+$/.test(a.value))
-		{
-			a.value=a.value.substring(0,a.value.length-1000);
-		}
-	}
-	$(document).ready(function(){
-		$(function() {
-			const Toast=Swal.mixin({
-				toast: true,
-				position: 'top-end',
-				showConfirmButton: false,
-				timer: 3000
-			});
-		})
-	})
+function
+validAngka(a) {
+    if (!/^[0-9.]+$/.test(a.value)) {
+        a.value =
+            a.value.substring(0,
+                a.value.length -
+                1000);
+    }
+}
 </script>

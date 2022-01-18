@@ -354,40 +354,38 @@
         </div>
     </div>
 </div>
-
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data Peserta Didik</h4>
-            <div class="card-tools">
-                <a href="index.php?p=addsiswa" class="btn btn-flat btn-primary btn-sm">
-                    <i class="fas fa-plus-circle"></i>&nbsp;Tambah
-                </a>
-                <button class="btn btn-flat btn-success btn-sm" data-toggle="modal" data-target="#myImportPD">
-                    <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-                </button>
-                <button class="btn btn-flat btn-secondary btn-sm" data-toggle="modal" data-target="#myRiwayatPD">
-                    <i class="fas fa-cloud-upload-alt"></i>&nbsp;Riwayat
-                </button>
-                <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                </button>
-            </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data Peserta Didik</h4>
+        <div class="card-tools">
+            <a href="index.php?p=addsiswa" class="btn btn-flat btn-primary btn-sm">
+                <i class="fas fa-plus-circle"></i>&nbsp;Tambah
+            </a>
+            <button class="btn btn-flat btn-success btn-sm" data-toggle="modal" data-target="#myImportPD">
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
+            </button>
+            <button class="btn btn-flat btn-secondary btn-sm" data-toggle="modal" data-target="#myRiwayatPD">
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Riwayat
+            </button>
+            <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+            </button>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tb_siswa" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center;width:22.5%">Nama User</th>
-                            <th style="text-align: center;width:17.5%">NIS / NISN</th>
-                            <th style="text-align: center;">Alamat</th>
-                            <th style="text-align: center;width:20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tb_siswa" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center;width:22.5%">Nama User</th>
+                        <th style="text-align: center;width:17.5%">NIS / NISN</th>
+                        <th style="text-align: center;">Alamat</th>
+                        <th style="text-align: center;width:20%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 							$data=array(
 								'deleted'=>'0'
 							);
@@ -398,30 +396,29 @@
 								$no++;
 								if($s['aktif']=='1'){$stat='Aktif';$btn="btn-success";} else {$stat='Non Aktif';$btn="btn-danger";}
 						?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
-                            </td>
-                            <td><?php echo $s['nis'].' / '.$s['nisn'];?></td>
-                            <td><?php echo $s['alamat'];?></td>
-                            <td style="text-align: center">
-                                <!-- <a href="index.php?p=addsiswa&m=2&id=<?php echo base64_encode($s['idsiswa']);?>" class="btn btn-xs btn-primary btn-flat">
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
+                        </td>
+                        <td><?php echo $s['nis'].' / '.$s['nisn'];?></td>
+                        <td><?php echo $s['alamat'];?></td>
+                        <td style="text-align: center">
+                            <!-- <a href="index.php?p=addsiswa&m=2&id=<?php echo base64_encode($s['idsiswa']);?>" class="btn btn-xs btn-primary btn-flat">
 									<i class="fas fa-edit"></i>&nbsp;Edit
 								</a> -->
-                                <button data-id="<?php echo $s['idsiswa'];?>"
-                                    class="btn btn-xs btn-success btn-flat btnUpdate">
-                                    <i class="fas fa-edit"></i>&nbsp;Edit
-                                </button>
-                                <button data-id="<?php echo $s['idsiswa'];?>"
-                                    class="btn btn-xs btn-danger btn-flat btnHapus">
-                                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                                </button>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
+                            <button data-id="<?php echo $s['idsiswa'];?>"
+                                class="btn btn-xs btn-success btn-flat btnUpdate">
+                                <i class="fas fa-edit"></i>&nbsp;Edit
+                            </button>
+                            <button data-id="<?php echo $s['idsiswa'];?>"
+                                class="btn btn-xs btn-danger btn-flat btnHapus">
+                                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+                            </button>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

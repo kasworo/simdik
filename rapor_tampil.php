@@ -40,36 +40,35 @@
         </div>
     </div>
 </div>
-<div class="col-sm-12">
-    <div class="alert alert-warning">
-        <p><strong>Petunjuk:</strong></p>
-        <p>Silahkan isikan data Nilai <?php echo $aspek;?> yang diperoleh tiap semester.<br />Nilai Akan tersimpan
-            otomatis jika kursor keluar dari kotak isian, setelah selesai melakukan pengisian klik tombol
-            <strong>Refresh</strong>
-        </p>
-    </div>
-    <div class="card card-primary card-outline">
-        <div class="card-header">
-            <h5 class="card-title m-0">Data Nilai <?php echo $aspek;?></h5>
-            <div class="card-tools">
-                <button class="btn btn-flat btn-success btn-sm" data-target="#myImportNilai" data-toggle="modal">
-                    <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-                </button>
-            </div>
+<div class="alert alert-warning">
+    <p><strong>Petunjuk:</strong></p>
+    <p>Silahkan isikan data Nilai <?php echo $aspek;?> yang diperoleh tiap semester.<br />Nilai Akan tersimpan
+        otomatis jika kursor keluar dari kotak isian, setelah selesai melakukan pengisian klik tombol
+        <strong>Refresh</strong>
+    </p>
+</div>
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h5 class="card-title m-0">Data Nilai <?php echo $aspek;?></h5>
+        <div class="card-tools">
+            <button class="btn btn-flat btn-success btn-sm" data-target="#myImportNilai" data-toggle="modal">
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
+            </button>
         </div>
-        <div class="card-body">
-            <table id="tb_rombel" class="table table-bordered table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th style="text-align: center;width:2.5%">No.</th>
-                        <th style="text-align: center;width:20%">Nomor Induk</th>
-                        <th style="text-align: center;">Nama Peserta Didik</th>
-                        <th style="text-align: center;width:10%">Nilai</th>
-                        <th style="text-align: center;width:20%">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
+    </div>
+    <div class="card-body">
+        <table id="tb_rombel" class="table table-bordered table-striped table-sm">
+            <thead>
+                <tr>
+                    <th style="text-align: center;width:2.5%">No.</th>
+                    <th style="text-align: center;width:20%">Nomor Induk</th>
+                    <th style="text-align: center;">Nama Peserta Didik</th>
+                    <th style="text-align: center;width:10%">Nilai</th>
+                    <th style="text-align: center;width:20%">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
 						$sql="SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi rs USING(idsiswa) INNER JOIN tbkelas k USING(idkelas) INNER JOIN tbthpel tp USING(idthpel) WHERE s.deleted='0' AND tp.aktif='1'";
                         //var_dump($sql);
 						$qs=vquery($sql);
@@ -77,28 +76,26 @@
 						foreach($qs as $s):
 			        	$no++;
 					?>
-                    <tr>
-                        <td style="text-align:center"><?php echo $no.'.';?></td>
-                        <td style="text-align:center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
-                        <td title="<?php echo $s['idsiswa'];?>">
-                            <?php echo ucwords(strtolower($s['nmsiswa']));?>
-                        </td>
-                        <td style="text-align:center">
-                        </td>
-                        <td style="text-align:center">
-                            <button data-id="<?php echo $s['idsiswa'];?>" class="btn btn-xs btn-info btn-flat btnInput">
-                                <i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Detail
-                            </button>
-                            <button data-id="<?php echo $s['idsiswa'];?>"
-                                class="btn btn-xs btn-success btn-flat btnInput">
-                                <i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Input
-                            </button>
-                        </td>
-                    </tr>
-                    <?php endforeach?>
-                </tbody>
-            </table>
-        </div>
+                <tr>
+                    <td style="text-align:center"><?php echo $no.'.';?></td>
+                    <td style="text-align:center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
+                    <td title="<?php echo $s['idsiswa'];?>">
+                        <?php echo ucwords(strtolower($s['nmsiswa']));?>
+                    </td>
+                    <td style="text-align:center">
+                    </td>
+                    <td style="text-align:center">
+                        <button data-id="<?php echo $s['idsiswa'];?>" class="btn btn-xs btn-info btn-flat btnInput">
+                            <i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Detail
+                        </button>
+                        <button data-id="<?php echo $s['idsiswa'];?>" class="btn btn-xs btn-success btn-flat btnInput">
+                            <i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Input
+                        </button>
+                    </td>
+                </tr>
+                <?php endforeach?>
+            </tbody>
+        </table>
     </div>
 </div>
 <script type="text/javascript">

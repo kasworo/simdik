@@ -124,65 +124,62 @@
         </div>
     </div>
 </div>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data Mata Pelajaran</h4>
-            <div class="card-tools">
-                <button class="btn btn-flat btn-success btn-sm" id="btnTambah" data-toggle="modal"
-                    data-target="#myAddMapel">
-                    <i class="fas fa-plus-circle"></i>&nbsp;Tambah
-                </button>
-                <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
-                    <i class="fas fa-sync-alt"></i>&nbsp;Refresh
-                </button>
-                <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                </button>
-            </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data Mata Pelajaran</h4>
+        <div class="card-tools">
+            <button class="btn btn-flat btn-success btn-sm" id="btnTambah" data-toggle="modal"
+                data-target="#myAddMapel">
+                <i class="fas fa-plus-circle"></i>&nbsp;Tambah
+            </button>
+            <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
+                <i class="fas fa-sync-alt"></i>&nbsp;Refresh
+            </button>
+            <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+            </button>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tb_mapel" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center;width:7.5%">Kode</th>
-                            <th style="text-align: center">Mata Pelajaran</th>
-                            <th style="text-align: center;width:20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tb_mapel" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center;width:7.5%">Kode</th>
+                        <th style="text-align: center">Mata Pelajaran</th>
+                        <th style="text-align: center;width:20%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 					$qk=$conn->query("SELECT*FROM tbmapel");
 					$no=0;
 					while($m=$qk->fetch_array())
 					{
 						$no++;
 				?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td style="text-align:center"><?php echo $m['akmapel'];?></td>
-                            <td><?php echo $m['nmmapel'];?></td>
-                            <td style="text-align: center">
-                                <a href="#myAddMapel" data-toggle="modal" data-id="<?php echo $m['idmapel'];?>"
-                                    class="btn btn-xs btn-success btn-flat btnUpdate">
-                                    <i class="fas fa-edit"></i>&nbsp;Edit
-                                </a>
-                                <button data-id="<?php echo $m['idmapel'];?>"
-                                    class="btn btn-xs btn-danger btn-flat btnHapus">
-                                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                                </button>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td style="text-align:center"><?php echo $m['akmapel'];?></td>
+                        <td><?php echo $m['nmmapel'];?></td>
+                        <td style="text-align: center">
+                            <a href="#myAddMapel" data-toggle="modal" data-id="<?php echo $m['idmapel'];?>"
+                                class="btn btn-xs btn-success btn-flat btnUpdate">
+                                <i class="fas fa-edit"></i>&nbsp;Edit
+                            </a>
+                            <button data-id="<?php echo $m['idmapel'];?>"
+                                class="btn btn-xs btn-danger btn-flat btnHapus">
+                                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+                            </button>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
 $(document).ready(function() {
     $("#myAddMapel").on('hidden.bs.modal', function() {
@@ -201,7 +198,7 @@ $("#btnTambah").click(function() {
 $(".btnUpdate").click(function() {
     $(".modal-title").html("Ubah Data Mata Pelajaran");
     $("#simpan").html("<i class='fas fa-save'></i> Update");
-    var id = $(this).data('id');
+    let id = $(this).data('id');
     $.ajax({
         url: 'mapel_json.php',
         type: 'post',
@@ -216,7 +213,7 @@ $(".btnUpdate").click(function() {
     })
 })
 $(".btnHapus").click(function() {
-    var id = $(this).data('id');
+    let id = $(this).data('id');
     Swal.fire({
         title: 'Anda Yakin?',
         text: "Menghapus Mata Pelajaran",
@@ -268,44 +265,42 @@ $("#btnrefresh").click(function() {
 })
 </script>
 <?php else : ?>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data Mata Pelajaran</h4>
-        </div>
-        <div class="card-body">
-            <div class="form-group mb-2">
-                <div class="alert alert-warning">
-                    <p><strong>Perhatian:</strong><br />Berikut adalah data Mata Pelajaran. Perubahan data ini hanya
-                        bisa dilakukan oleh Administrator.</p>
-                </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data Mata Pelajaran</h4>
+    </div>
+    <div class="card-body">
+        <div class="form-group mb-2">
+            <div class="alert alert-warning">
+                <p><strong>Perhatian:</strong><br />Berikut adalah data Mata Pelajaran. Perubahan data ini hanya
+                    bisa dilakukan oleh Administrator.</p>
             </div>
-            <br />
-            <div class="table-responsive">
-                <table id="tb_mapel" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center;width:15%">Kode Mapel</th>
-                            <th style="text-align: center">Mata Pelajaran</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+        </div>
+        <br />
+        <div class="table-responsive">
+            <table id="tb_mapel" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center;width:15%">Kode Mapel</th>
+                        <th style="text-align: center">Mata Pelajaran</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 					$mp=viewdata('tbmapel');
 					$no=0;
 					foreach ($mp as $m):
                     $no++;
 				?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td style="text-align:center"><?php echo $m['akmapel'];?></td>
-                            <td><?php echo $m['nmmapel'];?></td>
-                        </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td style="text-align:center"><?php echo $m['akmapel'];?></td>
+                        <td><?php echo $m['nmmapel'];?></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

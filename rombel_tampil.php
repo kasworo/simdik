@@ -224,42 +224,41 @@
         </div>
     </div>
 </div>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Registrasi Peserta Didik</h4>
-            <?php
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Registrasi Peserta Didik</h4>
+        <?php
 				$where=array('idthpel'=>$_COOKIE['c_tahun']);
 				$th=viewdata('tbthpel',$where)[0];
 				if(substr($th['nmthpel'],-1)=='2'):
 			?>
-            <div class="card-tools">
-                <button class="btn btn-flat btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
-                    <i class="fas fa-plus-circle"></i>&nbsp;Lanjutkan
-                </button>
-            </div>
-            <?php else:?>
-            <div class="card-tools">
-                <button class="btn btn-flat btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
-                    <i class="fas fa-plus-circle"></i>&nbsp;Naik Kelas
-                </button>
-            </div>
-            <?php endif;?>
+        <div class="card-tools">
+            <button class="btn btn-flat btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
+                <i class="fas fa-plus-circle"></i>&nbsp;Lanjutkan
+            </button>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tb_siswa" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center">Nama Peserta Didik</th>
-                            <th style="text-align: center;width:20%">NIS / NISN</th>
-                            <th style="text-align: center;width:10%">Kelas</th>
-                            <th style="text-align: center;width:17.5%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+        <?php else:?>
+        <div class="card-tools">
+            <button class="btn btn-flat btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
+                <i class="fas fa-plus-circle"></i>&nbsp;Naik Kelas
+            </button>
+        </div>
+        <?php endif;?>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tb_siswa" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center">Nama Peserta Didik</th>
+                        <th style="text-align: center;width:20%">NIS / NISN</th>
+                        <th style="text-align: center;width:10%">Kelas</th>
+                        <th style="text-align: center;width:17.5%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 							$field=array('idsiswa', 'idthpel','nmsiswa','nisn','nis', 'nmkelas', 'idjreg');
 							$tbl=array(
 								'tbregistrasi'=>'idsiswa',
@@ -276,23 +275,22 @@
 							foreach($qs as $s):
 							$no++;
 						?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
-                            </td>
-                            <td style="text-align: center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
-                            <td style="text-align: center"><?php echo $s['idjreg'].'/'.$s['nmrombel'];?></td>
-                            <td style="text-align:center">
-                                <button data-target="#myRegPD" data-toggle="modal" data-id="<?php echo $s['idsiswa'];?>"
-                                    class="btn btn-sm btn-secondary btn-flat col-sm-8 btnRegistrasi">
-                                    <i class="fas fa-edit"></i>&nbsp;Registrasi
-                                </button>
-                            </td>
-                        </tr>
-                        <?php endforeach?>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
+                        </td>
+                        <td style="text-align: center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
+                        <td style="text-align: center"><?php echo $s['idjreg'].'/'.$s['nmrombel'];?></td>
+                        <td style="text-align:center">
+                            <button data-target="#myRegPD" data-toggle="modal" data-id="<?php echo $s['idsiswa'];?>"
+                                class="btn btn-sm btn-secondary btn-flat col-sm-8 btnRegistrasi">
+                                <i class="fas fa-edit"></i>&nbsp;Registrasi
+                            </button>
+                        </td>
+                    </tr>
+                    <?php endforeach?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

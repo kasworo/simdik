@@ -134,32 +134,30 @@
         </div>
     </div>
 </div>
-
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data Rombongan Belajar <?php echo $tapel;?></h4>
-            <div class="card-tools">
-                <button button class="btn btn-flat btn-success btn-sm" id="btnTambah" data-toggle="modal"
-                    data-target="#myAddKelas">
-                    <i class="fas fa-plus-circle"></i>&nbsp;Tambah
-                </button>
-                <button class="btn btn-flat btn-info btn-sm" id="btnImport" data-toggle="modal"
-                    data-target="#myImportRombel">
-                    <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-                </button>
-                <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
-                    <i class="fas fa-sync-alt"></i>&nbsp;Refresh
-                </button>
-                <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                </button>
-            </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data Rombongan Belajar <?php echo $tapel;?></h4>
+        <div class="card-tools">
+            <button button class="btn btn-flat btn-success btn-sm" id="btnTambah" data-toggle="modal"
+                data-target="#myAddKelas">
+                <i class="fas fa-plus-circle"></i>&nbsp;Tambah
+            </button>
+            <button class="btn btn-flat btn-info btn-sm" id="btnImport" data-toggle="modal"
+                data-target="#myImportRombel">
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
+            </button>
+            <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
+                <i class="fas fa-sync-alt"></i>&nbsp;Refresh
+            </button>
+            <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+            </button>
         </div>
-        <div class="card-body">
-            <div class="form-group row mb-2">
-                <div class="table-responsive">
-                    <?php
+    </div>
+    <div class="card-body">
+        <div class="form-group row mb-2">
+            <div class="table-responsive">
+                <?php
 						$col=array('idrombel','nmkelas', 'nmrombel', 'nama');
 						$tbl=array(
 							'tbkelas'=>'idkelas',
@@ -169,43 +167,42 @@
                         $where=array('aktif'=>'1');
 						$sk=fulljoin($col,'tbrombel',$tbl,$where);
 					?>
-                    <table id="tb_kelas" class="table table-bordered table-striped table-sm">
-                        <thead>
-                            <tr>
-                                <th style="text-align: center;width:2.5%">No.</th>
-                                <th style="text-align: center;width:15%">Kelas</th>
-                                <th style="text-align: center;width:15%">Rombel</th>
-                                <th style="text-align: center">Wali Kelas</th>
-                                <th style="text-align: center;width:30%">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php							
+                <table id="tb_kelas" class="table table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;width:2.5%">No.</th>
+                            <th style="text-align: center;width:15%">Kelas</th>
+                            <th style="text-align: center;width:15%">Rombel</th>
+                            <th style="text-align: center">Wali Kelas</th>
+                            <th style="text-align: center;width:30%">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php							
 								$no=0;
 								foreach($sk as $m)
 								{
 									$no++;
 							?>
-                            <tr>
-                                <td style="text-align:center"><?php echo $no.'.';?></td>
-                                <td style="text-align:center"><?php echo $m['nmkelas'];?></td>
-                                <td style="text-align:center"><?php echo $m['nmrombel'];?></td>
-                                <td><?php echo $m['nama'];?></td>
-                                <td style="text-align: center">
-                                    <a href="#myAddKelas" data-toggle="modal" data-id="<?php echo $m['idrombel'];?>"
-                                        class="btn btn-xs btn-success btn-flat btnUpdate">
-                                        <i class="fas fa-edit"></i>&nbsp;Edit
-                                    </a>
-                                    <button data-id="<?php echo $m['idrombel'];?>"
-                                        class="btn btn-xs btn-danger btn-flat btnHapus">
-                                        <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
+                        <tr>
+                            <td style="text-align:center"><?php echo $no.'.';?></td>
+                            <td style="text-align:center"><?php echo $m['nmkelas'];?></td>
+                            <td style="text-align:center"><?php echo $m['nmrombel'];?></td>
+                            <td><?php echo $m['nama'];?></td>
+                            <td style="text-align: center">
+                                <a href="#myAddKelas" data-toggle="modal" data-id="<?php echo $m['idrombel'];?>"
+                                    class="btn btn-xs btn-success btn-flat btnUpdate">
+                                    <i class="fas fa-edit"></i>&nbsp;Edit
+                                </a>
+                                <button data-id="<?php echo $m['idrombel'];?>"
+                                    class="btn btn-xs btn-danger btn-flat btnHapus">
+                                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+                                </button>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

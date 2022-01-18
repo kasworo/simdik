@@ -174,30 +174,29 @@ if(isset($_POST['upload'])) {
         </div>
     </div>
 </div>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Riwayat Pendidikan Peserta Didik</h4>
-            <div class="card-tools">
-                <button class="btn btn-flat btn-success btn-sm" data-target="#mySkulAsal" data-toggle="modal">
-                    <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-                </button>
-            </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Riwayat Pendidikan Peserta Didik</h4>
+        <div class="card-tools">
+            <button class="btn btn-flat btn-success btn-sm" data-target="#mySkulAsal" data-toggle="modal">
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
+            </button>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tb_siswa" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center">Nama Peserta Didik</th>
-                            <th style="text-align: center;width:17.5%">NIS / NISN</th>
-                            <th style="text-align: center;width:25%">Asal Sekolah</th>
-                            <th style="text-align: center;width:17.5%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tb_siswa" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center">Nama Peserta Didik</th>
+                        <th style="text-align: center;width:17.5%">NIS / NISN</th>
+                        <th style="text-align: center;width:25%">Asal Sekolah</th>
+                        <th style="text-align: center;width:17.5%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 							$field=array('idsiswa', 'nmsiswa','nisn','nis', 'jnsregistrasi', 'idjreg','aslsd', 'aslsmp');
 							$tbl=array(
 								'tbriwayatskul'=>'idsiswa',
@@ -218,23 +217,22 @@ if(isset($_POST['upload'])) {
                                 $aslskul=$s['aslsmp'];
                             }
 						?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
-                            </td>
-                            <td style="text-align: center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
-                            <td style="text-align: center"><?php echo $aslskul;?></td>
-                            <td style="text-align:center">
-                                <a href="index.php?p=addriwayat&id=<?php echo $s['idsiswa'];?>"
-                                    class="btn btn-sm btn-info btn-flat">
-                                    <i class="fas fa-edit"></i>&nbsp;Isi Riwayat
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach?>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
+                        </td>
+                        <td style="text-align: center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
+                        <td style="text-align: center"><?php echo $aslskul;?></td>
+                        <td style="text-align:center">
+                            <a href="index.php?p=addriwayat&id=<?php echo $s['idsiswa'];?>"
+                                class="btn btn-sm btn-info btn-flat">
+                                <i class="fas fa-edit"></i>&nbsp;Isi Riwayat
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endforeach?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -20,120 +20,84 @@
 			$sukses = 0;
 			$gagal = 0;
 			$update=0;	
-			for ($i=9; $i<=$baris; $i++)
-			{
-				$xnis=$data->val($i,2);                
-				$xnisn=$data->val($i,3);
-				$xnama=$data->val($i,4);
-				$xnilai = $data->val($i,5); 
-				$xpred = $data->val($i,6); 
-				$xdes = $data->val($i,7); 
-				$xmapel = $data->val($i,8);
-				$ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
-            	$idsiswa=$ds['idsiswa'];
-				if($xnis==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom NIS a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:10000,
-								fadeOut:10000
-							});
-						});
-					</script>";
-				}
-				else if(strlen($xnisn)<>10 || $xnisn==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom NISN a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:10000,
-								fadeOut:10000
-							});
-						});
-					</script>";
-				}
-				else {
-					$key=array(
-						'idsiswa'=>$idsiswa,
-						'idthpel'=>$thpel,
-						'idmapel'=>$xmapel,
-						'aspek'=>$aspek
-					); 
-					$cekrapor=cekdata('tbnilairapor',$key);
-					if($cekrapor>0){
-						$nilai=array(
-							'nilairapor'=>$xnilai,
-							'predikat'=>$xpred,
-							'deskripsi'=>$xdes
-						);
-						$editnilai=editdata('tbnilairapor',$nilai,'',$key);
-						if($editnilai>0){
-						// echo "<script>
-						// 	$(function() {
-						// 		toastr.success('Update Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
-						// 			timeOut:3000,
-						// 			fadeOut:3000
-						// 		});
-						// 	});
-						// </script>";
-						$update++;
-					}
-					// else {
-					// 	// echo "<script>
-					// 	// 	$(function() {
-					// 	// 		toastr.error('Update Data Peserta Didik a.n ".$xnama." Gagal!','Terima Kasih',{
-					// 	// 			timeOut:3000,
-					// 	// 			fadeOut:3000
-					// 	// 		});
-					// 	// 	});
-					// 	// </script>";
-					// }
-				} 
-				else {
-					$nilai=array(
-						'idsiswa'=>$idsiswa,
-						'idthpel'=>$thpel,
-						'idmapel'=>$xmapel,
-						'aspek'=>$aspek,
-						'nilairapor'=>$xnilai,
-						'predikat'=>$xpred,
-						'deskripsi'=>$xdes
-					);
-					$tambahnilai=adddata('tbnilairapor',$nilai);
-					if($tambahnilai>0){
-						// echo "<script>
-						// 	$(function() {
-						// 		toastr.success('Tambah Data Peserta Didik a.n ".$xnama." Sukses!','Terima Kasih',{
-						// 			timeOut:3000,
-						// 			fadeOut:3000
-						// 		});
-						// 	});
-						// </script>";
-						$sukses++;
-					}
-					else {
-						// echo "<script>
-						// 	$(function() {
-						// 		toastr.error('Tambah Data Peserta Didik a.n ".$xnama." Gagal!','Mohon Maaf',{
-						// 			timeOut:4000,
-						// 			fadeOut:3000
-						// 		});
-						// 	});
-						// </script>";
-						$gagal++;
-					}
-				}
-			}
-		}
-		echo "<script>
-				$(function() {
-					toastr.info('Ada ".$sukses." data ditambah, ".$update." data diupdate, ".$gagal." data gagal ditambahkan!','Terimakasih',{
-					timeOut:2000,
-					fadeOut:2000
-				});
-			});
-		</script>";
-	}
-}
+			if($aspek=='1' || $aspek=='2'){
+                
+            }
+            else {            
+                for ($i=9; $i<=$baris; $i++)
+			    {
+				    $xnis=$data->val($i,2);                
+				    $xnisn=$data->val($i,3);
+				    $xnama=$data->val($i,4);
+				    $xnilai = $data->val($i,5); 
+				    $xpred = $data->val($i,6); 
+				    $xdes = $data->val($i,7); 
+				    $xmapel = $data->val($i,8);
+				    $ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
+            	    $idsiswa=$ds['idsiswa'];
+				    if($xnis==''){
+					    echo "<script>
+						    $(function() {
+							    toastr.error('Cek Kolom NIS a.n ".$xnama."','Mohon Maaf!',{
+								    timeOut:10000,
+								    fadeOut:10000
+							    });
+						    });
+					    </script>";
+				    }
+				    else if(strlen($xnisn)<>10 || $xnisn==''){
+					    echo "<script>
+						    $(function() {
+							    toastr.error('Cek Kolom NISN a.n ".$xnama."','Mohon Maaf!',{
+								    timeOut:10000,
+								    fadeOut:10000
+							    });
+						    });
+					    </script>";
+				    }
+				    else {
+					    $key=array(
+						    'idsiswa'=>$idsiswa,
+						    'idthpel'=>$thpel,
+						    'idmapel'=>$xmapel,
+						    'aspek'=>$aspek
+					    ); 
+					    $cekrapor=cekdata('tbnilairapor',$key);
+					    if($cekrapor>0){
+						    $nilai=array(
+							    'nilairapor'=>$xnilai,
+							    'predikat'=>$xpred,
+							    'deskripsi'=>$xdes
+						    );
+						    $editnilai=editdata('tbnilairapor',$nilai,'',$key);
+						    if($editnilai>0){$update++;}					
+				        } 
+				        else {
+					        $nilai=array(
+						        'idsiswa'=>$idsiswa,
+						        'idthpel'=>$thpel,
+						        'idmapel'=>$xmapel,
+						        'aspek'=>$aspek,
+						        'nilairapor'=>$xnilai,
+						        'predikat'=>$xpred,
+						        'deskripsi'=>$xdes
+				    	    );
+					        $tambahnilai=adddata('tbnilairapor',$nilai);
+					        if($tambahnilai>0){$sukses++;} else { $gagal++;}
+				        }
+			        }
+		        }
+            }
+		    echo "<script>
+				    $(function() {
+					    toastr.info('Ada ".$sukses." data ditambah, ".$update." data diupdate, ".$gagal." data gagal ditambahkan!','Terimakasih',{
+					    timeOut:2000,
+					    fadeOut:2000
+				    });
+			    });
+		    </script>";
+	    }
+    }
 ?>
 <script type="text/javascript">
 $(document).ready(function() {

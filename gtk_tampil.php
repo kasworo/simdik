@@ -33,60 +33,58 @@
         </div>
     </div>
 </div>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data Guru dan Staff</h4>
-            <div class="card-tools">
-                <a href="index.php?p=addgtk&m=1" class="btn btn-flat btn-primary btn-sm">
-                    <i class="fas fa-plus-circle"></i>&nbsp;Tambah
-                </a>
-                <button class="btn btn-flat btn-success btn-sm" data-toggle="modal" data-target="#myImportguru">
-                    <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-                </button>
-                <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                </button>
-            </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data Guru dan Staff</h4>
+        <div class="card-tools">
+            <a href="index.php?p=addgtk&m=1" class="btn btn-flat btn-primary btn-sm">
+                <i class="fas fa-plus-circle"></i>&nbsp;Tambah
+            </a>
+            <button class="btn btn-flat btn-success btn-sm" data-toggle="modal" data-target="#myImportguru">
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
+            </button>
+            <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+            </button>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tb_guru" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center;width:22.5%">Nama Lengkap</th>
-                            <th style="text-align: center;width:17.5%">NIP/NIK</th>
-                            <th style="text-align: center;">Alamat</th>
-                            <th style="text-align: center;width:20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tb_guru" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center;width:22.5%">Nama Lengkap</th>
+                        <th style="text-align: center;width:17.5%">NIP/NIK</th>
+                        <th style="text-align: center;">Alamat</th>
+                        <th style="text-align: center;width:20%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 						$row=viewdata("tbgtk");
 						$no=0;
 						foreach ($row as $s):
 						$no++;						
 					?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td><?php echo $s['nama'];?></td>
-                            <td><?php echo $s['nip'];?></td>
-                            <td><?php echo $s['alamat'];?></td>
-                            <td style="text-align: center">
-                                <button data-id="<?php echo $s['idgtk'];?>"
-                                    class="btn btn-xs btn-primary btn-flat btnUpdate">
-                                    <i class="fas fa-edit"></i>&nbsp;Edit
-                                </button>
-                                <a href="#" class="btn btn-xs btn-danger btn-flat">
-                                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                                </a>
-                            </td>
-                        </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td><?php echo $s['nama'];?></td>
+                        <td><?php echo $s['nip'];?></td>
+                        <td><?php echo $s['alamat'];?></td>
+                        <td style="text-align: center">
+                            <button data-id="<?php echo $s['idgtk'];?>"
+                                class="btn btn-xs btn-primary btn-flat btnUpdate">
+                                <i class="fas fa-edit"></i>&nbsp;Edit
+                            </button>
+                            <a href="#" class="btn btn-xs btn-danger btn-flat">
+                                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+                            </a>
+                        </td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

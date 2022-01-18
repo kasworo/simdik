@@ -47,49 +47,47 @@
         </div>
     </div>
 </div>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data KKM Tahun Pelajaran <?php echo $tapel;?></h4>
-            <div class="card-tools">
-                <button class="btn btn-flat btn-success btn-sm" id="btnSalin" data-toggle="modal"
-                    data-target="#myAddKKM">
-                    <i class="far fa-copy"></i>&nbsp;Salin
-                </button>
-                <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
-                    <i class="fas fa-sync-alt"></i>&nbsp;Refresh
-                </button>
-                <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                </button>
-            </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data KKM Tahun Pelajaran <?php echo $tapel;?></h4>
+        <div class="card-tools">
+            <button class="btn btn-flat btn-success btn-sm" id="btnSalin" data-toggle="modal" data-target="#myAddKKM">
+                <i class="far fa-copy"></i>&nbsp;Salin
+            </button>
+            <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
+                <i class="fas fa-sync-alt"></i>&nbsp;Refresh
+            </button>
+            <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+            </button>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tb_kkm" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center">Mata Pelajaran</th>
-                            <?php
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tb_kkm" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center">Mata Pelajaran</th>
+                        <?php
 								$qk=fulljoin(array('idkelas','nmkelas'),'tbkelas',array('tbskul'=>'idjenjang'));
 								foreach ($qk as $k):
 							?>
-                            <th style="text-align: center;width:10%"><?php echo $k['nmkelas'];?></th>
-                            <?php endforeach ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+                        <th style="text-align: center;width:10%"><?php echo $k['nmkelas'];?></th>
+                        <?php endforeach ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 							$qmp=viewdata('tbmapel');
 							$no=0;
 							foreach($qmp as $m):
 							$no++;
 						?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td><?php echo $m['nmmapel'];?></td>
-                            <?php
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td><?php echo $m['nmmapel'];?></td>
+                        <?php
 								$ql=fulljoin(array('idkelas','nmkelas'),'tbkelas',array('tbskul'=>'idjenjang'));
 								foreach ($ql as $l):
 									$where=array(
@@ -100,21 +98,19 @@
 									$km=viewdata('tbkkm',$where)[0];
 									if($km['kkm']==0 || $km['kkm']==null) {$kkm='';} else {$kkm=$km['kkm'];}
                             ?>
-                            <td style="text-align: center;">
-                                <input class="form-control form-control-xs col-xs-4 ekkm"
-                                    data-id="<?php echo $m['idmapel'].'&kls='.$l['idkelas'];?>"
-                                    style="text-align:center" value="<?php echo $kkm;?>">
-                            </td>
-                            <?php endforeach ?>
-                        </tr>
+                        <td style="text-align: center;">
+                            <input class="form-control form-control-xs col-xs-4 ekkm"
+                                data-id="<?php echo $m['idmapel'].'&kls='.$l['idkelas'];?>" style="text-align:center"
+                                value="<?php echo $kkm;?>">
+                        </td>
                         <?php endforeach ?>
-                    </tbody>
-                </table>
-            </div>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
 $(function() {
     $('#tb_kkm').DataTable({
@@ -183,60 +179,58 @@ $("#btnRefresh").click(function() {
 })
 </script>
 <?php else: ?>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data KKM Tahun Pelajaran <?php echo $tapel;?></h4>
-        </div>
-        <div class="card-body">
-            <div class="form-group mb-2">
-                <div class="alert alert-warning">
-                    <p><strong>Perhatian:</strong><br />Berikut adalah data Kriteria Ketuntasan Minimal yang berlaku
-                        pada saat ini. Perubahan data ini hanya bisa dilakukan oleh Administrator.</p>
-                </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data KKM Tahun Pelajaran <?php echo $tapel;?></h4>
+    </div>
+    <div class="card-body">
+        <div class="form-group mb-2">
+            <div class="alert alert-warning">
+                <p><strong>Perhatian:</strong><br />Berikut adalah data Kriteria Ketuntasan Minimal yang berlaku
+                    pada saat ini. Perubahan data ini hanya bisa dilakukan oleh Administrator.</p>
             </div>
-            <br />
-            <div class="table-responsive">
-                <table id="tb_kkm" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center">Mata Pelajaran</th>
-                            <?php
+        </div>
+        <br />
+        <div class="table-responsive">
+            <table id="tb_kkm" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center">Mata Pelajaran</th>
+                        <?php
 					$qk=$conn->query("SELECT*FROM tbkelas INNER JOIN tbskul USING(idjenjang)");
 					while($k=$qk->fetch_array()){
 					?>
-                            <th style="text-align: center;width:10%"><?php echo $k['nmkelas'];?></th>
-                            <?php } ?>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+                        <th style="text-align: center;width:10%"><?php echo $k['nmkelas'];?></th>
+                        <?php } ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 					$qk=$conn->query("SELECT*FROM tbmapel");
 					$no=0;
 					while($m=$qk->fetch_array())
 					{
 						$no++;
 				?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td><?php echo $m['nmmapel'];?></td>
-                            <?php
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td><?php echo $m['nmmapel'];?></td>
+                        <?php
 					$ql=$conn->query("SELECT*FROM tbkelas INNER JOIN tbskul USING(idjenjang)");
 					while($l=$ql->fetch_array()){
 						$qkkm=$conn->query("SELECT kkm FROM tbkkm WHERE idmapel='$m[idmapel]' AND idkelas='$l[idkelas]' AND idthpel='$_COOKIE[c_tahun]'");
 						$k=$qkkm->fetch_array();
 						if($k['kkm']==0 || $k['kkm']==null) {$kkm='';} else {$kkm=$k['kkm'];}
 					?>
-                            <td style="text-align: center;">
-                                <?php echo $kkm;?>
-                            </td>
-                            <?php } ?>
-                        </tr>
+                        <td style="text-align: center;">
+                            <?php echo $kkm;?>
+                        </td>
                         <?php } ?>
-                    </tbody>
-                </table>
-            </div>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

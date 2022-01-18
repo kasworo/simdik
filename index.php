@@ -260,7 +260,11 @@
 									case 'inputsikap' : {include "rapor_sikap.php";break;}
 									case 'inputkognetif' : {include "rapor_kognetif.php";break;}
 									case 'inputterampil' : {include "rapor_motorik.php";break;}
-									case 'nilaieksim' :{include "rapor_ekspor.php";break;}
+									case 'nilaius' :{include "us_tampil.php";break;}
+                                    case 'inputus' :{include "us_input.php";break;}
+                                    case 'nilaiijz' :{include "rapor_rekap.php";break;}
+                                    case 'nilaieksim' :{include "rapor_ekspor.php";break;}
+                                    
 									
 									case 'datakkm' : {include "kkm_tampil.php";break;}
 									case 'datakelas' : {include "kelas_tampil.php";break;}

@@ -1,5 +1,5 @@
 <?php
-	include "config/function_kbm.php";
+	
 	if(isset($_POST['simpan'])){
 		if($_POST['idkur']==''){
 			if(addkurikulum($_POST)>0)
@@ -96,37 +96,36 @@
         </div>
     </div>
 </div>
-<div class="col-sm-12">
-    <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h4 class="card-title">Data Kurikulum</h4>
-            <div class="card-tools">
-                <button class="btn btn-flat btn-success btn-sm" id="btnTambah" data-toggle="modal"
-                    data-target="#myAddKurikulum">
-                    <i class="fas fa-plus-circle"></i>&nbsp;Tambah
-                </button>
-                <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
-                    <i class="fas fa-sync-alt"></i>&nbsp;Refresh
-                </button>
-                <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
-                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                </button>
-            </div>
+<div class="card card-secondary card-outline">
+    <div class="card-header">
+        <h4 class="card-title">Data Kurikulum</h4>
+        <div class="card-tools">
+            <button class="btn btn-flat btn-success btn-sm" id="btnTambah" data-toggle="modal"
+                data-target="#myAddKurikulum">
+                <i class="fas fa-plus-circle"></i>&nbsp;Tambah
+            </button>
+            <button class="btn btn-flat btn-info btn-sm" id="btnRefresh">
+                <i class="fas fa-sync-alt"></i>&nbsp;Refresh
+            </button>
+            <button id="hapusall" class="btn btn-flat btn-danger btn-sm">
+                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+            </button>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="tb_kurikulum" class="table table-bordered table-striped table-sm">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center;width:2.5%">No.</th>
-                            <th style="text-align: center;width:7.5%">Kode</th>
-                            <th style="text-align: center">Kurikulum</th>
-                            <th style="text-align: center">Status</th>
-                            <th style="text-align: center;width:20%">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tb_kurikulum" class="table table-bordered table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center;width:7.5%">Kode</th>
+                        <th style="text-align: center">Kurikulum</th>
+                        <th style="text-align: center">Status</th>
+                        <th style="text-align: center;width:20%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
 					$qk=viewdata('tbkurikulum');
 					$no=0;
 					foreach($qk as $m)
@@ -139,26 +138,24 @@
 							$status='Non Aktif';
 						}
 				?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td style="text-align:center"><?php echo $m['akkur'];?></td>
-                            <td><?php echo $m['nmkur'];?></td>
-                            <td><?php echo $status;?></td>
-                            <td style="text-align: center">
-                                <a href="#myAddKurikulum" data-toggle="modal" data-id="<?php echo $m['idkur'];?>"
-                                    class="btn btn-xs btn-success btn-flat btnUpdate">
-                                    <i class="fas fa-edit"></i>&nbsp;Edit
-                                </a>
-                                <button data-id="<?php echo $m['idkur'];?>"
-                                    class="btn btn-xs btn-danger btn-flat btnHapus">
-                                    <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                                </button>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
+                    <tr>
+                        <td style="text-align:center"><?php echo $no.'.';?></td>
+                        <td style="text-align:center"><?php echo $m['akkur'];?></td>
+                        <td><?php echo $m['nmkur'];?></td>
+                        <td><?php echo $status;?></td>
+                        <td style="text-align: center">
+                            <a href="#myAddKurikulum" data-toggle="modal" data-id="<?php echo $m['idkur'];?>"
+                                class="btn btn-xs btn-success btn-flat btnUpdate">
+                                <i class="fas fa-edit"></i>&nbsp;Edit
+                            </a>
+                            <button data-id="<?php echo $m['idkur'];?>" class="btn btn-xs btn-danger btn-flat btnHapus">
+                                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
+                            </button>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
