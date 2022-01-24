@@ -108,6 +108,7 @@
 		}
 		return $kbthn;
 	}
+
 	function getdarah($id){
 		switch($id){
 			case '0' : {$goldarah='Tidak Tahu';break;}
@@ -118,6 +119,26 @@
 		}
 		return $goldarah;
 	}
+
+	function KonversiHuruf($hrf)
+    {
+        if($hrf=='A' || $hrf=='SB'){
+			$angka=4;
+		}
+		else if($hrf=='B'){
+			$angka=3;
+		}
+		else if($hrf=='C'){
+			$angka=2;
+		}
+		else if($hrf=='D' || $hrf=='K'){
+			$angka=1;
+		}
+		else {
+			$angka=0;
+		}	
+		return $angka;
+    }
 
 	function getskulortu($id){
 		if(isset($id)) {

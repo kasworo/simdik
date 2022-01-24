@@ -5,98 +5,199 @@
 		if(empty($_FILES['filerapor']['tmp_name'])) { 
 			echo "<script>
 				$(function() {
-					toastr.error('File Template Peserta Didik Kosong!','Mohon Maaf!',{
-						timeOut:1000,
-						fadeOut:1000
+					toastr.error('File Template Nilai Rapor Kosong!','Mohon Maaf!',{
+						timeOut:3000,
+						fadeOut:3000
 					});
 				});
 			</script>";	
-		} else {
-			$data = new Spreadsheet_Excel_Reader($_FILES['filerapor']['tmp_name']);
-			$baris = $data->rowcount($sheet_index=0);       
-        	$thpel=substr($data->val(3,4),2,1);
-        	$aspek=substr($data->val(5,4),2,1);
-			$isidata=$baris-8;
-			$sukses = 0;
-			$gagal = 0;
-			$update=0;	
-			if($aspek=='1' || $aspek=='2'){
-                
+		} 
+        else {
+            $data = new Spreadsheet_Excel_Reader($_FILES['filerapor']['tmp_name']);
+            $baris = $data->rowcount($sheet_index=0);
+            $isidata=$baris-9;
+            $skskog = 0;$btlkog = 0; $updkog = 0; $gglkog=0;
+            $sksmot = 0;$btlmot = 0; $updmot = 0; $gglmot=0;
+            $sksspr = 0;$btlspr = 0; $updspr = 0; $gglspr=0;
+            $skssos = 0;$btlsos = 0; $updsos = 0; $gglsos=0;
+            $sksabs = 0;$btlabs = 0; $updabs = 0; $gglabs=0;
+            $skseks = 0;$btleks = 0; $updeks = 0; $ggleks=0;
+
+            for ($i=10; $i<=$baris; $i++)
+            {
+                $xnis=$data->val($i,2);
+                $xnmsiswa=$data->val($i,3);
+                $xthpel=$data->val($i,4);
+                $ds=viewdata('tbsiswa',array('nis'=>$xnis))[0];
+                $idsiswa=$ds['idsiswa'];               
+                $qtp="SELECT idthpel FROM tbthpel WHERE nmthpel='$xthpel'";
+                $tp=vquery($qtp)[0];
+                $idthpel=$tp['idthpel'];
+                $qmp="SELECT akmapel FROM tbmapel m INNER JOIN tbkurikulum k USING(idkur)";               
+                $jmp=cquery($qmp);
+                for($j=1;$j<=$jmp;$j++)
+                {
+                    $xakmapel=$data->val(6,($j-1)*4+5);
+                    $sqm="SELECT idmapel FROM tbmapel WHERE akmapel='$xakmapel'";
+                    $mp=vquery($sqm)[0];
+                    $idmapel=$mp['idmapel'];
+                    $xnkog=$data->val($i,($j-1)*4+5);
+                    $xpkog=$data->val($i,($j-1)*4+6);
+                    $xnmot=$data->val($i,($j-1)*4+7);
+                    $xpmot=$data->val($i,($j-1)*4+8);
+                    $keykog=array(
+                        'idsiswa'=>$idsiswa,
+                        'idmapel'=>$idmapel,
+                        'idthpel'=>$idthpel,
+                        'aspek'=>'3'
+                    );
+                    if(cekdata('tbnilairapor',$keykog)>0){
+                        $nilai=array(
+                            'nilairapor'=>$xnkog,
+                            'predikat'=>$xpkog
+                        );
+                        if(editdata('tbnilairapor',$nilai,'',$keykog)>0){$updkog++;} else {$btlkog++;}
+                    }
+                    else {
+                        $nilai = array(
+                            'idsiswa'=>$idsiswa,
+                            'idmapel'=>$idmapel,
+                            'idthpel'=>$idthpel,				
+                            'nilairapor'=>$xnkog,
+                            'predikat'=>$xpkog,
+                            'aspek'=>'3'
+                        );				
+                        if(adddata('tbnilairapor',$nilai)>0){$skskog++;} else {$gglkog++;}
+                    }
+                    $keymot=array(
+                        'idsiswa'=>$idsiswa,
+                        'idmapel'=>$idmapel,
+                        'idthpel'=>$idthpel,
+                        'aspek'=>'4'
+                    );
+                    
+                    if(cekdata('tbnilairapor',$keymot)>0){
+                        $nilai=array(
+                            'nilairapor'=>$xnmot,
+                            'predikat'=>$xpmot
+                        );
+                        if(editdata('tbnilairapor',$nilai,'',$keymot)>0){$updmot++;} else {$btlmot++;}
+                    }
+                    else {
+                        $nilai = array(
+                            'idsiswa'=>$idsiswa,
+                            'idmapel'=>$idmapel,
+                            'idthpel'=>$idthpel,				
+                            'nilairapor'=>$xnmot,
+                            'predikat'=>$xpmot,
+                            'aspek'=>'4'
+                        );				
+                        if(adddata('tbnilairapor',$nilai)>0){$sksmot++;} else {$gglmot++;}
+                    }
+                }
+                $keyspr=array(
+                    'idsiswa'=>$idsiswa,
+                    'idthpel'=>$idthpel,
+                    'aspek'=>'1'
+                 );
+                $xnspr=KonversiHuruf($data->val($i,$jmp*4+7));                    
+                if(cekdata('tbnilaisikap',$keyspr)>0){
+                    $sikap=array(
+                        'nilaisikap'=>$xnspr
+                    );
+                   if(editdata('tbnilaisikap',$nilai,'',$keyspr)>0){$updspr++;} else {$btlspr++;}
+                }
+                else {
+                    $sikap = array(
+                        'idsiswa'=>$idsiswa,
+                        'idthpel'=>$idthpel,				
+                        'nilaisikap'=>$xnspr,
+                        'aspek'=>'1'
+                    );				
+                    if(adddata('tbnilaisikap',$sikap)>0){$sksspr++;} else {$gglspr++;}
+                }
+
+                $keysos=array(
+                   'idsiswa'=>$idsiswa,
+                   'idthpel'=>$idthpel,
+                   'aspek'=>'2'
+                );
+                $xnsos=KonversiHuruf($data->val($i,$jmp*4+8));
+                    
+                if(cekdata('tbnilaisikap',$keysos)>0){
+                    $sikap=array(
+                        'nilaisikap'=>$xnsos
+                    );
+                    if(editdata('tbnilaisikap',$sikap,'',$keysos)>0){$updsos++;} else {$btlsos++;}
+                }
+                else {
+                    $sikap= array(
+                       'idsiswa'=>$idsiswa,
+                       'idthpel'=>$idthpel,
+                        'nilaisikap'=>$xnsos,
+                        'aspek'=>'2'
+                    );				
+                    if(adddata('tbnilaisikap',$sikap)>0){$skssos++;} else {$gglsos++;}
+                }
+
+                $keyabs=array(
+                   'idsiswa'=>$idsiswa,
+                   'idthpel'=>$idthpel
+                );
+                $xskt=$data->val($i,$jmp*4+9);
+                $xizn=$data->val($i,$jmp*4+10);
+                $xalp=$data->val($i,$jmp*4+11);
+                if(cekdata('tbabsensi',$keyabs)>0){
+                    $absen=array(
+                       'sakit'=>$xskt,
+                       'izin'=>$xizn,
+                       'alpa'=>$xalp
+                    );
+                    if(editdata('tbabsensi',$absen,'',$keyabs)>0){$updabs++;} else {$btlabs++;}
+                }
+                else {
+                    $absen = array(
+                        'idsiswa'=>$idsiswa,
+                        'idthpel'=>$idthpel,				
+                        'sakit'=>$xskt,
+                        'izin'=>$xizn,
+                        'alpa'=>$xalp
+                    );				
+                    if(adddata('tbabsensi',$absen)>0){$sksabs++;} else {$gglabs++;}
+                }                   
+                //Ekstrakurikuler
+                $qek="SELECT akekskul FROM tbekskul";               
+                $jeks=cquery($qek);
+                for($k=1;$k<=$jeks;$k++){
+                    $xakekskul=$data->val(8,($k-1)+$jmp*4+12);
+                    $qeks="SELECT idekskul FROM tbekskul WHERE akekskul='$xakekskul'";
+                    $eks=vquery($qeks)[0];
+                    $idekskul=$eks['idekskul'];                    
+                    $keyeks=array(
+                        'idsiswa'=>$idsiswa,
+                        'idthpel'=>$idthpel,
+                        'idekskul'=>$idekskul
+                    );                    
+                    $xneks=KonversiHuruf($data->val($i,($k-1)+$jmp*4+12)); 
+                    if(cekdata('tbnilaiekskul',$keyeks)>0){
+                        $ekskul=array(
+                            'nilaieks'=>$xneks
+                        );
+                        if(editdata('tbnilaiekskul',$ekskul,'',$keyeks)>0){$updeks++;} else {$btleks++;}
+                    }
+                    else {
+                        $ekskul = array(
+                            'idsiswa'=>$idsiswa,
+                            'idthpel'=>$idthpel,
+                            'idekskul'=>$idekskul,
+                            'nilaieks'=>$xneks
+                        );                        			
+                        if(adddata('tbnilaiekskul',$ekskul)>0){$skseks++;} else {$ggleks++;}
+                    }
+                }
+                          
             }
-            else {            
-                for ($i=9; $i<=$baris; $i++)
-			    {
-				    $xnis=$data->val($i,2);                
-				    $xnisn=$data->val($i,3);
-				    $xnama=$data->val($i,4);
-				    $xnilai = $data->val($i,5); 
-				    $xpred = $data->val($i,6); 
-				    $xdes = $data->val($i,7); 
-				    $xmapel = $data->val($i,8);
-				    $ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
-            	    $idsiswa=$ds['idsiswa'];
-				    if($xnis==''){
-					    echo "<script>
-						    $(function() {
-							    toastr.error('Cek Kolom NIS a.n ".$xnama."','Mohon Maaf!',{
-								    timeOut:10000,
-								    fadeOut:10000
-							    });
-						    });
-					    </script>";
-				    }
-				    else if(strlen($xnisn)<>10 || $xnisn==''){
-					    echo "<script>
-						    $(function() {
-							    toastr.error('Cek Kolom NISN a.n ".$xnama."','Mohon Maaf!',{
-								    timeOut:10000,
-								    fadeOut:10000
-							    });
-						    });
-					    </script>";
-				    }
-				    else {
-					    $key=array(
-						    'idsiswa'=>$idsiswa,
-						    'idthpel'=>$thpel,
-						    'idmapel'=>$xmapel,
-						    'aspek'=>$aspek
-					    ); 
-					    $cekrapor=cekdata('tbnilairapor',$key);
-					    if($cekrapor>0){
-						    $nilai=array(
-							    'nilairapor'=>$xnilai,
-							    'predikat'=>$xpred,
-							    'deskripsi'=>$xdes
-						    );
-						    $editnilai=editdata('tbnilairapor',$nilai,'',$key);
-						    if($editnilai>0){$update++;}					
-				        } 
-				        else {
-					        $nilai=array(
-						        'idsiswa'=>$idsiswa,
-						        'idthpel'=>$thpel,
-						        'idmapel'=>$xmapel,
-						        'aspek'=>$aspek,
-						        'nilairapor'=>$xnilai,
-						        'predikat'=>$xpred,
-						        'deskripsi'=>$xdes
-				    	    );
-					        $tambahnilai=adddata('tbnilairapor',$nilai);
-					        if($tambahnilai>0){$sukses++;} else { $gagal++;}
-				        }
-			        }
-		        }
-            }
-		    echo "<script>
-				    $(function() {
-					    toastr.info('Ada ".$sukses." data ditambah, ".$update." data diupdate, ".$gagal." data gagal ditambahkan!','Terimakasih',{
-					    timeOut:2000,
-					    fadeOut:2000
-				    });
-			    });
-		    </script>";
-	    }
+        }
     }
 ?>
 <script type="text/javascript">
@@ -152,17 +253,27 @@ $(document).ready(function() {
 
 <div class="alert alert-danger">
     <p><strong>Petunjuk:</strong></p>
-    <p>Silahkan isikan data Nilai Sikap Spiritual yang diperoleh tiap semester.<br>Nilai Akan tersimpan
-        otomatis jika kursor keluar dari kotak isian, setelah selesai melakukan pengisian klik tombol
-        <strong>Refresh</strong>
-    </p>
+    <ul>
+        <li>Silahkan pilih kelas dan tahun pelajaran terlebih dahulu, kemudian klik tombol <strong>Pilih</strong> agar
+            tombol
+            Download template aktif.
+        </li>
+        <li>Setelah template import data terisi, silahkan upload dengan cara klik tombol
+            <strong>Import</strong>,kemudian
+            pilihlah dimana file template tersimpan dengan cara klik tombol Browse.
+        </li>
+        <li>Pastikan anda memilih file template yang benar, kemudian klik tombol <strong>Upload</strong>, tunggu
+            beberapa
+            saat proses import data selesai.
+        </li>
+    </ul>
 </div>
 <div class="card card-secondary card-outline">
     <div class="card-header">
         <h4 class="card-title">Impor Dan Ekspor Nilai Peserta Didik</h4>
         <div class="card-tools">
             <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myRapor">
-                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Upload
+                <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
             </button>
         </div>
     </div>
@@ -175,7 +286,7 @@ $(document).ready(function() {
             </div>
         </div>
         <div class="form-group row mt-2 mb-4">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <select class="form-control input-sm" id="txtKls">
                     <option value="">..Pilih..</option>
                     <?php
@@ -188,7 +299,7 @@ $(document).ready(function() {
                     <?php endforeach ?>
                 </select>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <select class="form-control" id="txtThpel">
                     <option value="">..Pilih..</option>
                     <?php
@@ -210,7 +321,7 @@ $(document).ready(function() {
                 <thead>
                     <tr>
                         <th style="text-align:center;width:7.5%">No.</th>
-                        <th style="text-align:center">Template</th>
+                        <th style="text-align:center">Format Template</th>
                         <th style="text-align:center;width:27.5%">Download Format</th>
                     </tr>
                 </thead>
@@ -265,6 +376,34 @@ $(document).ready(function() {
                                 <input type="hidden" class="thpel" name="thpel4">
                                 <input type="hidden" class="kls" name="kls4">
                                 <button type="submit" class="btn btn-xs btn-success tmpinput" name="downloadmot"
+                                    disabled="disabled">
+                                    <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">5.</td>
+                        <td>Penilaian Ekstrakurikuler</td>
+                        <td style="text-align:center">
+                            <form action="rapor_ekskul.php" method="post">
+                                <input type="hidden" class="thpel" name="thpel5">
+                                <input type="hidden" class="kls" name="kls5">
+                                <button type="submit" class="btn btn-xs btn-success tmpinput" name="downloadekskul"
+                                    disabled="disabled">
+                                    <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">6.</td>
+                        <td>Catatan Kehadiran</td>
+                        <td style="text-align:center">
+                            <form action="rapor_template.php" method="post">
+                                <input type="hidden" class="thpel" name="thpel6">
+                                <input type="hidden" class="kls" name="kls6">
+                                <button type="submit" class="btn btn-xs btn-success tmpinput" name="downloadabsen"
                                     disabled="disabled">
                                     <i class="fas fa-cloud-download-alt"></i>&nbsp;Download
                                 </button>

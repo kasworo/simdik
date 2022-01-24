@@ -10,6 +10,7 @@
 		{
 			global $title;
 			$this->y0 = $this->GetY();
+			//$this->Image('images/tandaair.png',4.75,8.75,13.0);
 		}
         function SetCol($col)
         {
@@ -38,6 +39,7 @@
 			$ds=viewdata('tbsiswa',array('idsiswa'=>$idsiswa))[0];
 			$nis=$ds['nis'];
 			$nisn=$ds['nisn'];
+			
 			$this->SetFont('Times','B',12);
 			$this->Cell(28.0,0.75,'LEMBAR DATA INDUK PESERTA DIDIK',0,0,'C');
             $this->Ln(1.0);
@@ -760,7 +762,7 @@
 	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND (rg.idjreg='1' OR rg.idjreg='2')";
 	$data=vquery($sql);
 	foreach ($data as $ds){
-    	$pdf->PrintChapter($ds['idsiswa']);//, $ds['nisn']);
+    	$pdf->PrintChapter($ds['idsiswa']);
 	}
 	$pdf->Output();
 ?>

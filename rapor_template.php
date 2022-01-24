@@ -72,7 +72,15 @@
         $nmkelas=$kls['idkelas'].' - '.$kls['nmkelas'];
         $namafile='keterampilan_'.$kls['idkelas'].'_'.$thn['nmthpel'];
     }
-    
+    if(isset($_POST['downloadekskul'])){
+        $aspek='5 - Ekstrakurikuler';           
+        $data=getsiswa($_POST['kls5'],$_POST['thpel5'],2);
+        $thn=gettahun($_POST['thpel5']);
+        $tahun=$thn['idthpel'].' - '.$thn['desthpel'];
+        $kls=getkelas($_POST['kls5']);
+        $nmkelas=$kls['idkelas'].' - '.$kls['nmkelas'];
+        $namafile='ekskul_'.$kls['idkelas'].'_'.$thn['nmthpel'];
+    }
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
         ->setTitle("Template")->setLastModifiedBy("Kasworo Wardani");

@@ -79,7 +79,7 @@
                 <tbody>
                     <?php
 							$qsm="SELECT idmitra, npsn, nmmitra, alamat, nmjenjang FROM ref_skulmitra INNER JOIN tbjenjang USING(idjenjang)";
-							$rows=viewref($qsm);
+							$rows=vquery($qsm);
 							$no=0;
 							foreach ($rows as $k):
 							$no++;
