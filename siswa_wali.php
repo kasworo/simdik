@@ -240,19 +240,19 @@ $(document).ready(function() {
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <!-- <div class="form-group row mb-2">
-							<label class="col-sm-5 offset-sm-1">Hubungan Keluarga</label>
-								<div class="col-sm-6">
-									<select class="form-control form-control-sm" name="hubkel" id="hubkel" disabled="disabled">
-										<option value="">..Pilih..</option>
-										<option value="1">wali Kandung</option>
-										<option value="2">Ibu Kandung</option>
-										<option value="3">Kakak</option>
-										<option value="4">Paman/Bibi</option>
-										<option value="5">Kakek/Nenek</option>
-									</select>
-								</div>
-							</div> -->
+                        <div class="form-group row mb-2">
+                            <label class="col-sm-5 offset-sm-1">Hubungan Keluarga</label>
+                            <div class="col-sm-6">
+                                <select class="form-control form-control-sm" name="hubkel" id="hubkel">
+                                    <option value="">..Pilih..</option>
+                                    <option value="1">wali Kandung</option>
+                                    <option value="2">Ibu Kandung</option>
+                                    <option value="3">Kakak</option>
+                                    <option value="4">Paman/Bibi</option>
+                                    <option value="5">Kakek/Nenek</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group row mb-2">
                             <label class="col-sm-5 offset-sm-1">Alamat</label>
                             <div class="col-sm-6">

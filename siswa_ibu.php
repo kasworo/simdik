@@ -111,7 +111,7 @@ $(document).ready(function() {
         url: "siswa_json.php",
         type: "POST",
         dataType: 'json',
-        data: "id=" + id + "&j=1",
+        data: "id=" + id + "&j=2",
         success: function(data) {
             $("#nmortu").val(data.nmortu);
             $("#nik").val(data.nik);
@@ -205,8 +205,8 @@ $(document).ready(function() {
                         <div class="col-sm-5">
                             <select class="form-control form-control-sm" name="hidup" id="hidup">
                                 <option value="">..Pilih..</option>
-                                <option value="1">Masih Hidup</option>
-                                <option value="0">Sudah Meninggal</option>
+                                <option value="0">Masih Hidup</option>
+                                <option value="1">Sudah Meninggal</option>
                             </select>
                         </div>
                     </div>
@@ -216,7 +216,7 @@ $(document).ready(function() {
                             <select class="form-control form-control-sm" name="krjortu" id="krjortu">
                                 <option value="">..Pilih..</option>
                                 <?php
-										$qkrj=$conn->query("SELECT*FROM ref_pekerjaan LIMIT 7");
+										$qkrj=$conn->query("SELECT*FROM ref_pekerjaan LIMIT 8");
 										while($kr=$qkrj->fetch_array()):
 									?>
                                 <option value="<?php echo $kr['idkerja'];?>"><?php echo $kr['pekerjaan'];?></option>

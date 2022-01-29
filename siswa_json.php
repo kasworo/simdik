@@ -1,6 +1,7 @@
 <?php
 	include "dbfunction.php";
 	$id=$_POST['id'];
+	
 	if($_POST['d']=='1'){
 		$data=cekdata('tbsiswa', array('idsiswa'=>$id));
 		if($data==0){
@@ -100,6 +101,7 @@
 				);			
 		}
 	}
+	
 	else if($_POST['d']=='2'){
 		$data=cekdata('tbriwayatskul', array('idsiswa'=>$id));
 		if($data==0){
@@ -136,6 +138,7 @@
 				);
 		}
 	}
+	
 	else {
 		if($_POST['j']=='1'){
 			$hubkel='1';
@@ -182,27 +185,27 @@
 			$tmb='<i class="fas fa-save"></i> Update';
 			$m=viewdata('tbortu',$keys)[0];
 			$rows= array(
-						'nmortu'=>$m['nmortu'],
-						'nik'=>$m['nik'],
-						'tmplahir'=>$m['tmplahir'],
-						'tgllahir'=>$m['tgllahir'],
-						'idagama'=>$m['idagama'],
-						'idpddk'=>$m['idpddk'],
-						'idkerja'=>$m['idkerja'],
-						'idhsl'=>$m['idhsl'],
-						'hidup'=>$m['hidup'],
-						'hubkel'=>$m['hubkel'],
-						'alamat'=>$m['alamat'],
-						'desa'=>$m['desa'],
-						'kec'=>$m['kec'],
-						'kab'=>$m['kab'],
-						'prov'=>$m['prov'],
-						'kdpos'=>$m['kdpos'],
-						'nohp'=>$m['nohp'],
-						'tmb'=>$tmb,
-						'psn'=>$pesan
-					);
-				}		
+					'nmortu'=>$m['nmortu'],
+					'nik'=>$m['nik'],
+					'tmplahir'=>$m['tmplahir'],
+					'tgllahir'=>$m['tgllahir'],
+					'idagama'=>$m['idagama'],
+					'idpddk'=>$m['idpddk'],
+					'idkerja'=>$m['idkerja'],
+					'idhsl'=>$m['idhsl'],
+					'hidup'=>$m['hidup'],
+					'hubkel'=>$m['hubkel'],
+					'alamat'=>$m['alamat'],
+					'desa'=>$m['desa'],
+					'kec'=>$m['kec'],
+					'kab'=>$m['kab'],
+					'prov'=>$m['prov'],
+					'kdpos'=>$m['kdpos'],
+					'nohp'=>$m['nohp'],
+					'tmb'=>$tmb,
+					'psn'=>$pesan
+				);
+			}		
 				
 	}
 	echo json_encode($rows);

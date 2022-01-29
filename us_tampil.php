@@ -108,7 +108,6 @@ function validAngka(a) {
 $(".btnInput").click(function() {
     var id = $(this).data('id');
     window.location.href = "index.php?p=inputus&id=" + id
-
 })
 $(document).ready(function() {
     $(function() {

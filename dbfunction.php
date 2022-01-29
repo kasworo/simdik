@@ -8,7 +8,7 @@
 		echo "Error: Could not connect to database. ";
 		exit;
 	}
-	   
+	
 	function indonesian_date($date)
 	{
 		$indonesian_month = array("Januari", "Februari", "Maret",
@@ -122,21 +122,26 @@
 
 	function KonversiHuruf($hrf)
     {
-        if($hrf=='A' || $hrf=='SB'){
-			$angka=4;
-		}
-		else if($hrf=='B'){
-			$angka=3;
-		}
-		else if($hrf=='C'){
-			$angka=2;
-		}
-		else if($hrf=='D' || $hrf=='K'){
-			$angka=1;
+        if(is_numeric($hrf)){
+			$angka=$hrf;
 		}
 		else {
-			$angka=0;
-		}	
+			if($hrf=='A' || $hrf=='SB'){
+				$angka=4;
+			}
+			else if($hrf=='B'){
+				$angka=3;
+			}
+			else if($hrf=='C'){
+				$angka=2;
+			}
+			else if($hrf=='D' || $hrf=='K'){
+				$angka=1;
+			}
+			else {
+				$angka=0;
+			}
+		}			
 		return $angka;
     }
 
@@ -238,12 +243,12 @@
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin)." GROUP BY $group";
 		}
 		else if($group==''){
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys);
+			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys);
 		}
 		else {
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys)." GROUP BY $group";
+			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
 		}
-		//var_dump($sql);die;
+		//var_dump($sql);
 		$result=$conn->query($sql);
 		while($row=$result->fetch_assoc()){
 			$rows[]=$row;

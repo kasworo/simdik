@@ -6,6 +6,14 @@
     {
         protected $col = 0;
         protected $y0;
+		function Footer()
+        {
+           $this->SetY(-1.575);
+           $this->SetFont('Arial','I',8);
+           $sql="SELECT LEFT(desthpel,9) as tahun FROM tbthpel WHERE nmthpel LIKE '$_GET[id]%' LIMIT 1";
+           $th=vquery($sql)[0];
+           $this->Cell(28.5,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'R');
+        }
 		function Header()
 		{
 			global $title;
@@ -15,7 +23,7 @@
         function SetCol($col)
         {
             $this->col = $col;
-            $x = 2.0+$col*15;
+            $x = 2.75+$col*15;
             $this->SetLeftMargin($x);
             $this->SetX($x);
         }
@@ -497,7 +505,7 @@
 			$this->Cell(0.75,0.575);
 			$this->Cell(4.0,0.575,'b. Ibu');
 			$this->Cell(0.25,0.575,':');
-			$this->Cell(8.25,0.575,getgajiortu($di['idhsl']));
+			$this->Cell(8.25,0.575,$gajiibu);
 			$this->Ln();
 			$this->Cell(0.75,0.575);
 			$this->Cell(0.75,0.575,'6.');
@@ -741,7 +749,7 @@
 			$this->SetFont('Times','',11);
 			for($i=1;$i<=6;$i++){
 			$this->Cell(0.85,0.575);
-			$this->Cell(11.5,0.575,' ..........................................................................................................................................');
+			$this->Cell(11.5,0.575,' ................................................................................................................................');
 			$this->Ln();
 			}
 			$this->SetCol(0);
@@ -755,7 +763,7 @@
         }
     }
     $pdf = new PDF('L','cm',array(21.5,33.0));
-    $pdf->SetMargins(2.75,1.5,1.25);
+    $pdf->SetMargins(3.25,1.5,1.25);
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');

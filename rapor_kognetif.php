@@ -1,4 +1,8 @@
-<?php $idsiswa=$_GET['id'];?>
+<?php
+    $idsiswa=$_GET['id'];
+    $ds=viewdata('tbsiswa',array('idsiswa'=>$_GET['id']))[0];    
+    $namasiswa=ucwords(strtolower($ds['nmsiswa']));
+?>
 <script type="text/javascript">
 function isitable(id, th) {
     $.ajax({
@@ -105,7 +109,7 @@ $(document).ready(function() {
 </div>
 <div class="card card-primary card-outline">
     <div class="card-header">
-        <h5 class="card-title m-0" id="judul">Input Nilai Pengetahuan</h5>
+        <h5 class="card-title m-0" id="judul">Input Nilai Pengetahuan Untuk <?php echo $namasiswa;?></h5>
         <div class="card-tools">
             <a href="index.php?p=datarapor&d=3" class="btn btn-tool">
                 <i class="fas fa-arrow-circle-left"></i>

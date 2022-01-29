@@ -257,6 +257,7 @@
 									case 'kompetensi' : {include "kompetensi_tampil.php";break;}
 
 									case 'datarapor' : {include "rapor_tampil.php";break;}
+                                    case 'detailnilai' : {include "rapor_detail.php";break;}                                  
 									case 'inputsikap' : {include "rapor_sikap.php";break;}
 									case 'inputkognetif' : {include "rapor_kognetif.php";break;}
 									case 'inputterampil' : {include "rapor_motorik.php";break;}

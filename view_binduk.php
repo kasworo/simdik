@@ -1,3 +1,20 @@
+<div class="alert alert-danger">
+    <p><strong>Petunjuk:</strong></p>
+    <ul>
+        <li>Silahkan pilih kelas dan tahun pelajaran terlebih dahulu, kemudian klik tombol <strong>Pilih</strong> agar
+            tombol
+            Download template aktif.
+        </li>
+        <li>Setelah template import data terisi, silahkan upload dengan cara klik tombol
+            <strong>Import</strong>, kemudian
+            pilihlah dimana file template tersimpan dengan cara klik tombol Browse.
+        </li>
+        <li>Pastikan anda memilih file template yang benar, kemudian klik tombol <strong>Upload</strong>, tunggu
+            beberapa
+            saat proses import data selesai.
+        </li>
+    </ul>
+</div>
 <div class="card card-secondary card-outline">
     <div class="card-header">
         <h4 class="card-title">Cetak Buku Induk</h4>
@@ -9,33 +26,32 @@
                     <tr>
                         <td style="text-align:center;width:7.5%">No.</td>
                         <td style="text-align:center">Tahun Pelajaran</td>
-                        <td style="text-align:center;width:17.5%">Jumlah Siswa</td>
                         <td style="text-align:center;width:25%">Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
 							$no=0;
-							$qtp=$conn->query("SELECT LEFT(desthpel,9) as tapel, LEFT(nmthpel,4) as kdthpel FROM tbthpel GROUP BY LEFT(nmthpel,4)");
-							while($tp=$qtp->fetch_array()):
+							$sql="SELECT LEFT(desthpel,9) as tapel, LEFT(nmthpel,4) as kdthpel FROM tbthpel GROUP BY LEFT(nmthpel,4) ORDER BY idthpel DESC LIMIT 5";
+                            $qtp=vquery($sql);
+							foreach ($qtp as $tp):
 								$no++;
 						?>
                     <tr>
                         <td style="text-align:center;"><?php echo $no.'.';?></td>
                         <td><?php echo $tp['tapel'];?></td>
-                        <td></td>
                         <td style="text-align:center">
                             <button data-id="<?php echo $tp['kdthpel'];?>"
-                                class="btn btn-default btn-sm btn-flat col-sm-5 btnBiodata">
+                                class="btn btn-default btn-sm col-sm-5 btnBiodata">
                                 <i class="fas fa-print"></i>&nbsp;Biodata
                             </button>
                             <button data-id="<?php echo $tp['kdthpel'];?>"
-                                class="btn btn-default btn-sm btn-flat col-sm-5 btnNilai">
+                                class="btn btn-info btn-sm col-sm-5 btnNilai">
                                 <i class="fas fa-print"></i>&nbsp;Nilai
                             </button>
                         </td>
                     </tr>
-                    <?php endwhile;?>
+                    <?php endforeach ?>
                 </tbody>
             </table>
         </div>

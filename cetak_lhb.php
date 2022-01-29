@@ -1,6 +1,7 @@
 <?php
 	require('assets/library/fpdf/fpdf.php'); 
     include "dbfunction.php";
+    
     function GetKolom($awal, $akhir, $ofset)
     {
         $sql="SELECT idthpel, nmthpel, desthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir' ORDER BY idthpel LIMIT 4 OFFSET $ofset";
@@ -29,6 +30,7 @@
 		}
 		return $huruf;
     }
+    
     function RapikanAbsen($angka)
     {
         if($angka==0){
@@ -39,6 +41,7 @@
         }
 		return $absen;
     }
+    
     function UbahKelas($nama)
     {
         $angka=str_replace('Kelas','',$nama);
@@ -59,6 +62,14 @@
 
     class PDF extends FPDF
     {
+        function Footer()
+        {
+           $this->SetY(-1.575);
+           $this->SetFont('Arial','I',8);
+           $sql="SELECT LEFT(desthpel,9) as tahun FROM tbthpel WHERE nmthpel LIKE '$_GET[id]%' LIMIT 1";
+           $th=vquery($sql)[0];
+           $this->Cell(28.5,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'R');
+        }
         function ChapterTitle($id)
         {
 			$ds=viewdata('tbsiswa',array('idsiswa'=>$id))[0];
@@ -223,7 +234,6 @@
             $this->Cell(5.0,0.575,'Spiritual','TR',0,'L');
             $this->SetXY(7.0,$j*0.575+6.45);
             $this->Cell(5.0,0.575,'Sosial','TBR',0,'L');
-           // $this->SetXY(12.0,11.625); 
             $i=0;
             if(JmlKolom($awal, $akhir, $opset)==4){
                 foreach($qthpel as $th){                                     

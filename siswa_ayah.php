@@ -207,8 +207,8 @@ $(document).ready(function() {
                             <div class="col-sm-5">
                                 <select class="form-control form-control-sm" name="hidup" id="hidup">
                                     <option value="">..Pilih..</option>
-                                    <option value="1">Masih Hidup</option>
-                                    <option value="0">Sudah Meninggal</option>
+                                    <option value="0">Masih Hidup</option>
+                                    <option value="1">Sudah Meninggal</option>
                                 </select>
                             </div>
                         </div>

@@ -63,19 +63,41 @@
                     <th style="text-align: center;width:2.5%">No.</th>
                     <th style="text-align: center;width:20%">Nomor Induk</th>
                     <th style="text-align: center;">Nama Peserta Didik</th>
-                    <th style="text-align: center;width:10%">Nilai</th>
+                    <?php if($_GET['d']=='1' || $_GET['d']=='2'): ?>
+                    <th style="text-align: center;width:20%">Nilai</th>
+                    <?php endif ?>
+                    <?php if($_GET['d']=='3' || $_GET['d']=='4'): ?>
+                    <th style="text-align: center;width:20%">Rata-rata Nilai</th>
+                    <?php endif ?>
                     <th style="text-align: center;width:20%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <?php
-						$sql="SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi rs USING(idsiswa) INNER JOIN tbkelas k USING(idkelas) INNER JOIN tbthpel tp USING(idthpel) WHERE s.deleted='0' AND tp.aktif='1'";
-                        //var_dump($sql);
-						$qs=vquery($sql);
-						$no=0;
-						foreach($qs as $s):
-			        	$no++;
-					?>
+                <?php					
+                    $field=array('s.idsiswa', 's.nis', 's.nisn', 's.nmsiswa');
+                    $join=array(
+                        'tbregistrasi rs'=>'idsiswa',
+                        'tbkelas k'=>'idkelas',
+                        'tbthpel tp'=>'idthpel'
+                    );
+                    $where=array(
+                        's.deleted'=>'0',
+                        'tp.aktif'=>'1'
+                    );
+                    $qs=fulljoin($field,'tbsiswa s',$join,$where);
+					$no=0;
+					foreach($qs as $s):
+			       	    $no++;
+                        if($_GET['d']=='1' || $_GET['d']=='2'){
+                            $qnilai="SELECT AVG(nilaisikap) as rata FROM tbnilaisikap WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]' GROUP BY idmapel";
+                        }
+                        if($_GET['d']=='3' || $_GET['d']=='3'){
+                            $qnilai="SELECT AVG(nilairapor) as rata FROM tbnilairapor WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]' GROUP BY idmapel";
+                            $nil=vquery($qnilai)[0];
+                            $nilai=number_format($nil['rata'],2,',','.');
+                        }
+
+				?>
                 <tr>
                     <td style="text-align:center"><?php echo $no.'.';?></td>
                     <td style="text-align:center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
@@ -83,9 +105,10 @@
                         <?php echo ucwords(strtolower($s['nmsiswa']));?>
                     </td>
                     <td style="text-align:center">
+                        <?php echo $nilai;?>
                     </td>
                     <td style="text-align:center">
-                        <button data-id="<?php echo $s['idsiswa'];?>" class="btn btn-xs btn-info btn-flat btnInput">
+                        <button data-id="<?php echo $s['idsiswa'];?>" class="btn btn-xs btn-info btn-flat btnDetail">
                             <i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Detail
                         </button>
                         <button data-id="<?php echo $s['idsiswa'];?>" class="btn btn-xs btn-success btn-flat btnInput">
@@ -105,8 +128,8 @@ function validAngka(a) {
     }
 }
 $(".btnInput").click(function() {
-    var id = $(this).data('id');
-    var as = "<?php echo $_GET['d'];?>";
+    let id = $(this).data('id');
+    let d = "<?php echo $_GET['d'];?>";
     if (as == '1' || as == '2') {
         window.location.href = "index.php?p=inputsikap&id=" + id
     } else if (as == '3') {
@@ -114,6 +137,12 @@ $(".btnInput").click(function() {
     } else if (as == '4') {
         window.location.href = "index.php?p=inputterampil&id=" + id
     }
+})
+$(".btnDetail").click(function() {
+    let id = $(this).data('id');
+    let d = "<?php echo $_GET['d'];?>";
+    window.location.href = "index.php?p=detailnilai&id=" + id + "&d=" + d
+
 })
 $(document).ready(function() {
     $(function() {

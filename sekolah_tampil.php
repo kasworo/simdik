@@ -25,21 +25,24 @@
 	}
 	if($level=='1'):
 		if(isset($_POST['simpan'])){
-			$data=array( 
-				'nmskul'=>$_POST['nama'], 
-				'nss'=>$_POST['nss'], 
-				'npsn'=>$_POST['npsn'], 
-				'nmskpd'=>$_POST['skpd'], 
-				'alamat'=>$_POST['almt'], 
-				'desa'=>$_POST['desa'], 
-				'kec'=>$_POST['kec'], 
-				'kab'=>$_POST['kab'], 
-				'prov'=>$_POST['prov'],
-				'kdpos'=>$_POST['kdpos'], 
-				'email'=>$_POST['imel'],
-				'website'=>$_POST['web']
-			);
-			$row=editdata("tbskul", $data, "kdskul", $_POST['kode']);
+			$key=array('kdskul'=>$_POST['kode']);
+            if(cekdata('tbskul',$key)>0){
+                $data=array( 
+                    'nmskul'=>$_POST['nama'], 
+                    'nss'=>$_POST['nss'], 
+                    'npsn'=>$_POST['npsn'], 
+                    'nmskpd'=>$_POST['skpd'], 
+                    'alamat'=>$_POST['almt'], 
+                    'desa'=>$_POST['desa'], 
+                    'kec'=>$_POST['kec'], 
+                    'kab'=>$_POST['kab'], 
+                    'prov'=>$_POST['prov'],
+                    'kdpos'=>$_POST['kdpos'], 
+                    'email'=>$_POST['imel'],
+                    'website'=>$_POST['web']
+                );
+			    editdata("tbskul", $data,'',$key);
+            }
 		}
 ?>
 <div class="card card-secondary card-outline">
