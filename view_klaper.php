@@ -8,37 +8,29 @@
                 <thead>
                     <tr>
                         <th style="text-align: center;width:2.5%">No.</th>
+                        <th style="text-align: center;width:22.5%">Nomor Induk</th>
                         <th style="text-align: center;width:22.5%">Nama Peserta Didik</th>
-
-                        <th style="text-align: center;">Alamat</th>
-                        <th style="text-align: center;width:20%">Aksi</th>
+                        <th style="text-align: center;">Masuk</th>
+                        <th style="text-align: center;">Keluar</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-						$qs=viewdata('tbsiswa');
-							$no=0;
-							foreach($qs as $s)
-							{
-								$no++;
-								if($s['aktif']=='1'){$stat='Aktif';$btn="btn-success";} else {$stat='Non Aktif';$btn="btn-danger";}
-						?>
+                       // $sql="SELECT*FROM tbsiswa WHERE nmsiswa LIKE 'A%'";
+						//$qs=vquery($sql);
+                        $qs=viewdata('tbsiswa','','','nmsiswa,nis');
+						$no=0;
+						foreach($qs as $s)
+						{
+							$no++;
+							
+					?>
                     <tr>
                         <td style="text-align:center"><?php echo $no.'.';?></td>
-                        <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
-                        </td>
-                        <td><?php echo $s['nis'].' / '.$s['nisn'];?></td>
-                        <td><?php echo $s['alamat'];?></td>
-                        <td style="text-align: center">
-                            <button data-id="<?php echo $s['idsiswa'];?>"
-                                class="btn btn-xs btn-success btn-flat btnUpdate">
-                                <i class="fas fa-edit"></i>&nbsp;Edit
-                            </button>
-                            <button data-id="<?php echo $s['idsiswa'];?>"
-                                class="btn btn-xs btn-danger btn-flat btnHapus">
-                                <i class="fas fa-trash-alt"></i>&nbsp;Hapus
-                            </button>
-                        </td>
+                        <td style="text-align:center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
+                        <td><?php echo ucwords(strtolower($s['nmsiswa']));?> </td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <?php } ?>
                 </tbody>
