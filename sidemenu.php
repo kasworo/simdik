@@ -310,13 +310,13 @@
                         <li class="nav-item">
                             <a href="index.php?p=cetakrapor" class="nav-link">
                                 <i class="fas fa-list-alt nav-icon"></i>
-                                <p>Rapor Peserta Didik</p>
+                                <p>Rapor</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="index.php?p=cetakledger" class="nav-link">
                                 <i class="fas fa-list-alt nav-icon"></i>
-                                <p>Rekap Hasil Belajar</p>
+                                <p>Rekap Hasil</p>
                             </a>
                         </li>
                     </ul>
@@ -324,7 +324,7 @@
                 <li class="nav-item">
                     <a href="index.php?p=cetakmutasi" class="nav-link">
                         <i class="far fa-list-alt nav-icon"></i>
-                        <p>Mutasi Peserta Didik</p>
+                        <p>Mutasi</p>
                     </a>
                 </li>
                 <li class="nav-item">
