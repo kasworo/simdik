@@ -53,6 +53,7 @@
 			$xseni = $data->val($i,29);
 			$xorgn = $data->val($i,30);
 			$xlain = $data->val($i,31);
+			
 			if(strlen($nmagama)==1){$xagama=$nmagama;}
 				else {
 					switch ($nmagama) {
@@ -184,7 +185,8 @@
 						'hobi1' =>$xolga,
 						'hobi2' =>$xseni,
 						'hobi3' =>$xorgn,
-						'hobi4' =>$xlain
+						'hobi4' =>$xlain,
+						'deleted'=>'0'
 					);
 					
 					if(editdata('tbsiswa',$datasiswa,'',$key)>0){
@@ -239,10 +241,10 @@
 						'lintang' =>$xltg,
 						'bujur' =>$xbjr,
 						'nohp' =>$xnohp,
-						'olahrg' =>$xolga,
-						'seni' =>$xseni,
-						'orgns' =>$xorgn,
-						'lain' =>$xlain
+						'hobi1' =>$xolga,
+						'hobi2' =>$xseni,
+						'hobi3' =>$xorgn,
+						'hobi4' =>$xlain
 					);
 					
 					if(adddata('tbsiswa',$datasiswa)>0){
@@ -403,9 +405,6 @@
                         <td><?php echo $s['nis'].' / '.$s['nisn'];?></td>
                         <td><?php echo $s['alamat'];?></td>
                         <td style="text-align: center">
-                            <!-- <a href="index.php?p=addsiswa&m=2&id=<?php echo base64_encode($s['idsiswa']);?>" class="btn btn-xs btn-primary btn-flat">
-									<i class="fas fa-edit"></i>&nbsp;Edit
-								</a> -->
                             <button data-id="<?php echo $s['idsiswa'];?>"
                                 class="btn btn-xs btn-success btn-flat btnUpdate">
                                 <i class="fas fa-edit"></i>&nbsp;Edit

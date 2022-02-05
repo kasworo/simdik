@@ -23,11 +23,12 @@
                     'tglijazah' => $_POST['tglijz'],
                     'lama'    => $_POST['lamasd'],
                     'aslsmp'    => $_POST['aslsmp'],
-                    'nosrt'     => $_POST['nosrt'],
-                    'tglsrt'    => $_POST['tglsrt'],
+                    'nosurat'     => $_POST['nosrt'],
+                    'tglsurat'    => $_POST['tglsrt'],
                     'alasan'    =>$_POST['alasan']  
                 );
             }
+           
             $baru=adddata('tbriwayatskul',$data);
 			if($baru>0){
 				echo "<script>
@@ -76,12 +77,12 @@
                     'tglijazah' => $_POST['tglijz'],
                     'lama'      => $_POST['lamasd'],
                     'aslsmp'    => $_POST['aslsmp'],
-                    'nosrt'     => $_POST['nosrt'],
-                    'tglsrt'    => $_POST['tglsrt'],
+                    'nosurat'     => $_POST['nosrt'],
+                    'tglsurat'    => $_POST['tglsrt'],
                     'alasan'    =>$_POST['alasan']  
                 );
             }
-            $update=editdata('tbskul', $data, array('idsiswa'=>$_POST['idsiswa']));
+            $update=editdata('tbriwayatskul', $data, '',array('idsiswa'=>$_POST['idsiswa']));
             if($update>0){
 				echo "<script>
 						$(function() {

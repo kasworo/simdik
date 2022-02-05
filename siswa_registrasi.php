@@ -126,12 +126,12 @@
                 $xthpel=$data->val($i,7);
                 $ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
                 $idsiswa=$ds['idsiswa'];
-                $dreg=viewdata('tbthpel',array('idthpel'=>$xthpel))[0];
-                //var_dump($dreg);die;
+                $dreg=viewdata('tbthpel',array('nmthpel'=>$xthpel))[0];
+                $idthpel=$dreg['idthpel'];
                 $xtglreg=$dreg['awal'];             
                 $key=array(
                     'idsiswa'=>$idsiswa,
-                    'idthpel'=>$xthpel
+                    'idthpel'=>$idthpel
                 );                         
                 $cekdata=cekdata('tbregistrasi',$key);
                 if($cekdata>0){
@@ -147,7 +147,7 @@
                         'idjreg'=>$xidreg,
                         'idsiswa'=>$idsiswa,
                         'idkelas'=>$xidkelas,
-                        'idthpel'=>$xthpel,
+                        'idthpel'=>$idthpel,
                         'tglreg'=>$xtglreg  
                     );
                     $tambah=adddata('tbregistrasi',$datane);

@@ -62,7 +62,7 @@
 				}
 				$rows=array(
 					'idsiswa'=>$m['idsiswa'],
-					'nmsiswa'=>$m['nmsiswa'],
+					'nmsiswa'=>ucwords(strtolower($m['nmsiswa'])),
 					'nik'=>$m['nik'],
 					'nis'=>$m['nis'],
 					'nisn' => $m['nisn'],

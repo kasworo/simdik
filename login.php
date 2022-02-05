@@ -16,7 +16,8 @@
 		header("Location: index.php?p=dashboard");
 		exit;
 	}
-	if(isset($_POST['login'])){
+	
+    if(isset($_POST['login'])){
 		$user=$conn->real_escape_string($_POST['user']);
 		$pass=$_POST['pass'];
         $keys=array(

@@ -145,6 +145,22 @@
 		return $angka;
     }
 
+	function KonversiRomawi($angka)
+    {
+        switch($angka){
+			case '1' : {$romawi='i';break;}
+			case '2' : {$romawi='ii';break;}
+			case '3' : {$romawi='iii';break;}
+			case '4' : {$romawi='iv';break;}
+			case '5' : {$romawi='v';break;}
+			case '6' : {$romawi='vi';break;}
+			case '7' : {$romawi='vii';break;}
+			case '8' : {$romawi='viii';break;}
+			case '9' : {$romawi='ix';break;}
+		}		
+		return strtoupper($romawi);
+    }
+
 	function getskulortu($id){
 		if(isset($id)) {
 			$data=viewdata('ref_pendidikan',array('idpddk'=>$id))[0];
@@ -335,25 +351,39 @@
 		return $rows;
 	}
 	
-	function viewdata($tbl, $key='', $ord=''){
+	function viewdata($tbl, $key='', $grup='',$ord=''){
 		global $conn;
-		$where=[];
-		foreach($key as $wh=>$nil) {
-			$where[] = "$wh = '$nil'";
-		}
-		if($key=='' && $ord==''){
-			$sql="SELECT*FROM $tbl"; 
-		}
-		else if($key==''){
-			$sql="SELECT*FROM $tbl ORDER BY $ord";
-		}
-		else if($ord==''){
-			$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where);
+		if($key==''){
+			if($grup=='' && $ord==''){
+				$sql="SELECT*FROM $tbl"; 
+			}
+			
+			else if($grup==''){
+				$sql="SELECT*FROM $tbl ORDER BY $ord"; 
+			}
+			
+			else {
+				$sql="SELECT*FROM $tbl GROUP BY $grup";
+			}
 		}
 		else {
-			$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." ORDER BY $ord";
+			$where=[];
+			foreach($key as $wh=>$nil) {
+				$where[] = "$wh = '$nil'";
+			}
+			if($grup=='' && $ord==''){
+				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where);
+			}
+			
+			else if($grup==''){
+				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." ORDER BY $ord";
+			}
+			
+			else{
+				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." GROUP BY $grup";
+			}
 		}
-		//var_dump($sql);
+		//var_dump($sql);die;
 		$rows=[];
 		$result=$conn->query($sql);
 		while($row=$result->fetch_assoc()){
@@ -362,17 +392,37 @@
 		return $rows;
 	}
    
-	function cekdata($tbl, $keys=''){
+	function cekdata($tbl, $key='', $grup='', $ord=''){
 		global $conn;
-		if($keys==''){
-			$sql="SELECT*FROM $tbl";
+		if($key==''){
+			if($grup=='' && $ord==''){
+				$sql="SELECT*FROM $tbl"; 
+			}
+			
+			else if($grup==''){
+				$sql="SELECT*FROM $tbl ORDER BY $ord"; 
+			}
+			
+			else {
+				$sql="SELECT*FROM $tbl GROUP BY $grup";
+			}
 		}
 		else {
 			$where=[];
-			foreach($keys as $wh=>$nil) {
+			foreach($key as $wh=>$nil) {
 				$where[] = "$wh = '$nil'";
 			}
-			$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where);
+			if($grup=='' && $ord==''){
+				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where);
+			}
+			
+			else if($grup==''){
+				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." ORDER BY $ord";
+			}
+			
+			else{
+				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." GROUP BY $grup";
+			}
 		}
 		//var_dump($sql);die;
 		$result=$conn->query($sql);

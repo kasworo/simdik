@@ -1,7 +1,4 @@
-<div class="col-sm-12">
-<?php 
-	if($level=='1'): 
-?>
+<?php if($level=='1'):?>
 	<div class="card card-secondary card-outline">
 		<div class="card-header">
 			<h3 class="card-title">Riwayat Login</h3>
@@ -63,10 +60,9 @@
     <?php else: ?>
     <div class="card card-secondary card-outline">
 		<div class="card-header">
-			<h3 class="card-title">Riwayat Login Pengguna</h3>
+		    <h3 class="card-title">Riwayat Login Pengguna</h3>
         </div>
 		<div class="card-body">
 		</div>
 	</div>
     <?php endif ?>
-</div>

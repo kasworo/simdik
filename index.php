@@ -272,7 +272,7 @@
 									case 'dataampu' : {include "pengampu_tampil.php";break;}
 									case 'isikelas' : {include "rombel_tampil.php";break;}
 									case 'cetakbinduk' : {include "view_binduk.php";break;}
-									
+									case 'cetakklaper' : {include "view_klaper.php";break;}
 									default:{include "dashboard.php";break;}
 								}
 							}

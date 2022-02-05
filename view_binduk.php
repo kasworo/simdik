@@ -31,12 +31,19 @@
                 </thead>
                 <tbody>
                     <?php
-							$no=0;
-							$sql="SELECT LEFT(desthpel,9) as tapel, LEFT(nmthpel,4) as kdthpel FROM tbthpel GROUP BY LEFT(nmthpel,4) ORDER BY idthpel DESC LIMIT 5";
-                            $qtp=vquery($sql);
-							foreach ($qtp as $tp):
-								$no++;
-						?>
+						$no=0;
+                        $kabeh=cekdata('tbthpel','',"LEFT(nmthpel,4)");
+                        if($kabeh>5){
+                            $offset=$kabeh-5;
+                             $sql="SELECT LEFT(desthpel,9) as tapel, LEFT(nmthpel,4) as kdthpel FROM tbthpel GROUP BY LEFT(nmthpel,4) ORDER BY idthpel LIMIT 5 OFFSET $offset";
+                        }
+                        else{
+                            $sql="SELECT LEFT(desthpel,9) as tapel, LEFT(nmthpel,4) as kdthpel FROM tbthpel GROUP BY LEFT(nmthpel,4) ORDER BY idthpel LIMIT 5";
+                        }
+                        $qtp=vquery($sql);
+						foreach ($qtp as $tp):
+							$no++;
+					?>
                     <tr>
                         <td style="text-align:center;"><?php echo $no.'.';?></td>
                         <td><?php echo $tp['tapel'];?></td>

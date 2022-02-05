@@ -294,27 +294,43 @@
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-print"></i>
-                <p>Cetak
+                <p>Cetak Laporan
                     <i class="fas fa-angle-left right"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="index.php?p=cetakrapor" class="nav-link">
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
                         <i class="fas fa-list-alt nav-icon"></i>
-                        <p>Laporan Hasil Belajar</p>
+                        <p>Hasil Belajar
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="index.php?p=cetakledger" class="nav-link">
-                        <i class="fas fa-list-alt nav-icon"></i>
-                        <p>Rekap Hasil Belajar</p>
-                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="index.php?p=cetakrapor" class="nav-link">
+                                <i class="fas fa-list-alt nav-icon"></i>
+                                <p>Rapor Peserta Didik</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?p=cetakledger" class="nav-link">
+                                <i class="fas fa-list-alt nav-icon"></i>
+                                <p>Rekap Hasil Belajar</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a href="index.php?p=cetakmutasi" class="nav-link">
                         <i class="far fa-list-alt nav-icon"></i>
                         <p>Mutasi Peserta Didik</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.php?p=cetakklaper" class="nav-link">
+                        <i class="fas fa-sort-alpha-down nav-icon"></i>
+                        <p>Klapper</p>
                     </a>
                 </li>
                 <li class="nav-item">
