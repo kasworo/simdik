@@ -383,7 +383,7 @@
 				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." GROUP BY $grup";
 			}
 		}
-		//var_dump($sql);die;
+		//var_dump($sql);
 		$rows=[];
 		$result=$conn->query($sql);
 		while($row=$result->fetch_assoc()){
@@ -424,7 +424,7 @@
 				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." GROUP BY $grup";
 			}
 		}
-		//var_dump($sql);die;
+		//var_dump($sql);
 		$result=$conn->query($sql);
 		return $result->num_rows;
 	}
