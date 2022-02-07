@@ -424,7 +424,6 @@
 				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." GROUP BY $grup";
 			}
 		}
-		//var_dump($sql);
 		$result=$conn->query($sql);
 		return $result->num_rows;
 	}
