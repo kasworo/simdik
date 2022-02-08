@@ -1,7 +1,25 @@
 <?php
 	require('assets/library/fpdf/fpdf.php'); 
     include "dbfunction.php";
-
+    
+    function UbahKelas($nama)
+    {
+        $angka=str_replace('Kelas','',$nama);
+        switch($angka){
+			case '1' : {$romawi='I';break;}
+			case '2' : {$romawi='II';break;}
+            case '3' : {$romawi='III';break;}
+            case '4' : {$romawi='IV';break;}
+            case '5' : {$romawi='V';break;}
+            case '6' : {$romawi='VI';break;}
+            case '7' : {$romawi='VII';break;}
+            case '8' : {$romawi='VIII';break;}
+            case '9' : {$romawi='IX';break;}
+            default : {$romawi='';break;}
+		}
+        return $romawi;
+    }
+    
     class PDF extends FPDF
     {
         function Footer()
@@ -21,7 +39,7 @@
                 $this->SetXY(31.0,1.25);
                 $this->Cell(0.75,0.75,$hrf,1,1,'C');
                 $this->SetXY(2.75,2.0);
-                $this->SetFont('Times','B',12);
+                $this->SetFont('Times','B',14);
                 $this->Cell(28.5,0.75,'DAFTAR PESERTA DIDIK',0,0,'C');
             }            
         }
@@ -38,19 +56,21 @@
             }
             $y1=$y0+0.575;
             $this->SetFont('Times','',10);            
-            $this->Cell(1.0,1.15,'No.','LTBR',0,'C');
-            $this->Cell(3.75,1.15,'Nomor Induk','TBR',0,'C');             
-            $this->Cell(7.25,1.15,'Nama Peserta Didik','TBR',0,'C');
-            $this->Cell(1.0,1.15,'L / P','TBR',0,'C'); 
-            $this->SetXY(15.75,$y0);
-            $this->Cell(9.0,0.575,'Tanggal Masuk / Naik Kelas','TBR',0,'C');
-            $this->SetXY(15.75,$y1);
-            $this->Cell(3.0,0.575,'Kelas 7','BR',0,'C');
-            $this->Cell(3.0,0.575,'Kelas 8','BR',0,'C');
-            $this->Cell(3.0,0.575,'Kelas 9','BR',0,'C'); 
-            $this->SetXY(24.75,$y0); 
-            $this->Cell(3.0,1.15,'Tanggal Keluar','TBR',0,'C');
-            $this->Cell(4.0,1.15,'Catatan / Alasan Keluar','TBR',0,'C');          
+            $this->Cell(0.75,1.15,'No.','LTBR',0,'C');
+            $this->Cell(3.25,1.15,'Nomor Induk','TBR',0,'C');             
+            $this->Cell(6.5,1.15,'Nama Peserta Didik','TBR',0,'C');
+            $this->Cell(5.75,1.15,'Tempat, Tgl. Lahir','TBR',0,'C');
+            $this->Cell(0.75,1.15,'L/P','TBR',0,'C'); 
+            $this->SetXY(19.75,$y0);
+            $this->Cell(4.25,0.575,'Diterima di Sekolah Ini','TBR',0,'C');
+            $this->SetXY(19.75,$y1);
+            $this->Cell(1.25,0.575,'Kelas','BR',0,'C');
+            $this->Cell(3.0,0.575,'Tanggal','BR',0,'C');
+            $this->SetXY(24.0,$y0); 
+            $this->Cell(7.75,0.57,'Keluar Dari Sekolah Ini','TBR',0,'C');
+            $this->SetXY(24.0,$y1); 
+            $this->Cell(3.0,0.575,'Tanggal','BR',0,'C');
+            $this->Cell(4.75,0.575,'Alasan','BR',0,'C');                  
         }
         function GetTableIsi($hrf,$hal)
         {           
@@ -68,46 +88,48 @@
                 $no=1;
                 for($i=0;$i<=24;$i++) {
                     $this->SetXY(2.75,$i*0.575+$y1); 
-                    $this->Cell(1.0, 0.575, $no++.'.', 'LBR', 0, 'C');
-                    $this->Cell(3.75, 0.575,'', 'BR', 0, 'C');
-                    $this->Cell(7.25, 0.575,'','BR', 0, 'L');
-                    $this->Cell(1.0, 0.575, '', 'BR', 0, 'C');
+                    $this->Cell(0.75, 0.575, $no++.'.', 'LBR', 0, 'C');
+                    $this->Cell(3.25, 0.575,'', 'BR', 0, 'C');
+                    $this->Cell(6.5, 0.575,'', 'BR', 0, 'L');
+                    $this->Cell(5.75, 0.575,'','BR', 0, 'L');
+                    $this->Cell(0.75, 0.575, '', 'BR', 0, 'C');
+                    $this->Cell(1.25, 0.575, '', 'BR', 0, 'C');
                     $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
                     $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(4.0, 0.575, '', 'BR', 0, 'C');
+                    $this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
                 }
             }
             else {
                 if($hal==1){$opset=0;$no=1;} else {$opset=26;$no=26;}
-                $sql="SELECT nis, nisn, nmsiswa, gender FROM tbsiswa WHERE nmsiswa LIKE '$hrf%' ORDER BY nis LIMIT 25 OFFSET $opset";
+                $sql="SELECT idsiswa, nis, nisn, nmsiswa, tmplahir, tgllahir, gender FROM tbsiswa WHERE nmsiswa LIKE '$hrf%' ORDER BY nis LIMIT 25 OFFSET $opset";
                 $qs=vquery($sql);
                 $i=0;
                 foreach ($qs as $s) {
                     $this->SetXY(2.75,$i*0.575+$y1); 
-                    $this->Cell(1.0, 0.575, $no++.'.', 'LBR', 0, 'C');
-                    $this->Cell(3.75, 0.575, $s['nis'].' / '.$s['nisn'], 'BR', 0, 'C');
-                    $this->Cell(7.25, 0.575, ucwords(strtolower($s['nmsiswa'])), 'BR', 0, 'L');
-                     $this->Cell(1.0, 0.575, $s['gender'], 'LBR', 0, 'C');
-                    $this->Cell(3.0, 0.575, '12 Desember 2018', 'BR', 0, 'C');
+                    $this->Cell(0.75, 0.575, $no++.'.', 'LBR', 0, 'C');
+                    $this->Cell(3.25, 0.575, $s['nis'].' / '.$s['nisn'], 'BR', 0, 'C');
+                    $this->Cell(6.5, 0.575, ucwords(strtolower($s['nmsiswa'])), 'BR', 0, 'L');
+                    $this->Cell(5.75, 0.575,ucwords(strtolower($s['tmplahir'])).', '.indonesian_date($s['tgllahir']),'BR', 0, 'L');
+                    $this->Cell(0.75, 0.575, $s['gender'], 'BR', 0, 'C');
+                    $sqlr="SELECT idkelas, tglreg FROM tbregistrasi WHERE idsiswa='$s[idsiswa]' AND (idjreg='1' OR idjreg='2')";
+                    $rg=vquery($sqlr)[0];
+                    $this->Cell(1.25, 0.575, UbahKelas($rg['idkelas']), 'BR', 0, 'C');
+                    $this->Cell(3.0, 0.575, indonesian_date($rg['tglreg']), 'BR', 0, 'L');
                     $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(4.0, 0.575, '', 'BR', 0, 'C');
+                    $this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
                     $i++;
                 }
                 for($j=$i;$j<=24;$j++) {
                     $this->SetXY(2.75,$j*0.575+$y1); 
-                    $this->Cell(1.0, 0.575, $no++.'.', 'LBR', 0, 'C');
-                    $this->Cell(3.75, 0.575,'', 'BR', 0, 'C');
-                    $this->Cell(7.25, 0.575,'','BR', 0, 'L');
-                    $this->Cell(1.0, 0.575, '', 'LBR', 0, 'C');
+                    $this->Cell(0.75, 0.575, $no++.'.', 'LBR', 0, 'C');
+                    $this->Cell(3.25, 0.575,'', 'BR', 0, 'C');
+                    $this->Cell(6.5, 0.575,'', 'BR', 0, 'L');
+                    $this->Cell(5.75, 0.575,'','BR', 0, 'L');
+                    $this->Cell(0.75, 0.575, '', 'BR', 0, 'C');
+                    $this->Cell(1.25, 0.575, '', 'BR', 0, 'C');
                     $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
                     $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(4.0, 0.575, '', 'BR', 0, 'C');
+                    $this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
                 }
             }
         }
