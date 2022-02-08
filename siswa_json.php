@@ -144,17 +144,20 @@
 			$hubkel='1';
 			$keys=array('idsiswa'=>$id,'hubkel'=>$hubkel);			
 			$deshubkel='Ayah Kandung';
+			$data=cekdata('tbortu',$keys);
 		}
 		else if($_POST['j']=='2'){
 			$hubkel='2';
 			$keys=array('idsiswa'=>$id,'hubkel'=>$hubkel);
-			$deshubkel='Ibu Kandung';			
+			$deshubkel='Ibu Kandung';
+			$data=cekdata('tbortu',$keys);			
 		}
 		else {
-			$keys=array('idsiswa'=>$id,'hubkel<>2 OR hubkel<>1');	
+			$sql="SELECT*FROM tbortu WHERE idsiswa='$id' AND hubkel<>'1' AND hubkel<>'2'";
+			$data=cquery($sql);
 			$deshubkel='Wali';	
 		}
-		$data=cekdata('tbortu',$keys);
+		
 		if($data==0){
 			$pesan='Tambah Data '.$deshubkel.' Peserta Didik';
 			$tmb='<i class="fas fa-save"></i> Simpan';

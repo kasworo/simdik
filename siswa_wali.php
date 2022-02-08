@@ -11,11 +11,11 @@
 				'idsiswa'   => $_POST['idsiswa'],
 				'nmortu'	=>$_POST['nmortu'],
 				'nik'	   =>$_POST['nik'],
-				'tmplahir'  =>$_POST['tmplahir'],
-				'tgllahir'  =>$_POST['tgllahir'],
+				// 'tmplahir'  =>$_POST['tmplahir'],
+				// 'tgllahir'  =>$_POST['tgllahir'],
 				'idagama'   =>$_POST['agama'],
 				'idpddk'	=>$_POST['pddkortu'],
-				'hidup'	 =>$_POST['hidup'],
+				'hidup'	 =>'0',
 				'idkerja'   =>$_POST['krjortu'],
 				'idhsl'	 =>$_POST['hslortu'],
 				'hubkel'	=>$_POST['hubkel'],
@@ -59,11 +59,11 @@
 			$ortu=array(
 				'nmortu'=>$_POST['nmortu'],
 				'nik'=>$_POST['nik'],
-				'tmplahir'=>$_POST['tmplahir'],
-				'tgllahir'=>$_POST['tgllahir'],
+				// 'tmplahir'=>$_POST['tmplahir'],
+				// 'tgllahir'=>$_POST['tgllahir'],
 				'idagama'=>$_POST['agama'],
 				'idpddk'=>$_POST['pddkortu'],
-				'hidup'=>$_POST['hidup'],
+				'hidup'=>'0',
 				'idkerja'=>$_POST['krjortu'],
 				'idhsl'=>$_POST['hslortu'],
 				'alamat'=>$_POST['almt'],
@@ -110,15 +110,14 @@ $(document).ready(function() {
         url: "siswa_json.php",
         type: "POST",
         dataType: 'json',
-        data: "id=" + id + "&j=1",
+        data: "id=" + id,
         success: function(data) {
             $("#nmortu").val(data.nmortu);
             $("#nik").val(data.nik);
-            $("#tmplahir").val(data.tmplahir);
-            $("#tgllahir").val(data.tgllahir);
+            // $("#tmplahir").val(data.tmplahir);
+            // $("#tgllahir").val(data.tgllahir);
             $("#agama").val(data.idagama);
             $("#pddkortu").val(data.idpddk);
-            $("#hidup").val(data.hidup);
             $("#krjortu").val(data.idkerja);
             $("#hslortu").val(data.idhsl);
             $("#hubkel").val(data.hubkel);
@@ -147,9 +146,7 @@ $(document).ready(function() {
                         <div class="form-group row mb-2">
                             <input type="hidden" class="form-control form-control-sm col-sm-6" name="idsiswa"
                                 id="idsiswa" value="<?php echo $idsiswa;?>">
-                            <input type="hidden" class="form-control form-control-sm col-sm-6" name="hubkel"
-                                id="hubkel">
-                            <label class="col-sm-5 offset-sm-1">Nama wali</label>
+                            <label class="col-sm-5 offset-sm-1">Nama Wali</label>
                             <div class="col-sm-6">
                                 <input class="form-control form-control-sm" name="nmortu" id="nmortu">
                             </div>
@@ -201,16 +198,6 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="form-group row mb-2">
-                            <label class="col-sm-5 offset-sm-1">Masih Hidup / Sudah Meninggal</label>
-                            <div class="col-sm-6">
-                                <select class="form-control form-control-sm" name="hidup" id="hidup">
-                                    <option value="">..Pilih..</option>
-                                    <option value="1">Masih Hidup</option>
-                                    <option value="0">Sudah Meninggal</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row mb-2">
                             <label class="col-sm-5 offset-sm-1">Pekerjaan</label>
                             <div class="col-sm-6">
                                 <select class="form-control form-control-sm" name="krjortu" id="krjortu">
@@ -238,21 +225,20 @@ $(document).ready(function() {
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6">
                         <div class="form-group row mb-2">
                             <label class="col-sm-5 offset-sm-1">Hubungan Keluarga</label>
                             <div class="col-sm-6">
                                 <select class="form-control form-control-sm" name="hubkel" id="hubkel">
                                     <option value="">..Pilih..</option>
-                                    <option value="1">wali Kandung</option>
-                                    <option value="2">Ibu Kandung</option>
                                     <option value="3">Kakak</option>
                                     <option value="4">Paman/Bibi</option>
                                     <option value="5">Kakek/Nenek</option>
+                                    <option value="6">Famili Lainnya</option>
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm-6">
                         <div class="form-group row mb-2">
                             <label class="col-sm-5 offset-sm-1">Alamat</label>
                             <div class="col-sm-6">

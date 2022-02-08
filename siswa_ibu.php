@@ -296,7 +296,7 @@ $(document).ready(function() {
                     <i class="fas fa-fw fa-save"></i>
                     <span>&nbsp;<?php echo $tmbl;?></span>
                 </button>
-                <a href="index.php?p=add&id=<?php echo $idsiswa;?>"
+                <a href="index.php?p=addwali&id=<?php echo $idsiswa;?>"
                     class="btn btn-success btn-md mb-2 ml-2 col-sm-2">
                     <span>Berikutnya&nbsp;</span>
                     <i class="fas fa-arrow-circle-right"></i>

@@ -250,6 +250,7 @@
 									case 'addriwayat' : {include "siswa_riwayat.php";break;}
 									case 'addayah' : {include "siswa_ayah.php";break;}									
 									case 'addibu' : {include "siswa_ibu.php";break;}
+                                    case 'addwali' : {include "siswa_wali.php";break;}
 									case 'eksporsiswa' : {include "siswa_ekspor.php";break;}
 									case 'addrombel' : {include "form_rombel.php";break;}
 									case 'regsiswa' : {include "siswa_registrasi.php";break;}

@@ -30,6 +30,18 @@
 		}
 		return $huruf;
     }
+
+	function GetHubkel($hk)
+    {
+        switch($hk){
+			case '3' : {$huruf='A (Amat Baik)';break;}
+			case '3' : {$huruf='B (Baik)';break;}
+            case '2' : {$huruf='C (Cukup)';break;}
+            case '1' : {$huruf='D (Kurang)';break;}
+            default : {$huruf='-';break;}
+		}
+		return $huruf;
+    }
     
     function RapikanAbsen($angka)
     {
@@ -74,11 +86,14 @@
 		function Footer()
         {
         	if ($this->PageNo()>1) {
-				$this->SetY(-1.575);
+				$this->SetXY(3.75,-1.575);
            		$this->SetFont('Arial','I',8);
            		$sql="SELECT LEFT(desthpel,9) as tahun FROM tbthpel WHERE nmthpel LIKE '$_GET[id]%' LIMIT 1";
            		$th=vquery($sql)[0];
-           		$this->Cell(29,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'R');
+				$hal=$this->PageNo()-1;
+           		$this->Cell(26.25,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'C');
+           		$this->Cell(1.75,1.0,'Halaman '.$hal,0,0,'C');
+				
 			}
         }
 
@@ -110,7 +125,7 @@
 			$ds=viewdata('tbsiswa',array('idsiswa'=>$id))[0];
 			$nis=$ds['nis'];
 			$nisn=$ds['nisn'];			
-			$this->SetFont('Times','B',12);
+			$this->SetFont('Times','B',14);
 			$this->SetXY(2.75,1.75);
 			$this->Cell(29,0.75,'LEMBAR DATA PESERTA DIDIK',0,0,'C');
             $this->SetXY(20.725,2.5);
@@ -497,7 +512,7 @@
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725,'1.');
 			$this->Cell(4.0,0.5725,'Nama Lengkap');
-			$this->Cell(0.25,0.5725,':');
+			$this->Cell(0.25,0.5725);
 			$this->Cell(8.25,0.5725);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
@@ -630,7 +645,7 @@
 			$this->Cell(0.75,0.5725,'D.');
 			$this->Cell(12.5,0.5725,'Keterangan Wali Peserta Didik');
 			$this->Ln();
-			$qwali="SELECT ay.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ay LEFT JOIN ref_pendidikan r1 USING(idpddk) LEFT JOIN ref_pekerjaan r2 USING(idkerja) LEFT JOIN ref_penghasilan r3 USING(idhsl) WHERE (ay.hubkel<>'1' OR ay.hubkel<>'2') AND ay.idsiswa='$id'";
+			$qwali="SELECT ay.*, r1.pendidikan, r2.pekerjaan, r3.penghasilan FROM tbortu ay LEFT JOIN ref_pendidikan r1 USING(idpddk) LEFT JOIN ref_pekerjaan r2 USING(idkerja) LEFT JOIN ref_penghasilan r3 USING(idhsl) WHERE (ay.hubkel<>'1' AND ay.hubkel<>'2') AND ay.idsiswa='$id'";
 			if(cquery($qwali)==0){
 				$nmwali='-';
 				$agmwali='-';
@@ -642,6 +657,7 @@
 				$alamat2='-';
 				$alamat3='-';
 				$nohp='-';
+				$hubkel='-';
 			}
 			else {
 				$dw=vquery($qwali)[0];
@@ -654,6 +670,7 @@
 				$alamat2='Kecamatan '.$dw['kec'].', Kabupaten '.$d['kab'];	
 				$alamat3='Provinsi '.$dw['prov'].', Kode Pos '.$dw['kdpos'];
 				$nohp=$dw['nohp'];
+				$hubkel=$dw['hubkel'];
 			}
 			$this->SetFont('Times','',11);
 			$this->Cell(0.75,0.5725);
@@ -690,31 +707,31 @@
 			$this->Cell(0.75,0.5725,'6.');
 			$this->Cell(4.0,0.5725,'Alamat');
 			$this->Cell(0.25,0.5725,':');		
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$alamat1);
 			$this->Ln();
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725);
 			$this->Cell(4.0,0.5725);
 			$this->Cell(0.25,0.5725);		
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$alamat2);
 			$this->Ln();
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725);
 			$this->Cell(4.0,0.5725);
 			$this->Cell(0.25,0.5725);		
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$alamat3);
 			$this->Ln();
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725,'7.');
 			$this->Cell(4.0,0.5725,'Nomor HP');
 			$this->Cell(0.25,0.5725,':');		
-			$this->Cell(8.25,0.5725,$dw['nohp']);
+			$this->Cell(8.25,0.5725,$nohp);
 			$this->Ln();
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725,'8.');
 			$this->Cell(4.0,0.5725,'Hubungan Keluarga');
 			$this->Cell(0.25,0.5725,':');		
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,GetHubkel($hubkel));
 			$this->Ln(0.75);
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.5725,'E.');
@@ -749,9 +766,8 @@
 				$this->Cell(1.5,0.5725);
 				$this->Cell(12.5,0.5725,' .........................................................................................................................');			
 				$this->Ln();
-			}
-						
-			$this->Ln(0.55);
+			}						
+			$this->Ln(0.75-0.5725);
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.5725,'F.');
 			$this->Cell(12.5,0.5725,'Meninggalkan Sekolah');
@@ -828,7 +844,7 @@
 			$this->Cell(12.5,0.5725,'Catatan Penting Lainnya');
 			$this->Ln();
 			$this->SetFont('Times','',11);
-			for($i=1;$i<=5;$i++){
+			for($i=1;$i<=6;$i++){
 			$this->Cell(0.75,0.5725);
 			$this->Cell(12.5,0.5725,' ................................................................................................................................');
 			$this->Ln();
@@ -844,8 +860,8 @@
             $nama=$ds['nmsiswa'];			
 			if($hal==1){
 				$this->SetXY(2.75, 1.75);
-				$this->SetFont('Times','B',12);				
-                $this->Cell(29,0.75,'RINGKASAN HASIL BELAJAR PESERTA DIDIK',0,0,'C');
+				$this->SetFont('Times','B',14);				
+                $this->Cell(29,0.75,'LAPORAN HASIL BELAJAR PESERTA DIDIK',0,0,'C');
 				$this->SetXY(2.75,2.75);
 				$this->SetFont('Times','',11);
 				$this->Cell(4,0.575,'Nama Peserta Didik',0,0,'L');
@@ -1224,7 +1240,7 @@
                 $this->Cell(4.8,0.575,'','BR',0,'C');   
             }
 		}
-		function IsiCover(){
+		function IsiCover($id){
             $this->SetLineWidth(0.125);
             $this->Rect(2.75, 1.75, 28.5, 17.5,1);
             $this->AddFont('HappyMonkey-Regular','','HappyMonkey.php');
@@ -1235,17 +1251,19 @@
             $this->SetFont('Times','',12); 
             $this->SetXY(2.75,12.75);
             $this->Cell(29, 0.575, 'TAHUN PELAJARAN', 0, 0, 'C');
-            $this->SetFont('Times','BI',12);
+			$sql="SELECT LEFT(desthpel,9) as tahune FROM tbthpel WHERE nmthpel LIKE '$id%' GROUP BY tahune";
+			$th=vquery($sql)[0];
+            $this->SetFont('Times','BI',18);
             $this->SetXY(2.75,13.75);
-            $this->Cell(29, 0.575, '', 0, 0, 'C');
+            $this->Cell(29, 0.575,str_replace('/',' / ',$th['tahune']), 0, 0, 'C');
             $this->SetXY(2.75,15.75);
             $this->SetFont('Times','',24); 
             $this->Cell(29, 0.575, 'SMP NEGERI 5 PELEPAT', 0, 0, 'C');   
         }
 
-        function PrintCover(){
+        function PrintCover($id){
             $this->AddPage();
-            $this->IsiCover();       
+            $this->IsiCover($id);       
         }
         function PrintBiodata($id)
         {
@@ -1293,8 +1311,9 @@
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-	$pdf->PrintCover();
-    $sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND (rg.idjreg='1' OR rg.idjreg='2')";
+	$pdf->PrintCover($_GET['id']);
+    
+	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND (rg.idjreg='1' OR rg.idjreg='2')";
     $qsiswa=vquery($sql);
     foreach($qsiswa as $ds){
         $pdf->PrintBiodata($ds['idsiswa']);
