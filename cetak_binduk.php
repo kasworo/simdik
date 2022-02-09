@@ -1144,14 +1144,24 @@
             if(JmlKolom($awal, $akhir, $opset)==4){
 				foreach ($qthpel as $th){
                     $qabs="SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
-                   	var_dump($qabs);die;
-					$abs=vquery($qabs)[0];
+                   	if(cquery($qabs)==0){
+						$sakit='-';
+						$ijin='-';
+						$alpa='-';
+					}
+					else{
+						$abs=vquery($qabs)[0];
+						$sakit=RapikanAbsen($abs['sakit']);
+						$ijin=RapikanAbsen($abs['izin']);
+						$alpa=RapikanAbsen($abs['alpa']);
+					}
+					
                     $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3);
-                    $this->Cell(4.8, 0.575, RapikanAbsen($abs['sakit']), 'TBR', 0, 'C');
+                    $this->Cell(4.8, 0.575, $sakit, 'TBR', 0, 'C');
                     $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3+0.575);
-                    $this->Cell(4.8, 0.575, RapikanAbsen($abs['izin']), 'BR', 0, 'C');
+                    $this->Cell(4.8, 0.575, $ijin, 'BR', 0, 'C');
                     $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3+1.15);
-                    $this->Cell(4.8, 0.575, RapikanAbsen($abs['alpa']), 'BR', 0, 'C');
+                    $this->Cell(4.8, 0.575, $alpa, 'BR', 0, 'C');
                     $i++;                             
                 }                     
             }
