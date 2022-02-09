@@ -1056,7 +1056,8 @@
 					}
 					else {
 						$rkog=vquery($qmot)[0];
-						$nilairkog=number_format($rkog['kognetif'],2,',','.');
+						$nilairkog=0;
+						//number_format($rkog['kognetif'],2,',','.');
 					} 
                     
                     $this->Cell(2.4,0.575,$nilairkog,'BR',0,'C'); 
