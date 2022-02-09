@@ -275,11 +275,11 @@ $(document).ready(function() {
                                 <label class="col-sm-5 offset-sm-1">Anak Ke / Dari</label>
                                 <div class="col-sm-3 mb-2">
                                     <input class="form-control form-control-sm" name="anake" id="anake"
-                                        placeholder='anak ke' value="<?php echo $anake;?>">
+                                        placeholder='anak ke'>
                                 </div>
                                 <div class="col-sm-3" for="saudara">
                                     <input class="form-control form-control-sm" name="saudara" id="saudara"
-                                        placeholder="bersaudara" value="<?php echo $sdr;?>">
+                                        placeholder="bersaudara">
                                 </div>
                             </div>
                             <div class="form-group row mb-2" for="warganegara">
