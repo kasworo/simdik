@@ -1134,21 +1134,32 @@
 					else {
 						$sos=vquery($qsos)[0]; 
 						$nilaisos=KonversiNilai($sos['nilaisikap']);
-					} 
-                   
+					}                    
                     $this->SetXY($i*4.8+12,$j*0.575+$y1+0.575);                
                     $this->Cell(4.8,0.575,$nilaisos,'BR',0,'C');
                     $i++;                
                 }  
                 $this->SetXY($i*4.8+12.0,$j*0.575+$y1);  
-                $qsp="SELECT AVG(nilaisikap) AS akspr FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='1' GROUP BY idsiswa"; 
-                $sp=vquery($qsp)[0];                
-                $this->Cell(4.8,0.575,KonversiNilai(round($sp['akspr'])),'TBR',0,'C');
+                $qsp="SELECT AVG(nilaisikap) AS akspr FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='1' GROUP BY idsiswa";
+				if(cquery($qsp)==0){
+					$nilairsp='-';
+				}
+				else {
+					$sp=vquery($qsp)[0];
+					$nilairsp=KonversiNilai($sp['akspr']);
+				} 
+				$this->Cell(4.8,0.575,$nilairsp,'TBR',0,'C');
                 $this->Cell(4.8,0.575,'','TBR',0,'C');
                 $this->SetXY($i*4.8+12.0,$j*0.575+$y1+0.575);    
                 $qso="SELECT AVG(nilaisikap) AS aksos FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='2' GROUP BY idsiswa"; 
-                $so=vquery($qso)[0];                
-                $this->Cell(4.8,0.575,KonversiNilai(round($so['aksos'])),'BR',0,'C');               
+				if(cquery($qso)==0){
+					$nilairso='-';
+				}
+				else {
+					$so=vquery($qso)[0];
+					$nilairso=KonversiNilai($so['aksos']);
+				}               
+                $this->Cell(4.8,0.575,$nilairso,'BR',0,'C');               
                 $this->Cell(4.8,0.575,'','BR',0,'C');
             }
 			$y2=$y0+1.4;
