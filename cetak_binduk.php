@@ -1187,7 +1187,7 @@
                     $this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3);
                     $this->Cell(4.8,0.575,$sakit,'TBR',0,'C'); 
                     $this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3+0.575); 
-                    $this->Cell(4.8,0.575,$ijin),'BR',0,'C');
+                    $this->Cell(4.8,0.575,$ijin,'BR',0,'C');
                     $this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3+1.15); 
                     $this->Cell(4.8,0.575,$alpa,'BR',0,'C');  
                     $i++;                                       
