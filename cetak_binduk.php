@@ -369,27 +369,39 @@
 			$this->Cell(0.25,0.5725,':');		
 			$this->Cell(8.25,0.5725,KonversiRomawi(str_replace('Kelas ','',$rg['nmkelas'])));
 			$this->Ln();
-			$rw=viewdata('tbriwayatskul', array('idsiswa'=>$id))[0];
-			if($rw['idjreg']=='1'){
-				$aslsd=$rw['aslsd'];
-				$noijz=$rw['noijazah'];
-				$tglijz=indonesian_date($rw['tglijazah']);
-				$lamasd=$rw['lama'];
+			if(cekdata('tbriwayatskul', array('idsiswa'=>$id))==0){
+				$aslsd='-';
+				$noijz='-';
+				$tglijz='-';
+				$lamasd='-';
 				$aslsmp='-';
 				$nosurat='-';
 				$tglsurat='-';
 				$alasan='-';
 			}
 			else {
-				$aslsd=$rw['aslsd'];
-				$noijz=$rw['noijazah'];
-				$tglijz=indonesian_date($rw['tglijazah']);
-				$lamasd=$rw['lama'];
-				$aslsmp=$rw['aslsmp'];
-				$nosurat=$rw['nosurat'];
-				$tglsurat=indonesian_date($rw['tglsurat']);
-				$alasan=$rw['alasan'];
-			}
+				$rw=viewdata('tbriwayatskul', array('idsiswa'=>$id))[0];
+				if($rw['idjreg']=='1'){
+					$aslsd=$rw['aslsd'];
+					$noijz=$rw['noijazah'];
+					$tglijz=indonesian_date($rw['tglijazah']);
+					$lamasd=$rw['lama'];
+					$aslsmp='-';
+					$nosurat='-';
+					$tglsurat='-';
+					$alasan='-';
+				}
+				else {
+					$aslsd=$rw['aslsd'];
+					$noijz=$rw['noijazah'];
+					$tglijz=indonesian_date($rw['tglijazah']);
+					$lamasd=$rw['lama'];
+					$aslsmp=$rw['aslsmp'];
+					$nosurat=$rw['nosurat'];
+					$tglsurat=indonesian_date($rw['tglsurat']);
+					$alasan=$rw['alasan'];
+				}				
+			}			
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725,'4.');
 			$this->Cell(4.0,0.5725,'Lulus Dari');
