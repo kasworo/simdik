@@ -396,7 +396,7 @@
 							foreach($qs as $s)
 							{
 								$no++;
-								if($s['aktif']=='1'){$stat='Aktif';$btn="btn-success";} else {$stat='Non Aktif';$btn="btn-danger";}
+								
 						?>
                     <tr>
                         <td style="text-align:center"><?php echo $no.'.';?></td>
