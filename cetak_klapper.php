@@ -112,11 +112,21 @@
                     $this->Cell(5.75, 0.575,ucwords(strtolower($s['tmplahir'])).', '.indonesian_date($s['tgllahir']),'BR', 0, 'L');
                     $this->Cell(0.75, 0.575, $s['gender'], 'BR', 0, 'C');
                     $sqlr="SELECT idkelas, tglreg FROM tbregistrasi WHERE idsiswa='$s[idsiswa]' AND (idjreg='1' OR idjreg='2')";
-                    $rg=vquery($sqlr)[0];
-                    $this->Cell(1.25, 0.575, UbahKelas($rg['idkelas']), 'BR', 0, 'C');
-                    $this->Cell(3.0, 0.575, indonesian_date($rg['tglreg']), 'BR', 0, 'L');
-                    $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
-                    $this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
+                    if(cquery($sqlr)==0){
+                        $this->Cell(1.25, 0.575, '-', 'BR', 0, 'C');
+                        $this->Cell(3.0, 0.575, '-', 'BR', 0, 'L');
+                        $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
+                        $this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
+                    }
+                    else {
+                        $rg=vquery($sqlr)[0];
+                        $this->Cell(1.25, 0.575, UbahKelas($rg['idkelas']), 'BR', 0, 'C');
+                        $this->Cell(3.0, 0.575, indonesian_date($rg['tglreg']), 'BR', 0, 'L');
+                        $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
+                        $this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
+                    }
+                    
+                    
                     $i++;
                 }
                 for($j=$i;$j<=24;$j++) {
