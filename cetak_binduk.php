@@ -1029,27 +1029,46 @@
 							$kog=vquery($qkog)[0];
 							$nilaikog=$kog['nilairapor'];
 							$predkog=$kog['predikat'];
-						}        
-                       
-
-                        $this->SetXY($i*4.8 + 12.0,$j*0.575+$y0);
+						} 
+						$this->SetXY($i*4.8 + 12.0,$j*0.575+$y0);
                         $this->Cell(1.0,0.575,$nilaikog,'BR',0,'C');
                         $this->SetXY($i*4.8+13.0,$j*0.575+$y0);
                         $this->Cell(1.40,0.575,$predkog,'BR',0,'C');
                         $qmot="SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='4'";               
-                        $mot=vquery($qmot)[0];
+                        if(cquery($qmot)==0){
+							$nilaimot='-';
+							$predmot='-';
+						}
+						else {
+							$mot=vquery($qmot)[0];
+							$nilaimot=$mot['nilairapor'];
+							$predmot=$mot['predikat'];
+						} 
                         $this->SetXY($i*4.8 + 14.4,$j*0.575+$y0);
-                        $this->Cell(1.0,0.575,$mot['nilairapor'],'BR',0,'C');
+                        $this->Cell(1.0,0.575,$nilaimot,'BR',0,'C');
                         $this->SetXY($i*4.8 + 15.4,$j*0.575+$y0);
-                        $this->Cell(1.40,0.575,$mot['predikat'],'BR',0,'C');
+                        $this->Cell(1.40,0.575,$predmot,'BR',0,'C');
                         $i++;
                     } 
                     $qrkog="SELECT AVG(nilairapor) as kognetif FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='3' GROUP BY idmapel";
-                    $rkog=vquery($qrkog)[0]; 
-                    $this->Cell(2.4,0.575,number_format($rkog['kognetif'],2,',','.'),'BR',0,'C'); 
+					if(cquery($qrkog)==0){
+						$nilairkog='-';
+					}
+					else {
+						$rkog=vquery($qmot)[0];
+						$nilairkog=number_format($rkog['kognetif'],',','.');
+					} 
+                    
+                    $this->Cell(2.4,0.575,$nilairkog,'BR',0,'C'); 
                     $qrmot="SELECT AVG(nilairapor) as motorik FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='4' GROUP BY idmapel";
-                    $rmot=vquery($qrmot)[0];                    
-                    $this->Cell(2.4,0.575,number_format($rmot['motorik'],2,',','.'),'BR',0,'C');
+					if(cquery($qrmot)==0){
+						$nilairkog='-';
+					}
+					else {
+						$rmot=vquery($qrmot)[0];
+						$nilairmot=number_format($rmot['motorik'],',','.');
+					}                    
+                    $this->Cell(2.4,0.575,$nilairmot,'BR',0,'C');
                     $this->Cell(2.4,0.575,'','BR',0,'C');
                     $qijz="SELECT AVG(nilairapor) as nilaiijz FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' GROUP BY idmapel";
                     $ijz=vquery($qijz)[0];                   
