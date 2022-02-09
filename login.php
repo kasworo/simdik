@@ -26,8 +26,7 @@
 		$cekuser=cekdata('tbuser',$keys);
 		if($cekuser===1){
 			$data=viewdata('tbuser',$keys)[0];
-            //var_dump(password_verify($pass, $data['passwd']));die;
-			if(password_verify($pass, $data['passwd'])){
+           if(password_verify($pass, $data['passwd'])){
 				$_SESSION['login']=true;
 				setcookie('id',$data['username'],time()+3600);
 				if(isset($_POST['ingat'])){					
@@ -57,136 +56,6 @@
 </head>
 
 <body class="hold-transition login-page" style="background:url(assets/img/boxed-bg.png)">
-    <?php 
-        //$admin="SELECT*FROM tbuser WHERE level='1'";
-        $level=array(
-            'level'=>'1'
-        );
-        $cekadmin=cekdata('tbuser',$level);
-        if($cekadmin===0):
-    ?>
-
-    <div class="register-box">
-        <div class="register-logo">
-            <span><b>Selamat Datang</b></span>
-        </div>
-        <div class="card">
-            <div class="card-body register-card-body">
-                <p class="login-box-msg">Silahkan Isikan Data Administrator</p>
-                <form action="" method="post" role="form" id="FrmRegistrasi">
-                    <div class="form-group mb-3">
-                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama Lengkap"
-                            autocomplete="off">
-                    </div>
-                    <div class="form-group mb-3">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="user" id="user" placeholder="Username"
-                                autocomplete="off">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-user"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3">
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="paswd" id="paswd" placeholder="Password"
-                                autocomplete="off">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-eye"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group mb-5">
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="conf" id="conf" placeholder="Password"
-                                autocomplete="off">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-eye"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <button type="submit" name="regis" class="btn btn-primary btn-block col-5">
-                            <i class="far fa-check-square"></i>&nbsp;Registrasi</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <script src="assets/plugins/jquery/jquery.min.js"></script>
-    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/plugins/toastr/toastr.min.js"></script>
-    <script src="assets/plugins/sweetalert2/sweetalert2.min.js"></script>
-    <script src="assets/js/adminlte.min.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-        toastr.options = {
-            "closeButton": false,
-            "positionClass": "toast-top-center",
-            "preventDuplicates": true,
-            "onclick": null,
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-    })
-    </script>
-    <?php
-	if(isset($_POST['regis'])){
-        $password=$_POST['paswd'];
-        $passconf=$_POST['conf'];
-        if($password==$passconf){
-            $pwd=password_hash($password,PASSWORD_DEFAULT);
-          // var_dump($password);
-           // var_dump($pwd);die;
-            $data=array(
-                'namatmp'=>$_POST['nama'],
-                'username'=>$_POST['user'],
-                'passwd'=>$pwd,
-                'aktif'=>'1'
-            );
-            $tambah=adddata('tbuser',$data);
-		if($tambah>0){
-			echo "<script>
-                    $(function() {
-                        toastr.success('Administrator Berhasil Ditambahkan!','Terima Kasih...',{
-                            timeOut:1000,
-                            fadeOut:1000,
-                            onHidden:function(){
-                                this.location.reload();
-                            }
-                        });
-                    });
-                </script>";
-		}
-		else {
-			mysqli_error($conn);
-		}
-        }
-        else {
-            echo "<script>
-                    $(function() {
-                        toastr.error('Password Konfirmasi Tidak Sama!','Mohon Maaf',{
-                            timeOut:1000,
-                            fadeOut:1000,
-                            onHidden:function(){
-                                this.location.reload();
-                            }
-                        });
-                    });
-                </script>";
-        }        
-
-	}
-	?>
-    <?php else: ?>
     <div class="login-box">
         <div class="login-logo">
             <b>Aplikasi SIMAK</b><br />
@@ -273,7 +142,6 @@
 			</script>";
 	}
 	?>
-    <?php endif ?>
 </body>
 
 </html>
