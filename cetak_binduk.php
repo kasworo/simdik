@@ -1056,7 +1056,7 @@
 					}
 					else {
 						$rkog=vquery($qmot)[0];
-						$nilairkog=number_format($rkog['kognetif'],',','.');
+						$nilairkog=number_format($rkog['kognetif'],2,',','.');
 					} 
                     
                     $this->Cell(2.4,0.575,$nilairkog,'BR',0,'C'); 
@@ -1066,7 +1066,7 @@
 					}
 					else {
 						$rmot=vquery($qrmot)[0];
-						$nilairmot=number_format($rmot['motorik'],',','.');
+						$nilairmot=number_format($rmot['motorik'],2,',','.');
 					}                    
                     $this->Cell(2.4,0.575,$nilairmot,'BR',0,'C');
                     $this->Cell(2.4,0.575,'','BR',0,'C');
