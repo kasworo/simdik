@@ -1190,11 +1190,16 @@
                 $i=0;              
                 if(JmlKolom($awal, $akhir, $opset)==4){
                     foreach ($qthpel as $th){
-                        $qneks="SELECT nilaieks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' AND idthpel='$th[idthpel]'";                   
-                        $neks=vquery($qneks)[0];
+                        $qneks="SELECT nilaieks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' AND idthpel='$th[idthpel]'";
+						if(cquery($qneks)==0){
+							$nilaiekskul='-';
+						}
+						else {
+							$neks=vquery($qneks)[0];
+							$nilaieks=KonversiNilai($neks['nilaieks']);
+							$nilaiekskul=str_replace('A (Amat Baik)','SB (Sangat Baik)', $nilaieks);
+						}                
                         
-                        $nilaieks=KonversiNilai($neks['nilaieks']);
-                        $nilaiekskul=str_replace('A (Amat Baik)','SB (Sangat Baik)', $nilaieks);
                         $this->SetXY($i*4.8+12.0,($j+$k)*0.575+$y2);
                         $this->Cell(4.8,0.575,$nilaiekskul,$brd,0,'C');
                         $i++;                    
