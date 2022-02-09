@@ -203,7 +203,6 @@ $(document).ready(function() {
                 <div class="col-sm-10">
                     <div class="row">
                         <div class="col-sm-6">
-
                             <div class="form-group row mb-2" for="nis">
                                 <label class="col-sm-5 offset-sm-1" for="nis">N I S</label>
                                 <div class="col-sm-6">

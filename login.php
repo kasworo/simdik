@@ -1,6 +1,10 @@
 <?php
 	session_start();
 	include "dbfunction.php";
+<<<<<<< HEAD
+=======
+	$error=false;
+>>>>>>> refs/remotes/origin/master
     if(isset($_COOKIE['id']) && isset($_COOKIE['key'])){
         $pwd=$_COOKIE['key'];
         $keys=array(
@@ -128,7 +132,8 @@
         })
     })
     </script>
-    <?php if($error) {
+    <?php 
+    if($error) {
 		echo "<script>
 				$(function() {
 					toastr.error('Cek Username dan Password Anda!','Mohon Maaf',{
