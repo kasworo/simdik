@@ -321,7 +321,7 @@
                     <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
                 </button>
                 <?php
-				$where=array('idthpel'=>$_COOKIE['c_tahun']);
+				$where=array('aktif'=>'1');
 				$th=viewdata('tbthpel',$where)[0];
 				if(substr($th['nmthpel'],-1)=='2'):
 			?>
