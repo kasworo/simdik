@@ -1062,7 +1062,7 @@
                     $this->Cell(2.4,0.575,$nilairkog,'BR',0,'C'); 
                     $qrmot="SELECT AVG(nilairapor) as motorik FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='4' GROUP BY idmapel";
 					if(cquery($qrmot)==0){
-						$nilairkog='-';
+						$nilairmot='-';
 					}
 					else {
 						$rmot=vquery($qrmot)[0];
