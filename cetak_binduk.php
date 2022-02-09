@@ -1002,21 +1002,36 @@
                 $i=0;
                 if(JmlKolom($awal, $akhir, $opset)==4){                    
                     foreach($qthpel as $th){
-                       $qkog="SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]' AND aspek='3'";
-					   $kog=vquery($qkog)[0];
-                       $this->SetXY($i*4.8 + 12.0,$j*0.575+$y0);
-                       $this->Cell(1.0,0.575,$kog['nilairapor'],'BR',0,'C');
-                       $this->SetXY($i*4.8+13.0,$j*0.575+$y0);
-                        $this->Cell(1.40,0.575,$kog['predikat'],'BR',0,'C');
-                        
-                        $qmot="SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='4'";                   
-                        $mot=vquery($qmot)[0];
+                        $qkog="SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='3'";
+						if(cquery($qkog)==0){
+							$nilaikog='-';
+							$predkog='-';
+						}
+						else {
+							$kog=vquery($qkog)[0];
+							$nilaikog=$kog['nilairapor'];
+							$predkog=$kog['predikat'];
+						} 
+						$this->SetXY($i*4.8 + 12.0,$j*0.575+$y0);
+                        $this->Cell(1.0,0.575,$nilaikog,'BR',0,'C');
+                        $this->SetXY($i*4.8+13.0,$j*0.575+$y0);
+                        $this->Cell(1.40,0.575,$predkog,'BR',0,'C');
+                        $qmot="SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='4'";               
+                        if(cquery($qmot)==0){
+							$nilaimot='-';
+							$predmot='-';
+						}
+						else {
+							$mot=vquery($qmot)[0];
+							$nilaimot=$mot['nilairapor'];
+							$predmot=$mot['predikat'];
+						} 
                         $this->SetXY($i*4.8 + 14.4,$j*0.575+$y0);
-                        $this->Cell(1.0,0.575,$mot['nilairapor'],'BR',0,'C');
+                        $this->Cell(1.0,0.575,$nilaimot,'BR',0,'C');
                         $this->SetXY($i*4.8 + 15.4,$j*0.575+$y0);
-                        $this->Cell(1.40,0.575,$mot['predikat'],'BR',0,'C');
+                        $this->Cell(1.40,0.575,$predmot,'BR',0,'C');
                         $i++;
-                    } 
+                    }
                 } 
                 else {                    
                     foreach($qthpel as $th){
