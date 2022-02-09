@@ -482,10 +482,14 @@ $(document).ready(function() {
                     <i class="fas fa-fw fa-save"></i>
                     <span>&nbsp;Simpan</span>
                 </button>
+                <?php
+                    if(isset($_GET['id'])):                    
+                ?>
                 <a href="index.php?p=addriwayat&id=<?php echo $idsiswa;?>" class="btn btn-success col-sm-2 ml-2 mb-2">
                     <span>Berikutnya&nbsp;</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
+                <?php endif ?>
             </div>
         </div>
     </form>
