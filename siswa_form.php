@@ -203,6 +203,20 @@ $(document).ready(function() {
                 <div class="col-sm-10">
                     <div class="row">
                         <div class="col-sm-6">
+
+                            <div class="form-group row mb-2" for="nis">
+                                <label class="col-sm-5 offset-sm-1" for="nis">N I S</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control form-control-sm" name="nis" id="nis">
+                                    <!--required oninvalid="this.setCustomValidity('N I S Wajib Diisi')" oninput="setCustomValidity('')">-->
+                                </div>
+                            </div>
+                            <div class="form-group row mb-2" for="nisn">
+                                <label class="col-sm-5 offset-sm-1">NISN</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control form-control-sm" name="nisn" id="nisn">
+                                </div>
+                            </div>
                             <div class="form-group row mb-2" for="nmsiswa">
                                 <label class="col-sm-5 offset-sm-1">Nama Lengkap</label>
                                 <div class="col-sm-6">
@@ -218,19 +232,6 @@ $(document).ready(function() {
                                     <input class="form-control form-control-sm" name="nik" id="nik"
                                         onkeyup="validAngka(this)">
                                     <!-- required oninvalid="this.setCustomValidity('Kolom NIK Wajib Diisi')" oninput="setCustomValidity('')"> -->
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2" for="nis">
-                                <label class="col-sm-5 offset-sm-1" for="nis">N I S</label>
-                                <div class="col-sm-6">
-                                    <input class="form-control form-control-sm" name="nis" id="nis">
-                                    <!--required oninvalid="this.setCustomValidity('N I S Wajib Diisi')" oninput="setCustomValidity('')">-->
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2" for="nisn">
-                                <label class="col-sm-5 offset-sm-1">NISN</label>
-                                <div class="col-sm-6">
-                                    <input class="form-control form-control-sm" name="nisn" id="nisn">
                                 </div>
                             </div>
                             <div class="form-group row mb-2" for="tmplahir">

@@ -111,11 +111,27 @@
                         <p>Registrasi</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="index.php?p=rwyskul" class="nav-link">
-                        <i class="fas fa-user-minus nav-icon"></i>
-                        <p>Riwayat Pendidikan</p>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-home nav-icon"></i>
+                        <p>Riwayat Pendidikan
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="index.php?p=rwyskul" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Pendidikan Sebelumnya</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?p=rwylulus" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Kelulusan</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -290,7 +306,6 @@
                 </li>
             </ul>
         </li>
-
         <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-print"></i>
