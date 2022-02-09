@@ -1071,8 +1071,14 @@
                     $this->Cell(2.4,0.575,$nilairmot,'BR',0,'C');
                     $this->Cell(2.4,0.575,'','BR',0,'C');
                     $qijz="SELECT AVG(nilairapor) as nilaiijz FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' GROUP BY idmapel";
-                    $ijz=vquery($qijz)[0];                   
-                    $this->Cell(2.4,0.575,round($ijz['nilaiijz']),'BR',0,'C');
+                    if(cquery($qijz)==0){
+						$nilaijz='-';
+					}
+					else {
+						$ijz=vquery($qijz)[0];
+						$nilaijz=round($ijz['nilaiijz']);
+					}
+                    $this->Cell(2.4,0.575,$nilaijz,'BR',0,'C');
                }
                $j++;                            
             }
@@ -1086,13 +1092,26 @@
             if(JmlKolom($awal, $akhir, $opset)==4){
                 foreach($qthpel as $th){                                     
                     $qsp="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='1'"; 
-                    $sp=vquery($qsp)[0]; 
+					if(cquery($qsp)==0){
+						$nilaisp='-';
+					}
+					else {
+						$sp=vquery($qsp)[0]; 
+						$nilaisp=KonversiNilai($sp['nilaisikap']);
+					}                    
                     $this->SetXY($i*4.8+12,$j*0.575+$y1);                
-                    $this->Cell(4.8,0.575,KonversiNilai($sp['nilaisikap']),'TBR',0,'C');
-                    $qsos="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'"; 
-                    $sos=vquery($qsos)[0];
+                    $this->Cell(4.8,0.575,$nilaisp,'TBR',0,'C');
+                    $qsos="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'";
+					if(cquery($qsos)==0){
+						$nilaisos='-';
+					}
+					else {
+						$sos=vquery($qsos)[0]; 
+						$nilaisos=KonversiNilai($sos['nilaisikap']);
+					} 
+                   
                     $this->SetXY($i*4.8+12,$j*0.575+$y1+0.575);                
-                    $this->Cell(4.8,0.575,KonversiNilai($sos['nilaisikap']),'BR',0,'C');
+                    $this->Cell(4.8,0.575,$nilaisos,'BR',0,'C');
                     $i++;                
                 }                
             }
