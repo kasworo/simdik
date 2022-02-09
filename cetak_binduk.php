@@ -1,7 +1,6 @@
 <?php
 	require('assets/library/fpdf/fpdf.php'); 
-    include "dbfunction.php";
-   
+    include "dbfunction.php";   
     function GetKolom($awal, $akhir, $ofset)
     {
         $sql="SELECT idthpel, nmthpel, desthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir' ORDER BY idthpel LIMIT 4 OFFSET $ofset";
@@ -1145,8 +1144,9 @@
             if(JmlKolom($awal, $akhir, $opset)==4){
                 foreach ($qthpel as $th){
                     $qabs="SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
-                    $abs=vquery($qabs)[0];
-                    $this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3);
+                    var_dump(vquery($qabs));die;
+					$abs=vquery($qabs)[0];					
+					$this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3);
                     $this->Cell(4.8,0.575, RapikanAbsen($abs['sakit']),'TBR',0,'C'); 
                     $this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3+0.575); 
                     $this->Cell(4.8,0.575, RapikanAbsen($abs['izin']),'BR',0,'C');
