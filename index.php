@@ -266,9 +266,7 @@
                                     case 'inputus' :{include "us_input.php";break;}
                                     case 'nilaiijz' :{include "rapor_rekap.php";break;}
                                     case 'nilaieksim' :{include "rapor_ekspor.php";break;}
-                                    
-									
-									case 'datakkm' : {include "kkm_tampil.php";break;}
+                                    case 'datakkm' : {include "kkm_tampil.php";break;}
 									case 'datakelas' : {include "kelas_tampil.php";break;}
 									case 'dataampu' : {include "pengampu_tampil.php";break;}
 									case 'isikelas' : {include "rombel_tampil.php";break;}
@@ -291,51 +289,6 @@
         </footer>
     </div>
     <script type="text/javascript" src="assets/plugins/jquery/jquery.min.js"></script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $("#goleki").click(function() {
-            var cari = $("#dicari").val();
-            if (cari == null || cari == '' || cari == ' ') {
-                toastr.error('Tidak Boleh Kosong!');
-            } else {
-                $.ajax({
-                    type: "POST",
-                    url: "calsis_cari.php",
-                    data: "cari=" + cari,
-                    success: function(data) {
-                        if (data == 1) {
-                            window.location.href = 'index.php?p=addsiswa&m=2&id=' + cari;
-                        } else {
-                            toastr.error('Data Tidak Ada');
-                        }
-                    }
-                })
-            }
-        })
-        $("#gantipass").click(function() {
-            var passlama = $("#passlama").val();
-            var passbaru = $("#passbaru").val();
-            var passkonf = $("#passkonf").val();
-            var id = "<?php echo $_COOKIE['c_user'];?>";
-            if (passlama == '') {
-                toastr.error('Password Lama Tidak Boleh Kosong');
-                $("#passbaru").focus();
-            } else if (passkonf !== passbaru) {
-                toastr.error('Password Tidak Sama');
-                $("#passbaru").focus();
-            }
-            $.ajax({
-                type: "POST",
-                url: "user_simpan.php",
-                data: "aksi=pass&id=" + id + "&passbaru=" + passbaru,
-                success: function(data) {
-                    toastr.success(data)
-                }
-            })
-        })
-    })
-    </script>
-
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/adminlte.min.js"></script>
     <script src="assets/plugins/sweetalert2/sweetalert2.min.js"></script>
