@@ -6,7 +6,9 @@
 		$idsiswa=$r['idsiswa'];
 	}
 	else {
-		$idsiswa=$_GET['id'];
+		if(isset($_GET['id'])){
+            $idsiswa=$_GET['id'];
+        };
 	}
     
 	if(isset($_POST['simpan'])) {
