@@ -1144,7 +1144,8 @@
             if(JmlKolom($awal, $akhir, $opset)==4){
 				foreach ($qthpel as $th){
                     $qabs="SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
-                   	$abs=vquery($qabs)[0];
+                   	var_dump($qabs);die;
+					$abs=vquery($qabs)[0];
                     $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3);
                     $this->Cell(4.8, 0.575, RapikanAbsen($abs['sakit']), 'TBR', 0, 'C');
                     $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3+0.575);
