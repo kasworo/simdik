@@ -1,7 +1,7 @@
 <?php
 	$host="localhost";
 	$user="root";
-	$pwd="";
+	$pwd="password";
 	$db="dbsimdik";
 	$conn= new mysqli($host, $user, $pwd, $db);
 	if(mysqli_connect_errno()) {

@@ -1116,17 +1116,30 @@
                 }                
             }
             else { 
-                foreach($qthpel as $th){                                    
+                foreach($qthpel as $th){                                     
                     $qsp="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='1'"; 
-                    $sp=vquery($qsp)[0]; 
+					if(cquery($qsp)==0){
+						$nilaisp='-';
+					}
+					else {
+						$sp=vquery($qsp)[0]; 
+						$nilaisp=KonversiNilai($sp['nilaisikap']);
+					}                    
                     $this->SetXY($i*4.8+12,$j*0.575+$y1);                
-                    $this->Cell(4.8,0.575,KonversiNilai($sp['nilaisikap']),'TR',0,'C');
-                    $qsos="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'"; 
-                    $sos=vquery($qsos)[0];
+                    $this->Cell(4.8,0.575,$nilaisp,'TBR',0,'C');
+                    $qsos="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'";
+					if(cquery($qsos)==0){
+						$nilaisos='-';
+					}
+					else {
+						$sos=vquery($qsos)[0]; 
+						$nilaisos=KonversiNilai($sos['nilaisikap']);
+					} 
+                   
                     $this->SetXY($i*4.8+12,$j*0.575+$y1+0.575);                
-                    $this->Cell(4.8,0.575,KonversiNilai($sos['nilaisikap']),'TBR',0,'C');
-                    $i++;                  
-                }
+                    $this->Cell(4.8,0.575,$nilaisos,'BR',0,'C');
+                    $i++;                
+                }  
                 $this->SetXY($i*4.8+12.0,$j*0.575+$y1);  
                 $qsp="SELECT AVG(nilaisikap) AS akspr FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='1' GROUP BY idsiswa"; 
                 $sp=vquery($qsp)[0];                
@@ -1386,7 +1399,7 @@
     $pdf->SetAuthor('Kasworo Wardani, S.T');
 	$pdf->PrintCover($_GET['id']);
     
-	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND (rg.idjreg='1' OR rg.idjreg='2')";
+	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND (rg.idjreg='1' OR rg.idjreg='2') ORDER BY si.nis";
     $qsiswa=vquery($sql);
     foreach($qsiswa as $ds){
         $pdf->PrintBiodata($ds['idsiswa']);
