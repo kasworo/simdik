@@ -1201,10 +1201,15 @@
                         $this->Cell(4.8,0.575,$nilaiekskul,$brd,0,'C');
                         $i++;                    
                     }
-                    $qreks="SELECT AVG(nilaieks) as nrkpeks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' GROUP BY idekskul"; 
-                    $reks=vquery($qreks)[0];
-                    $nilaieks=KonversiNilai(round($reks['nrkpeks']));
-                    $nilaiekskul=str_replace('A (Amat Baik)','SB (Sangat Baik)', $nilaieks);
+                    $qreks="SELECT AVG(nilaieks) as nrkpeks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' GROUP BY idekskul";                    
+					if(cquery($qreks)==0){
+						$nilaiekskul='-';
+					}
+					else {
+						$reks=vquery($qreks)[0];
+						$nilaieks=KonversiNilai(round($reks['nrkpeks']));                   $nilaiekskul=str_replace('A (Amat Baik)','SB (Sangat Baik)', $nilaieks);
+					}
+                    
                     $this->Cell(4.8,0.575,$nilaiekskul,$brd,0,'C');
                     $this->Cell(4.8,0.575,'',$brd,0,'C');
                 }
