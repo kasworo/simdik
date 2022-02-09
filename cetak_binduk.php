@@ -1144,15 +1144,16 @@
             if(JmlKolom($awal, $akhir, $opset)==4){
                 foreach ($qthpel as $th){
                     $qabs="SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
-                    var_dump(vquery($qabs));die;
-					$abs=vquery($qabs)[0];					
-					$this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3);
-                    $this->Cell(4.8,0.575, RapikanAbsen($abs['sakit']),'TBR',0,'C'); 
-                    $this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3+0.575); 
-                    $this->Cell(4.8,0.575, RapikanAbsen($abs['izin']),'BR',0,'C');
-                    $this->SetXY($i*4.8+12,($j+$k)*0.575 + $y3+1.15); 
-                    $this->Cell(4.8,0.575, RapikanAbsen($abs['alpa']),'BR',0,'C');  
-                    $i++;                                        
+                   	$abs=vquery($qabs)[0];
+                    if (isset($abs)) {
+                        $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3);
+                        $this->Cell(4.8, 0.575, RapikanAbsen($abs['sakit']), 'TBR', 0, 'C');
+                        $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3+0.575);
+                        $this->Cell(4.8, 0.575, RapikanAbsen($abs['izin']), 'BR', 0, 'C');
+                        $this->SetXY($i*4.8+12, ($j+$k)*0.575 + $y3+1.15);
+                        $this->Cell(4.8, 0.575, RapikanAbsen($abs['alpa']), 'BR', 0, 'C');
+                        $i++;
+                    }                                       
                 }                     
             }
             else {
