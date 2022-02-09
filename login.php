@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	include "dbfunction.php";
-	if(isset($_COOKIE['id']) && isset($_COOKIE['key'])){
+    if(isset($_COOKIE['id']) && isset($_COOKIE['key'])){
         $pwd=$_COOKIE['key'];
         $keys=array(
             'username'=>$_COOKIE['id']
