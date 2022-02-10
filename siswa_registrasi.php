@@ -321,10 +321,10 @@
                     <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
                 </button>
                 <?php
-				$where=array('aktif'=>'1');
-				$th=viewdata('tbthpel',$where)[0];
-				if(substr($th['nmthpel'],-1)=='2'):
-			?>
+				    $where=array('aktif'=>'1');
+				    $th=viewdata('tbthpel',$where)[0];
+				    if(substr($th['nmthpel'],-1)=='2'):
+			    ?>
                 <button class="btn btn-flat btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
                     <i class="fas fa-plus-circle"></i>&nbsp;Lanjutkan
                 </button>
@@ -332,6 +332,9 @@
                 <button class="btn btn-flat btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
                     <i class="fas fa-plus-circle"></i>&nbsp;Naik Kelas
                 </button>
+                <!-- <button class="btn btn-flat btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
+                    <i class="fas fa-plus-circle"></i>&nbsp;Naik Kelas
+                </button> -->
                 <?php endif;?>
             </div>
         </div>
@@ -341,8 +344,8 @@
                     <thead>
                         <tr>
                             <th style="text-align: center;width:2.5%">No.</th>
+                            <th style="text-align: center;width:20%">Nomor Induk</th>
                             <th style="text-align: center">Nama Peserta Didik</th>
-                            <th style="text-align: center;width:20%">NIS / NISN</th>
                             <th style="text-align: center;width:10%">Kelas</th>
                             <th style="text-align: center;width:17.5%">Aksi</th>
                         </tr>
@@ -359,18 +362,18 @@
 								'tp.aktif'=>'1',
 								'deleted'=>'0'
 							); 
-							//$qs=$conn->query("SELECT s.idsiswa, s.idthpel as thmasuk, s.nmsiswa, s.nisn, s.nis,  rb.nmrombel,rg.idjreg FROM tbsiswa s LEFT JOIN tbregistrasi rg USING(idsiswa) LEFT JOIN tbrombel rb USING(idrombel) WHERE s.deleted='0' OR rb.idthpel='$_COOKIE[c_tahun]' AND (rg.idjreg<7 OR rg.idjreg is NULL) ORDER BY s.idsiswa, rg.idrombel");
+							
 							$no=0;
 							$qs=leftjoin($field,'tbsiswa', $tbl, $where);
-                           // var_dump($qs);die;
 							foreach($qs as $s):
 							$no++;
 						?>
                         <tr>
                             <td style="text-align:center"><?php echo $no.'.';?></td>
-                            <td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
+                            <td style="text-align: center" title="<?php echo $s['idsiswa'];?>">
+                                <?php echo $s['nis'].' / '.$s['nisn'];?></td>
+                            <td><?php echo ucwords(strtolower($s['nmsiswa']));?>
                             </td>
-                            <td style="text-align: center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
                             <td style="text-align: center"><?php echo $s['nmkelas'];?></td>
                             <td style="text-align:center">
                                 <button data-target="#myRegPD" data-toggle="modal" data-id="<?php echo $s['idsiswa'];?>"
