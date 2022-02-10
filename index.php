@@ -64,39 +64,59 @@
 </head>
 
 <body class="sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="modal fade" id="myPassword" aria-modal="true">
+    <div class="modal fade" id="myBukuInduk" aria-modal="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ganti Password</h5>
+                    <h5 class="modal-title">Cetak Laporan Buku Induk</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
+                <form action="cetak_binduk.php" method="post" target="_blank">
+                <?php
+                    $kabeh=cekdata('tbthpel','',"LEFT(nmthpel,4)");
+                    if($kabeh>5){
+                        $offset=$kabeh-5;
+                        $sql="SELECT LEFT(desthpel,9) as namathpel, MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbthpel GROUP BY LEFT(nmthpel,4) ORDER BY idthpel LIMIT 5 OFFSET $offset";
+                    }
+                    else{
+                        $sql="SELECT LEFT(desthpel,9) as namathpel, MIN(idthpel) as awal,  MAX(idthpel) as akhir FROM tbthpel GROUP BY LEFT(nmthpel,4) ORDER BY idthpel LIMIT 5";
+                    }
+                    $qtp=vquery($sql);
+                ?>
+						                
                 <div class="modal-body">
                     <div class="col-sm-10 offset-sm-1">
                         <div class="form-group mb-2">
-                            <label>Password Lama</label>
-                            <input type="password" class="form-control input-sm" id="passlama" name="passlama">
+                            <label>Dari Tahun Pelajaran</label>
+                            <select  class="form-control input-sm" id="awlbinduk" name="awlbinduk">
+                                <option value="">..Pilih..</option>
+                                <?php foreach ($qtp as $tp): ?>
+                                <option value="<?php echo $tp['awal'];?>"><?php echo $tp['namathpel'];?></option>
+                                <?php endforeach ?>
+                            </select>
                         </div>
                         <div class="form-group mb-2">
-                            <label>Password Baru</label>
-                            <input type="password" class="form-control input-sm" id="passbaru" name="passbaru">
-                        </div>
-                        <div class="form-group mb-2">
-                            <label>Konfirmasi Password</label>
-                            <input type="password" class="form-control input-sm" id="passkonf" name="passkonf">
+                            <label>Sampai Tahun Pelajaran</label>
+                            </select><select  class="form-control input-sm" id="akhbinduk" name="akhbinduk">
+                                <option value="">..Pilih..</option>
+                                <?php foreach ($qtp as $tp): ?>
+                                <option value="<?php echo $tp['akhir'];?>"><?php echo $tp['namathpel'];?></option>
+                                <?php endforeach ?>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="submit" class="btn btn-primary btn-md btn-flat" id="gantipass">
-                        <i class="fas fa-save"></i> Update
+                        <i class="fas fa-save"></i> Cetak
                     </button>
                     <button type="button" class="btn btn-danger btn-md btn-flat" data-dismiss="modal">
                         <i class="fas fa-power-off"></i> Tutup
                     </button>
                 </div>
+                </form>
             </div>
         </div>
     </div>

@@ -247,7 +247,7 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                <li class="nav-item has-treeview"">
+                <li class="nav-item has-treeview">
 						<a href=" #" class="nav-link">
                     <i class="far fa-check-circle nav-icon"></i>
                     <p>Input Nilai Rapor</p>
@@ -349,7 +349,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="index.php?p=cetakbinduk" class="nav-link">
+                    <a href="#" class="nav-link" data-toggle="modal" data-target="#myBukuInduk">
                         <i class="far fa-list-alt nav-icon"></i>
                         <p>Buku Induk</p>
                     </a>

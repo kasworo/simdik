@@ -51,7 +51,7 @@
 		->setCellValue('J5', '(10)')
         ->setCellValue('K3', 'Ket.')
 		->setCellValue('K5', '(11)');
-	$field=array('idsiswa', 'nmsiswa','nisn','nis', 'jnsregistrasi', 'idjreg','rg.*', 'nmkelas','nmthpel');
+	$field=array('nmsiswa','nisn','nis','nmthpel');
 	$tbl=array(
 	    'tbregistrasi rg'=>'idsiswa',
         'tbkelas k'=>'idkelas',
@@ -71,10 +71,7 @@
 			->setCellValue("B$baris",($row['nis']))
 			->setCellValue("C$baris",$row['nisn'])
 			->setCellValue("D$baris",ucwords(strtolower($row['nmsiswa'])))
-			->setCellValue("E$baris",$row['idjreg'])
-			->setCellValue("F$baris",$row['idkelas'])
-			->setCellValue("G$baris",$row['idthpel'])
-			->setCellValue("H$baris",$row['nmthpel']);
+			->setCellValue("J$baris",$row['nmthpel']);
 		$baris++;
 	}
 	$semua=$baris-1;

@@ -84,16 +84,17 @@
 		
 		function Footer()
         {
-        	if ($this->PageNo()>1) {
-				$this->SetXY(3.75,-1.575);
-           		$this->SetFont('Arial','I',8);
-           		$sql="SELECT LEFT(desthpel,9) as tahun FROM tbthpel WHERE nmthpel LIKE '$_GET[id]%' LIMIT 1";
-           		$th=vquery($sql)[0];
-				$hal=$this->PageNo()-1;
-           		$this->Cell(26.25,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'C');
-           		$this->Cell(1.75,1.0,'Halaman '.$hal,0,0,'C');
+        	// if ($this->PageNo()>1) {
+			// 	$this->SetXY(3.75,-1.575);
+           	// 	$this->SetFont('Arial','I',8);
+           	// 	$sql="SELECT LEFT(desthpel,9) as tahun FROM tbthpel WHERE idthpel='$id'";
+			// 	var_dump($sql);           		
+			// 	$th=vquery($sql)[0];
+			// 	$hal=$this->PageNo()-1;
+           	// 	$this->Cell(26.25,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'C');
+           	// 	$this->Cell(1.75,1.0,'Halaman '.$hal,0,0,'C');
 				
-			}
+			// }
         }
 
         function SetCol($col)
@@ -1383,7 +1384,7 @@
             $this->Cell(29, 0.575, 'BUKU INDUK PESERTA DIDIK', 0, 0, 'C');
             $this->SetXY(2.75,4.75);
 			$this->SetFont('HappyMonkey-Regular','',28.5);
-            $sql="SELECT LEFT(desthpel,9) as tahune FROM tbthpel WHERE nmthpel LIKE '$id%' GROUP BY tahune";
+            $sql="SELECT LEFT(desthpel,9) as tahune FROM tbthpel WHERE idthpel='$id' GROUP BY tahune";
 			$th=vquery($sql)[0];
 			$this->Cell(29, 0.575, 'TAHUN PELAJARAN '.str_replace('/',' / ',$th['tahune']), 0, 0, 'C');
 			$this->Image('images/logo.png',14.5,7.5,4.5);
@@ -1443,13 +1444,18 @@
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-	$pdf->PrintCover($_GET['id']);
-    
-	$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.nmthpel LIKE '$_GET[id]%' AND (rg.idjreg='1' OR rg.idjreg='2') ORDER BY si.nis";
-    $qsiswa=vquery($sql);
-    foreach($qsiswa as $ds){
-        $pdf->PrintBiodata($ds['idsiswa']);
-        $pdf->PrintNilai($ds['idsiswa']);
-    }
+	$awal=$_POST['awlbinduk'];
+	$akhir=$_POST['akhbinduk'];
+	$qthpel="SELECT idthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir' GROUP BY LEFT(nmthpel,4)";
+	$qthn=vquery($qthpel);
+	foreach($qthn as $thn){
+		$pdf->PrintCover($thn['idthpel']);    
+		$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.idthpel='$thn[idthpel]' AND (rg.idjreg='1' OR rg.idjreg='2') ORDER BY si.nis";
+		$qsiswa=vquery($sql);
+		foreach($qsiswa as $ds){
+			$pdf->PrintBiodata($ds['idsiswa']);
+			$pdf->PrintNilai($ds['idsiswa']);
+		}
+	}
     $pdf->Output();
 ?>
