@@ -122,7 +122,13 @@
                         <li class="nav-item">
                             <a href="index.php?p=rwyskul" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
-                                <p>Pendidikan Sebelumnya</p>
+                                <p>Asal SD / MI</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="index.php?p=rwysmp" class="nav-link">
+                                <i class="fas fa-user-minus nav-icon"></i>
+                                <p>Mutasi Dari</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -201,7 +207,6 @@
                         <p>Kompetensi Dasar</p>
                     </a>
                 </li>
-
                 <!--
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -248,10 +253,10 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item has-treeview">
-						<a href=" #" class="nav-link">
-                    <i class="far fa-check-circle nav-icon"></i>
-                    <p>Input Nilai Rapor</p>
-                    <i class="fas fa-angle-left right"></i>
+                    <a href=" #" class="nav-link">
+                        <i class="far fa-check-circle nav-icon"></i>
+                        <p>Input Nilai Rapor</p>
+                        <i class="fas fa-angle-left right"></i>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
@@ -337,19 +342,20 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="index.php?p=cetakmutasi" class="nav-link">
+                    <a href="#" class="nav-link linkModal" data-toggle="modal" data-target="#myReport" data-id="mutasi">
                         <i class="far fa-list-alt nav-icon"></i>
                         <p>Mutasi</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="index.php?p=cetakklaper" class="nav-link">
+                    <a href="#" class="nav-link linkModal" data-toggle="modal" data-target="#myReport"
+                        data-id="klapper">
                         <i class="fas fa-sort-alpha-down nav-icon"></i>
                         <p>Klapper</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-toggle="modal" data-target="#myBukuInduk">
+                    <a href="#" class="nav-link linkModal" data-toggle="modal" data-target="#myReport" data-id="binduk">
                         <i class="far fa-list-alt nav-icon"></i>
                         <p>Buku Induk</p>
                     </a>

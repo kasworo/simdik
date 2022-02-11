@@ -1,4 +1,6 @@
 <?php
+	session_start();
+	if(!isset($_SESSION['login'])){header("Location: login.php");exit;}
 	require('assets/library/fpdf/fpdf.php'); 
     include "dbfunction.php";   
     function GetKolom($awal, $akhir, $ofset)
@@ -370,39 +372,20 @@
 			$this->Cell(0.25,0.5725,':');		
 			$this->Cell(8.25,0.5725,KonversiRomawi(str_replace('Kelas ','',$rg['nmkelas'])));
 			$this->Ln();
-			if(cekdata('tbriwayatskul', array('idsiswa'=>$id))==0){
+
+			if(cekdata('tbsdmi', array('idsiswa'=>$id))==0){
 				$aslsd='-';
 				$noijz='-';
 				$tglijz='-';
 				$lamasd='-';
-				$aslsmp='-';
-				$nosurat='-';
-				$tglsurat='-';
-				$alasan='-';
 			}
 			else {
-				$rw=viewdata('tbriwayatskul', array('idsiswa'=>$id))[0];
-				if($rw['idjreg']=='1'){
-					$aslsd=$rw['aslsd'];
-					$noijz=$rw['noijazah'];
-					$tglijz=indonesian_date($rw['tglijazah']);
-					$lamasd=$rw['lama'];
-					$aslsmp='-';
-					$nosurat='-';
-					$tglsurat='-';
-					$alasan='-';
-				}
-				else {
-					$aslsd=$rw['aslsd'];
-					$noijz=$rw['noijazah'];
-					$tglijz=indonesian_date($rw['tglijazah']);
-					$lamasd=$rw['lama'];
-					$aslsmp=$rw['aslsmp'];
-					$nosurat=$rw['nosurat'];
-					$tglsurat=indonesian_date($rw['tglsurat']);
-					$alasan=$rw['alasan'];
-				}				
-			}			
+				$rw=viewdata('tbsdmi', array('idsiswa'=>$id))[0];
+				$aslsd=$rw['aslsd'];
+				$noijz=$rw['noijazah'];
+				$tglijz=indonesian_date($rw['tglijazah']);
+				$lamasd=$rw['lama'];				
+			}
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725,'4.');
 			$this->Cell(4.0,0.5725,'Lulus Dari');
@@ -439,6 +422,22 @@
 			$this->Cell(0.25,0.5725);		
 			$this->Cell(8.25,0.5725);
 			$this->Ln();
+			$km=array(
+				'idsiswa'=>$id,
+				'jnsmutasi'=>'1'
+			);
+			if(cekdata('tbmutasi',$km)==0){
+				$aslsmp='-';
+				$nosurat='-';
+				$tglsurat='-';
+				$alasan='-';
+			}
+			else {
+				$mu=viewdata('tbmutasi', $km)[0];
+				$aslsmp=$mu['aslsmp'];
+				$nosurat=$mu['nosurat'];
+				$tglsurat=indonesian_date($mu['tglsurat']);		$alasan=$mu['alasan'];	
+			}
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'a.');
 			$this->Cell(3.5,0.5725,'Nama SMP / MTs');
@@ -463,6 +462,7 @@
 			$this->Cell(0.25,0.5725,':');	
 			$this->Cell(8.25,0.5725,$alasan);
 			$this->Ln(0.75);
+
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.5725,'C.');
 			$this->Cell(12.5,0.5725,'Keterangan Orang Tua Kandung');
@@ -1377,7 +1377,7 @@
 		}
 		function IsiCover($id){
             $this->SetLineWidth(0.125);
-            $this->Rect(2.75, 1.75, 28.5, 17.5,1);
+            $this->Rect(2.75, 2.0, 28.5, 17.25,1);
             $this->AddFont('HappyMonkey-Regular','','HappyMonkey.php');
             $this->SetXY(2.75,3.25);
             $this->SetFont('HappyMonkey-Regular','',36.5);
@@ -1390,8 +1390,11 @@
 			$this->Image('images/logo.png',14.5,7.5,4.5);
             $this->SetFont('Times','',12);            
             $this->SetXY(2.75,15.75);
-            $this->SetFont('Times','',24); 
-            $this->Cell(29, 0.575, 'SMP NEGERI 5 PELEPAT', 0, 0, 'C');   
+			$ds=viewdata('tbskul')[0];
+            $this->SetFont('Times','B',18); 
+			$this->Cell(29,0.575, strtoupper($ds['nmskpd']), 0, 0, 'C');
+            $this->SetXY(2.75,16.5);
+			$this->Cell(29,0.575, strtoupper($ds['nmskul']), 0, 0, 'C');   
         }
 
         function PrintCover($id){
@@ -1444,8 +1447,8 @@
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-	$awal=$_POST['awlbinduk'];
-	$akhir=$_POST['akhbinduk'];
+	$awal=$_GET['awal'];
+	$akhir=$_GET['akhir'];
 	$qthpel="SELECT idthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir' GROUP BY LEFT(nmthpel,4)";
 	$qthn=vquery($qthpel);
 	foreach($qthn as $thn){

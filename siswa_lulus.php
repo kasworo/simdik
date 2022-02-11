@@ -9,17 +9,17 @@
     if(isset($_POST['upload'])) {
         require_once 'assets/library/PHPExcel.php';
 	    require_once 'assets/library/excel_reader.php';
-	if(empty($_FILES['filepd']['tmp_name'])) { 
+	if(empty($_FILES['filetmp']['tmp_name'])) { 
 		echo "<script>
 			$(function() {
-				toastr.error('File Template Peserta Didik Kosong!','Mohon Maaf!',{
+				toastr.error('File Template Kosong!','Mohon Maaf!',{
 					timeOut:1000,
 					fadeOut:1000
 				});
 			});
 		</script>";	
 	} else {
-		$data = new Spreadsheet_Excel_Reader($_FILES['filepd']['tmp_name']);
+		$data = new Spreadsheet_Excel_Reader($_FILES['filetmp']['tmp_name']);
 		$baris = $data->rowcount($sheet_index=0);
 		$isidata=$baris-5;
 		$sukses = 0;
@@ -28,37 +28,14 @@
         $idskul=getskul();	
 		for ($i=6; $i<=$baris; $i++)
 		{
-			$xnik=$data->val($i,2);
-			$xnis=$data->val($i,3);
-			$xnisn=$data->val($i,4);
-			$xnama= $conn->real_escape_string($data->val($i,5));
-			$xtmplhr = $data->val($i,6); 
-			$xtgllhr = $data->val($i,7); 
-			$xjekel = $data->val($i,8); 
-			$nmagama = $data->val($i,9);
-			$xanak=$data->val($i,10);
-			$xsdr=$data->val($i,11);
-			$xdrh=$data->val($i,12);
-			$xsakit=$data->val($i,13);
-			$xkeb=$data->val($i,14);
-			$xikut=$data->val($i,15);
-			$xtrans=$data->val($i,16);
-			$xjrk=$data->val($i,17);
-			$xwkt=$data->val($i,18);
-			$xltg=$data->val($i,19);
-			$xbjr=$data->val($i,20);
-			$xalmt = $data->val($i,21);
-			$xdesa	= $data->val($i,22);
-			$xkec	= $data->val($i,23);
-			$xkab	= $data->val($i,24);
-			$xprov = $data->val($i,25);
-			$xkdpos = $data->val($i,26);
-			$xnohp = $data->val($i,27);
-			$xolga = $data->val($i,28);
-			$xseni = $data->val($i,29);
-			$xorgn = $data->val($i,30);
-			$xlain = $data->val($i,31);
-			
+			$xnis=$data->val($i,2);
+			$xnisn=$data->val($i,3);			
+			$xnmsiswa = $data->val($i,4);
+			$xtglak = $data->val($i,5);			
+			$xnoijz = $data->val($i,6);
+			$xtglijz = $data->val($i,7);
+			$xlanjut = $data->val($i,8);
+			$xslta = $data->val($i,9);			
 			if(strlen($nmagama)==1){$xagama=$nmagama;}
 				else {
 					switch ($nmagama) {
@@ -301,10 +278,10 @@
                 <div class="modal-body">
                     <div class="col-sm-12">
                         <div class="row">
-                            <label for="filepd">Pilih File Template</label>
+                            <label for="filetmp">Pilih File Template</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input file" id="filepd" name="filepd">
-                                <label class="custom-file-label" for="filepd">Pilih file</label>
+                                <input type="file" class="custom-file-input file" id="filetmp" name="filetmp">
+                                <label class="custom-file-label" for="filetmp">Pilih file</label>
                             </div>
                             <p style="color:red;margin-top:10px"><em>Hanya mendukung file *.xls (Microsoft Excel
                                     97-2003)</em></p>

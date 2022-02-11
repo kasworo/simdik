@@ -1,7 +1,8 @@
 <?php
-	require('assets/library/fpdf/fpdf.php'); 
-    include "dbfunction.php";
-    
+	session_start();
+	if(!isset($_SESSION['login'])){header("Location: login.php");exit;}
+    require('assets/library/fpdf/fpdf.php'); 
+    include "dbfunction.php";    
     function UbahKelas($nama)
     {
         $angka=str_replace('Kelas','',$nama);
@@ -67,12 +68,12 @@
             $this->Cell(1.25,0.575,'Kelas','BR',0,'C');
             $this->Cell(3.0,0.575,'Tanggal','BR',0,'C');
             $this->SetXY(24.0,$y0); 
-            $this->Cell(7.75,0.57,'Keluar Dari Sekolah Ini','TBR',0,'C');
+            $this->Cell(7.75,0.57,'Meninggalkan Sekolah Ini','TBR',0,'C');
             $this->SetXY(24.0,$y1); 
             $this->Cell(3.0,0.575,'Tanggal','BR',0,'C');
             $this->Cell(4.75,0.575,'Alasan','BR',0,'C');                  
         }
-        function GetTableIsi($hrf,$hal)
+        function GetTableIsi($hrf,$a, $b, $hal)
         {           
             if($hal<=1){
                 $y0=3.25;
@@ -101,8 +102,9 @@
             }
             else {
                 if($hal==1){$opset=0;$no=1;} else {$opset=26;$no=26;}
-                $sql="SELECT idsiswa, nis, nisn, nmsiswa, tmplahir, tgllahir, gender FROM tbsiswa WHERE nmsiswa LIKE '$hrf%' ORDER BY nis LIMIT 25 OFFSET $opset";
+                $sql="SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa, s.tmplahir, s.tgllahir, s.gender FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) WHERE nmsiswa LIKE '$hrf%' AND (r.idjreg='1' OR idjreg='2') AND r.idthpel BETWEEN '$a' AND '$b' GROUP BY s.idsiswa ORDER BY s.nis LIMIT 25 OFFSET $opset";
                 $qs=vquery($sql);
+                
                 $i=0;
                 foreach ($qs as $s) {
                     $this->SetXY(2.75,$i*0.575+$y1); 
@@ -124,9 +126,7 @@
                         $this->Cell(3.0, 0.575, indonesian_date($rg['tglreg']), 'BR', 0, 'L');
                         $this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
                         $this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
-                    }
-                    
-                    
+                    } 
                     $i++;
                 }
                 for($j=$i;$j<=24;$j++) {
@@ -144,32 +144,49 @@
             }
         }
        
-        function IsiCover(){
+        function IsiCover($a,$b){
             $this->SetLineWidth(0.125);
-            $this->Rect(2.75, 1.75, 28.5, 17.5,1);
+            $this->Rect(2.75, 2.0, 28.5, 17.25,1);
             $this->AddFont('HappyMonkey-Regular','','HappyMonkey.php');
             $this->SetXY(2.75,3.25);
             $this->SetFont('HappyMonkey-Regular','',36.5);
-            $this->Cell(28.5, 0.575, 'LAPORAN KLAPPER PESERTA DIDIK', 0, 0, 'C');
-            $this->Image('images/logo.png',14.5,6.0,4.5);
-            $this->SetFont('Times','',12); 
-            $this->SetXY(2.75,12.75);
-            $this->Cell(28.5, 0.575, 'PERIODE TAHUN PELAJARAN', 0, 0, 'C');
-            $this->SetFont('Times','BI',12);
-            $this->SetXY(2.75,13.75);
-            $this->Cell(28.5, 0.575, '2018/2019 s.d 2021/2022', 0, 0, 'C');
-            $this->SetXY(2.75,15.75);
-            $this->SetFont('Times','',24); 
-            $this->Cell(28.5, 0.575, 'SMP NEGERI 5 PELEPAT', 0, 0, 'C');   
-        }
+            $this->Cell(29, 0.575, 'LAPORAN KLAPPER PESERTA DIDIK', 0, 0, 'C');
+           
+            $this->SetXY(2.75,4.75);
+			$this->SetFont('HappyMonkey-Regular','',28.5);
+            $sql="SELECT LEFT(desthpel,9) as awal FROM tbthpel WHERE idthpel='$a' GROUP BY awal";
+			$th=vquery($sql)[0];
+            $awal=$th['awal'];
 
-        function PrintCover(){
+            $sqla="SELECT LEFT(desthpel,9) as akhir FROM tbthpel WHERE idthpel='$b' GROUP BY awal";
+			$tha=vquery($sqla)[0];
+            $akhir=$tha['akhir'];
+            if ($awal==$akhir) {
+                $this->SetFont('HappyMonkey-Regular','',24);
+                $this->Cell(29, 0.575, 'TAHUN PELAJARAN '.str_replace('/', ' / ', $awal), 0, 0, 'C');                
+            }
+            else {
+                $this->SetFont('HappyMonkey-Regular','',20);
+                $this->Cell(29, 0.575, 'TAHUN PELAJARAN '.$awal. ' SAMPAI '.$akhir, 0, 0, 'C');
+            }
+            $this->Image('images/logo.png',14.5,7.5,4.5);
+            $this->SetFont('Times','',12);            
+            
+            $this->SetXY(2.75,15.75);
+			$ds=viewdata('tbskul')[0];
+            $this->SetFont('Times','B',18); 
+			$this->Cell(29,0.575, strtoupper($ds['nmskpd']), 0, 0, 'C');
+            $this->SetXY(2.75,16.5);
+			$this->Cell(29,0.575, strtoupper($ds['nmskul']), 0, 0, 'C');   
+        }        
+
+        function PrintCover($a, $b){
             $this->AddPage();
-            $this->IsiCover();       
+            $this->IsiCover($a,$b);       
         }
-        function PrintChapter($hrf){ 
+        function PrintChapter($hrf, $a, $b){ 
             $this->SetLineWidth(0.001);        
-            $sql="SELECT nis, nisn, nmsiswa FROM tbsiswa WHERE nmsiswa LIKE '$hrf%' ORDER BY nis";
+            $sql="SELECT s.idsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) WHERE nmsiswa LIKE '$hrf%' AND (r.idjreg='1' OR idjreg='2') AND r.idthpel BETWEEN '$a' AND '$b' GROUP BY s.idsiswa ORDER BY s.nis";
             $nsiswa=cquery($sql);
             if($nsiswa>0){
                 $hal=ceil($nsiswa/25);
@@ -177,14 +194,14 @@
                     $this->AddPage();
                     $this->ChapterTitle($hrf,$i);       
                     $this->GetTableJudul($i);
-                    $this->GetTableIsi($hrf,$i);
+                    $this->GetTableIsi($hrf,$a, $b,$i);
                 }
             }
             else {
                 $this->AddPage();
                 $this->ChapterTitle($hrf,0);       
                 $this->GetTableJudul(0);
-                $this->GetTableIsi($hrf,0);
+                $this->GetTableIsi($hrf,$a,$b,0);
             }            
         }        
     }   
@@ -193,9 +210,11 @@
     $title = 'Laporan Buku Induk';
     $pdf->SetTitle($title);
     $pdf->SetAuthor('Kasworo Wardani, S.T');
-    $pdf->PrintCover();
+    $awal=$_GET['awal'];
+	$akhir=$_GET['akhir'];
+    $pdf->PrintCover($awal, $akhir);
     foreach (range('A', 'Z') as $hrf) {
-        $pdf->PrintChapter($hrf);
+        $pdf->PrintChapter($hrf, $awal, $akhir);
     }
     $pdf->Output();
 ?>

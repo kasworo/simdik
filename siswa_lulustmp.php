@@ -27,6 +27,8 @@
 		->mergeCells('D3:D4')
 		->mergeCells('E3:G3')
         ->mergeCells('H3:I3')
+		->mergeCells('J3:J4')
+		->mergeCells('K3:K4')
 		->setCellValue('A3', 'No')
 		->setCellValue('A5', '(1)')
 		->setCellValue('B3', 'N I S')

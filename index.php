@@ -64,7 +64,7 @@
 </head>
 
 <body class="sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-    <div class="modal fade" id="myBukuInduk" aria-modal="true">
+    <div class="modal fade" id="myReport" aria-modal="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -73,7 +73,6 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <form action="cetak_binduk.php" method="post" target="_blank">
                 <?php
                     $kabeh=cekdata('tbthpel','',"LEFT(nmthpel,4)");
                     if($kabeh>5){
@@ -85,12 +84,12 @@
                     }
                     $qtp=vquery($sql);
                 ?>
-						                
                 <div class="modal-body">
                     <div class="col-sm-10 offset-sm-1">
+                        <input type="hidden" name="jenis" id="jenis">
                         <div class="form-group mb-2">
                             <label>Dari Tahun Pelajaran</label>
-                            <select  class="form-control input-sm" id="awlbinduk" name="awlbinduk">
+                            <select class="form-control input-sm" id="awal" name="awal">
                                 <option value="">..Pilih..</option>
                                 <?php foreach ($qtp as $tp): ?>
                                 <option value="<?php echo $tp['awal'];?>"><?php echo $tp['namathpel'];?></option>
@@ -99,7 +98,7 @@
                         </div>
                         <div class="form-group mb-2">
                             <label>Sampai Tahun Pelajaran</label>
-                            </select><select  class="form-control input-sm" id="akhbinduk" name="akhbinduk">
+                            </select><select class="form-control input-sm" id="akhir" name="akhir">
                                 <option value="">..Pilih..</option>
                                 <?php foreach ($qtp as $tp): ?>
                                 <option value="<?php echo $tp['akhir'];?>"><?php echo $tp['namathpel'];?></option>
@@ -109,14 +108,13 @@
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="submit" class="btn btn-primary btn-md btn-flat" id="gantipass">
-                        <i class="fas fa-save"></i> Cetak
+                    <button class="btn btn-primary btn-md" name="cetak" id="cetak">
+                        <i class="fas fa-print"></i> Cetak
                     </button>
-                    <button type="button" class="btn btn-danger btn-md btn-flat" data-dismiss="modal">
+                    <button type="button" class="btn btn-danger btn-md" data-dismiss="modal">
                         <i class="fas fa-power-off"></i> Tutup
                     </button>
                 </div>
-                </form>
             </div>
         </div>
     </div>
@@ -291,8 +289,7 @@
 									case 'datakelas' : {include "kelas_tampil.php";break;}
 									case 'dataampu' : {include "pengampu_tampil.php";break;}
 									case 'isikelas' : {include "rombel_tampil.php";break;}
-									case 'cetakbinduk' : {include "view_binduk.php";break;}
-									case 'cetakklaper' : {include "view_klaper.php";break;}
+									
 									default:{include "dashboard.php";break;}
 								}
 							}
@@ -325,6 +322,32 @@
     <script src="assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="assets/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script type="text/javascript">
+    $(".linkModal").click(function(e) {
+        e.preventDefault();
+        let id = $(this).data('id');
+        if (id == 'binduk') {
+            $(".modal-title").html("Cetak Buku Induk");
+        }
+        if (id == 'klapper') {
+            $(".modal-title").html("Cetak Klapper");
+        }
+        $("#jenis").val(id);
+    })
+    $("#cetak").click(function(e) {
+        e.preventDefault();
+        let id = $("#jenis").val();
+        let awal = $("#awal").val();
+        let akhir = $("#akhir").val();
+        if (id == 'binduk') {
+            myurl = "cetak_binduk.php?awal=" + awal + "&akhir=" + akhir;
+        } else if (id == 'klapper') {
+            myurl = "cetak_klapper.php?awal=" + awal + "&akhir=" + akhir;
+
+        }
+        window.open(myurl, "_blank");
+        window.location.reload();
+    })
+
     $(document).ready(function() {
         toastr.options = {
             "closeButton": false,
