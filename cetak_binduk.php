@@ -373,14 +373,14 @@
 			$this->Cell(8.25,0.5725,KonversiRomawi(str_replace('Kelas ','',$rg['nmkelas'])));
 			$this->Ln();
 
-			if(cekdata('tbsdmi', array('idsiswa'=>$id))==0){
+			if(cekdata('tbasalsd', array('idsiswa'=>$id))==0){
 				$aslsd='-';
 				$noijz='-';
 				$tglijz='-';
 				$lamasd='-';
 			}
 			else {
-				$rw=viewdata('tbsdmi', array('idsiswa'=>$id))[0];
+				$rw=viewdata('tbasalsd', array('idsiswa'=>$id))[0];
 				$aslsd=$rw['aslsd'];
 				$noijz=$rw['noijazah'];
 				$tglijz=indonesian_date($rw['tglijazah']);
@@ -434,7 +434,7 @@
 			}
 			else {
 				$mu=viewdata('tbmutasi', $km)[0];
-				$aslsmp=$mu['aslsmp'];
+				$aslsmp=$mu['aslkesmp'];
 				$nosurat=$mu['nosurat'];
 				$tglsurat=indonesian_date($mu['tglsurat']);		$alasan=$mu['alasan'];	
 			}
