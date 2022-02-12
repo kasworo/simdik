@@ -100,45 +100,7 @@
 					'tmbl'=>'<i class="fas fa-save"></i> Update'
 				);			
 		}
-	}
-	
-	else if($_POST['d']=='2'){
-		$data=cekdata('tbriwayatskul', array('idsiswa'=>$id));
-		if($data==0){
-			$rows=array(
-				'idsiswa'=>'',
-				'idreg' =>'',
-				'aslsd' =>'',
-				'noijz' =>'',
-				'tglijz' =>'',
-				'lamasd' =>'',
-				'aslsmp' =>'',
-				'nosrt' =>'',
-				'tglsrt' =>'',
-				'alasan' =>'',
-				'judul'=>'Tambah Data Riwayat Pendidikan Peserta Didik',
-				'tmbl'=>'<i class="fas fa-save"></i> Simpan'
-			);
-		}
-		else {
-			$m=viewdata('tbriwayatskul', array('idsiswa'=>$id))[0];
-				$rows=array(
-					'idsiswa'=>$m['idsiswa'],
-					'idreg' =>$m['idjreg'],
-					'aslsd' =>$m['aslsd'],
-					'noijz' =>$m['noijazah'],
-					'tglijz' =>$m['tglijazah'],
-					'lamasd' =>$m['lama'],
-					'aslsmp' =>$m['aslsmp'],
-					'nosrt' =>$m['nosurat'],
-					'tglsrt' =>$m['tglsurat'],
-					'alasan' =>$m['alasan'],
-					'judul'=>'Update Data Riwayat Pendidikan Peserta Didik',
-					'tmbl'=>'<i class="fas fa-save"></i> Update'
-				);
-		}
-	}
-	
+	}	
 	else {
 		if($_POST['j']=='1'){
 			$hubkel='1';

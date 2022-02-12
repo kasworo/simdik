@@ -85,33 +85,31 @@
                     $qtp=vquery($sql);
                 ?>
                 <div class="modal-body">
-                    <div class="col-sm-10 offset-sm-1">
-                        <input type="hidden" name="jenis" id="jenis">
-                        <div class="form-group mb-2">
-                            <label>Dari Tahun Pelajaran</label>
-                            <select class="form-control input-sm" id="awal" name="awal">
-                                <option value="">..Pilih..</option>
-                                <?php foreach ($qtp as $tp): ?>
-                                <option value="<?php echo $tp['awal'];?>"><?php echo $tp['namathpel'];?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label>Sampai Tahun Pelajaran</label>
-                            </select><select class="form-control input-sm" id="akhir" name="akhir">
-                                <option value="">..Pilih..</option>
-                                <?php foreach ($qtp as $tp): ?>
-                                <option value="<?php echo $tp['akhir'];?>"><?php echo $tp['namathpel'];?></option>
-                                <?php endforeach ?>
-                            </select>
-                        </div>
+                    <input type="hidden" name="jenis" id="jenis">
+                    <div class="form-group row mb-2">
+                        <label class="col-5 ml-2">Dari Tahun Pelajaran</label>
+                        <select class="form-control input-sm col-6" id="awal" name="awal">
+                            <option value="">..Pilih..</option>
+                            <?php foreach ($qtp as $tp): ?>
+                            <option value="<?php echo $tp['awal'];?>"><?php echo $tp['namathpel'];?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-5 ml-2">Sampai Tahun Pelajaran</label>
+                        <select class="form-control input-sm col-6" id="akhir" name="akhir">
+                            <option value="">..Pilih..</option>
+                            <?php foreach ($qtp as $tp): ?>
+                            <option value="<?php echo $tp['akhir'];?>"><?php echo $tp['namathpel'];?></option>
+                            <?php endforeach ?>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button class="btn btn-primary btn-md" name="cetak" id="cetak">
+                    <button class="btn btn-primary col-4" name="cetak" id="cetak">
                         <i class="fas fa-print"></i> Cetak
                     </button>
-                    <button type="button" class="btn btn-danger btn-md" data-dismiss="modal">
+                    <button type="button" class="btn btn-danger col-4" data-dismiss="modal">
                         <i class="fas fa-power-off"></i> Tutup
                     </button>
                 </div>
