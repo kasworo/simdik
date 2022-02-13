@@ -11,7 +11,8 @@ if(isset($_POST['upload'])) {
             });
         });
         </script>"; 
-    } else {
+    } 
+    else {
         $data = new Spreadsheet_Excel_Reader($_FILES['filerwy']['tmp_name']);        
 		$baris = $data->rowcount($sheet_index=0);
 		$isidata=$baris-5;        
@@ -31,7 +32,7 @@ if(isset($_POST['upload'])) {
             $idsiswa=$ds['idsiswa'];              
             $key=array('idsiswa'=>$idsiswa); 
                     
-            $cekdata=cekdata('tbsdmi',$key);
+            $cekdata=cekdata('tbasalsd',$key);
             if($cekdata>0){
                 $datane=array(
                     'aslsd'=>$xaslsd,
@@ -39,7 +40,7 @@ if(isset($_POST['upload'])) {
                    'tglijazah'=>$xtglijz,
                     'lama'=>$xlamasd  
                 );
-                $edit=editdata('tbriwayatskul',$datane,'',$key);
+                $edit=editdata('tbasalsd',$datane,'',$key);
                 $update++;
             } 
             else {
@@ -50,13 +51,14 @@ if(isset($_POST['upload'])) {
                     'tglijazah'=>$xtglijz,
                     'lama'=>$xlamasd
                 );
-            $tambah=adddata('tbriwayatskul',$datane);
-			if($tambah>0){$sukses++;}					
-			else {$gagal++;}
+                $tambah=adddata('tbasalsd',$datane);
+			    if($tambah>0){$sukses++;} else {$gagal++;}
+            }
+        }
             
-            if($gagal>0){
-                echo"<script>
-                    $(function() {
+        if($gagal>0){
+           echo"<script>
+                   $(function() {
                         toastr.error('Ada ".$gagal." Data Gagal Ditambahkan','Mohon Maaf!',{
                             timeOut:1000,
                             fadeOut:1000,
@@ -66,7 +68,7 @@ if(isset($_POST['upload'])) {
                         });
                     });
                 </script>";
-            } 
+         } 
             if($sukses>0){ 
                 echo"<script>
                     $(function() {
@@ -94,21 +96,21 @@ if(isset($_POST['upload'])) {
                     });
                 </script>";
             }            
-        }        
+                
+        }
     }
-}
+
 if(isset($_POST['simpan'])){
-    $ceks=cekdata('tbriwayatskul', array('idsiswa'=>$idsiswa));
-    if($cekriwayat==0){
+    $ceks=cekdata('tbasalsd', array('idsiswa'=>$_POST['idsiswa']));
+    if($ceks==0){
         $data=array(
             'idsiswa' => $_POST['idsiswa'],
-            'idjreg' => $_POST['idreg'],
             'aslsd' => $_POST['aslsd'],
             'noijazah' => $conn->escape_string($_POST['noijz']),
             'tglijazah' => $_POST['tglijz'],
             'lama' => $_POST['lamasd']
         );
-        $baru=adddata('tbriwayatskul',$data);
+        $baru=adddata('tbasalsd',$data);
         if($baru>0){
             echo "<script>
             $(function() {
@@ -116,7 +118,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        window.location.href = 'index.php?p=addortu&id=".$idsiswa."&a=1';
+                        $('#mySDMI').hide();
                     }
                 });
             });
@@ -129,7 +131,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        window.location.href = 'index.php?p=addriwayat&id=".$idsiswa."';
+                        $('#mySDMI').hide();
                     }
                 });
             });
@@ -143,7 +145,7 @@ if(isset($_POST['simpan'])){
             'tglijazah' => $_POST['tglijz'],
             'lama' => $_POST['lamasd']
         );
-        $update=editdata('tbriwayatskul', $data, '',array('idsiswa'=>$_POST['idsiswa']));
+        $update=editdata('tbasalsd', $data, '', array('idsiswa'=>$_POST['idsiswa']));
         if($update>0){
             echo "<script>
             $(function() {
@@ -151,7 +153,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        window.location.href = 'index.php?p=addayah&id=".$idsiswa."';
+                        $('#mySDMI').hide();
                     }
                 });
             });
@@ -164,7 +166,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        window.location.href = 'index.php?p=addriwayat&id=".$idsiswa."';
+                        $('#mySDMI').hide();
                     }
                 });
             });
@@ -172,6 +174,7 @@ if(isset($_POST['simpan'])){
         }
     }
 }
+
 ?>
 <div class="modal fade" id="mySkulAsal" aria-modal="true">
     <div class="modal-dialog">
@@ -221,6 +224,7 @@ if(isset($_POST['simpan'])){
             <form method="POST" action="">
                 <div class="modal-body">
                     <div class="form-group row mb-2">
+                        <input type="hidden" class="form-control form-control-sm col-sm-6" name="idsiswa" id="idsiswa">
                         <label class="col-sm-5 ml-2">Asal SD/MI</label>
                         <input class="form-control form-control-sm col-sm-6" name="aslsd" id="aslsd">
                     </div>
@@ -273,14 +277,13 @@ if(isset($_POST['simpan'])){
                     <?php
 							$field=array('idsiswa', 'nmsiswa','nisn','nis','aslsd');
 							$tbl=array(
-								'tbsdmi'=>'idsiswa'		
+								'tbasalsd'=>'idsiswa'		
 							);
 							$where =array(
 								'deleted'=>'0'
 							); 
 							$no=0;
-							$qs=leftjoin($field,'tbsiswa', $tbl, $where);
-                            
+							$qs=leftjoin($field,'tbsiswa', $tbl, $where);                            
 							foreach($qs as $s):
 							$no++;
                             $aslskul=$s['aslsd'];
@@ -313,13 +316,19 @@ $(".btnIsi").click(function(e) {
         type: "POST",
         dataType: 'json',
         data: "id=" + id + "&d=1",
-        success: function(data) {
+        success: function(data) {            
             $(".modal-title").html(data.judul);
             $("#simpan").html(data.tmbl);
             $("#aslsd").val(data.aslsd);
             $("#noijz").val(data.noijz);
             $("#tglijz").val(data.tglijz);
             $("#lamasd").val(data.lamasd);
+            if(data.idsiswa==''){
+                $("#idsiswa").val(id);
+            }
+            else {
+                $("#idsiswa").val(data.idsiswa);
+            }
         }
     })
 });

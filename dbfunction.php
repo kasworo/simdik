@@ -343,7 +343,7 @@
 		else {
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
 		}
-		//var_dump($sql);die;
+		var_dump($sql);die;
 		$result=$conn->query($sql);
 		while($row=$result->fetch_assoc()){
 			$rows[]=$row;
@@ -447,18 +447,19 @@
         $where=[];
 		foreach($field as $wh=>$nil) {
 			$where[] = "$wh = '$nil'";
-		}
-        $tbjoin=[];
-		foreach($join as $joins=>$idjoins) {
-			$tbjoin[] = "$joins USING($idjoins)";
-		}
+		}        
+		
         if($join==''){
 			$sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE ".implode (' AND ',$where);
 		}
         else {
+			$tbjoin=[];
+			foreach($join as $joins=>$idjoins) {
+				$tbjoin[] = "$joins USING($idjoins)";
+			}
 			$sql = "UPDATE $tbl INNER JOIN ".implode(' ',$tbjoin)." SET " . implode(', ', $cols). " WHERE ".implode (' AND ',$where);
 		}
-		//var_dump($sql);die;
+		
 		$conn->query($sql);
 		return $conn->affected_rows;
 	}

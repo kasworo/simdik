@@ -120,19 +120,19 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="index.php?p=rwyskul" class="nav-link">
+                            <a href="index.php?p=asalsd" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Asal SD / MI</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="index.php?p=rwysmp" class="nav-link">
+                            <a href="index.php?p=asalsmp" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Mutasi Dari</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="index.php?p=rwylulus" class="nav-link">
+                            <a href="index.php?p=akhir" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Kelulusan</p>
                             </a>

@@ -3,7 +3,7 @@
 	$ds=viewdata('tbsiswa',array('idsiswa'=>$_POST['id']))[0];
 	$nmsiswa=$ds['nmsiswa'];
     if($_POST['d']=='1'){
-		$data=cekdata('tbsdmi', array('idsiswa'=>$_POST['id']));
+		$data=cekdata('tbasalsd', array('idsiswa'=>$_POST['id']));
 		if($data==0){
 			$rows=array(
 				'idsiswa'=>'',
@@ -16,7 +16,7 @@
 			);
 		}
 		else {
-			$m=viewdata('tbsdmi', array('idsiswa'=>$_POST['id']))[0];
+			$m=viewdata('tbasalsd', array('idsiswa'=>$_POST['id']))[0];
 			$rows=array(
 				'idsiswa'=>$m['idsiswa'],
 				'aslsd' =>$m['aslsd'],

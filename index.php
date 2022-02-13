@@ -263,15 +263,16 @@
 									
 									case 'datasiswa' : {include "siswa_tampil.php";break;}									
 									case 'addsiswa' : {include "siswa_form.php";break;}
-									case 'addriwayat' : {include "siswa_riwayat.php";break;}
 									case 'addayah' : {include "siswa_ayah.php";break;}									
 									case 'addibu' : {include "siswa_ibu.php";break;}
                                     case 'addwali' : {include "siswa_wali.php";break;}
 									case 'eksporsiswa' : {include "siswa_ekspor.php";break;}
 									case 'addrombel' : {include "form_rombel.php";break;}
 									case 'regsiswa' : {include "siswa_registrasi.php";break;}
-                                    case 'rwyskul' : {include "siswa_rwyskul.php";break;}
-                                    case 'rwylulus' : {include "siswa_lulus.php";break;}
+                                    case 'asalsd' : {include "siswa_asalsd.php";break;}
+                                    case 'asalsmp' : {include "siswa_asalsmp.php";break;}
+                                    case 'akhir' : {include "siswa_lulus.php";break;}
+                                    
 									case 'kompetensi' : {include "kompetensi_tampil.php";break;}
 
 									case 'datarapor' : {include "rapor_tampil.php";break;}
