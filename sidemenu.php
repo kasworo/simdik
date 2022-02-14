@@ -126,9 +126,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="index.php?p=asalsmp" class="nav-link">
+                            <a href="index.php?p=mutasi" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
-                                <p>Mutasi Dari</p>
+                                <p>Mutasi</p>
                             </a>
                         </li>
                         <li class="nav-item">

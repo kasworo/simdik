@@ -1,8 +1,7 @@
 <?php
 	include "dbfunction.php";
-	$id=$_POST['id'];
-	
-	if($_POST['d']=='1'){
+	$id=$_POST['id'];	
+	if(isset($_POST['d'])){
 		$data=cekdata('tbsiswa', array('idsiswa'=>$id));
 		if($data==0){
 			$dir='assets/img/';
@@ -130,7 +129,7 @@
 				'tgllahir'=>'',
 				'idagama'=>'',
 				'idpddk'=>'',
-				'hidup'=>'',
+				'wafat'=>'',
 				'idkerja'=>'',
 				'idhsl'=>'',
 				'hubkel'=>$hubkel,
@@ -141,7 +140,7 @@
 				'prov'=>'',
 				'kdpos'=>'',
 				'nohp'=>'',
-				'tmb'=>$tmb,
+				'tmbl'=>$tmb,
 				'psn'=>$pesan
 			);
 		}
@@ -152,13 +151,13 @@
 			$rows= array(
 					'nmortu'=>$m['nmortu'],
 					'nik'=>$m['nik'],
-					'tmplahir'=>$m['tmplahir'],
-					'tgllahir'=>$m['tgllahir'],
+					// 'tmplahir'=>$m['tmplahir'],
+					// 'tgllahir'=>$m['tgllahir'],
 					'idagama'=>$m['idagama'],
 					'idpddk'=>$m['idpddk'],
 					'idkerja'=>$m['idkerja'],
 					'idhsl'=>$m['idhsl'],
-					'hidup'=>$m['hidup'],
+					'wafat'=>$m['wafat'],
 					'hubkel'=>$m['hubkel'],
 					'alamat'=>$m['alamat'],
 					'desa'=>$m['desa'],
@@ -167,7 +166,7 @@
 					'prov'=>$m['prov'],
 					'kdpos'=>$m['kdpos'],
 					'nohp'=>$m['nohp'],
-					'tmb'=>$tmb,
+					'tmbl'=>$tmb,
 					'psn'=>$pesan
 				);
 			}		

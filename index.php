@@ -2,34 +2,46 @@
 	session_start();
 	if(!isset($_SESSION['login'])){header("Location: login.php");exit;}
 	include "dbfunction.php";
-	$user=array(
-		'username'=>$_COOKIE['id']
-	);
+    if(empty($_COOKIE['id'])){  
+        {header("Location: logout.php");exit;}
+    }
+    else {
+        $user=array(
+            'username'=>$_COOKIE['id']
+        );
 
-	$u=viewdata('tbuser',$user)[0];
-	$nmuser=$u['namatmp'];
-	$level=$u['level'];
-	$foto='';
-	if($level=='1'){
-		$navigasi='<ul class="navbar-nav ml-auto">
-			<li class="nav-item">
-				<a class="nav-link" href="logout.php" title="Keluar / Logout">
-					<i class="fas fa-power-off"></i>
-				</a>
-			</li>
-		</ul>';
-	}
-	if($foto=='' || $foto==null){
-		$fotouser='assets/img/avatar.gif';
-	}
-	else{
-		if(file_exists('foto/'.$foto)){
-			$fotouser='foto/'.$foto;
-		}
-		else{
-			$fotouser='assets/img/avatar.gif';
-		}
-	}
+        $u=viewdata('tbuser',$user)[0];
+        $nmuser=$u['namatmp'];
+        $level=$u['level'];
+        $foto='';
+        if($level=='1' || $level=='2'){
+            $navigasi='<ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php" title="Keluar / Logout">
+                        <i class="fas fa-power-off"></i>
+                    </a>
+                </li>
+            </ul>';
+        }
+        else {
+            $navigasi='';
+        }
+        if($foto=='' || $foto==null){
+            $fotouser='assets/img/avatar.gif';
+        }
+        else{
+            if(file_exists('foto/'.$foto)){
+                $fotouser='foto/'.$foto;
+            }
+            else{
+                $fotouser='assets/img/avatar.gif';
+            }
+        }
+    // }
+    // else {
+    //     session_unset();
+    //     session_destroy(); 
+    // }
 	$tahun=array(
 		'aktif'=>'1'
 	);
@@ -68,7 +80,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Cetak Laporan Buku Induk</h5>
+                    <h5 class="modal-title" id="JudulMyReport">Cetak Laporan Buku Induk</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -270,16 +282,18 @@
 									case 'addrombel' : {include "form_rombel.php";break;}
 									case 'regsiswa' : {include "siswa_registrasi.php";break;}
                                     case 'asalsd' : {include "siswa_asalsd.php";break;}
-                                    case 'asalsmp' : {include "siswa_asalsmp.php";break;}
+                                    case 'mutasi' : {include "siswa_mutasi.php";break;}
                                     case 'akhir' : {include "siswa_lulus.php";break;}
                                     
 									case 'kompetensi' : {include "kompetensi_tampil.php";break;}
 
-									case 'datarapor' : {include "rapor_tampil.php";break;}
-                                    case 'detailnilai' : {include "rapor_detail.php";break;}                                  
+									case 'datarapor' : {include "rapor_tampil.php";break;}                                  
 									case 'inputsikap' : {include "rapor_sikap.php";break;}
 									case 'inputkognetif' : {include "rapor_kognetif.php";break;}
-									case 'inputterampil' : {include "rapor_motorik.php";break;}
+									case 'inputterampil' : {include "rapor_motorik.php";break;}                                    
+                                    case 'detailsikap' : {include "rapor_detsikap.php";break;}
+                                    case 'detailkognetif' : {include "rapor_detkognetif.php";break;}
+                                    case 'detailmotorik' : {include "rapor_detmotorik.php";break;}
 									case 'nilaius' :{include "us_tampil.php";break;}
                                     case 'inputus' :{include "us_input.php";break;}
                                     case 'nilaiijz' :{include "rapor_rekap.php";break;}
@@ -325,11 +339,12 @@
         e.preventDefault();
         let id = $(this).data('id');
         if (id == 'binduk') {
-            $(".modal-title").html("Cetak Buku Induk");
+            judul="Cetak Buku Induk";
         }
         if (id == 'klapper') {
-            $(".modal-title").html("Cetak Klapper");
+            judul="Cetak Klapper";
         }
+        $("#JudulMyReport").html(judul);
         $("#jenis").val(id);
     })
     $("#cetak").click(function(e) {
@@ -368,3 +383,4 @@
 </body>
 
 </html>
+<?php } ?>

@@ -200,7 +200,7 @@ if(isset($_POST['simpan'])){
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <a href="siswa_template.php?d=2" class="btn btn-success btn-sm btn-flat" target="_blank"><i
+                    <a href="siswa_rwytmp.php?d=1" class="btn btn-success btn-sm btn-flat" target="_blank"><i
                             class="fas fa-download"></i> Download</a>
                     <button type="submit" name="upload" class="btn btn-primary btn-sm btn-flat">
                         <i class="fas fa-upload"></i>&nbsp;Upload

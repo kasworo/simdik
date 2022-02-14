@@ -1,20 +1,15 @@
 <?php
-    $ds=viewdata('tbsiswa',array('idsiswa'=>$_GET['id']))[0];
-    $namasiswa=ucwords(strtolower($ds['nmsiswa']));
-	if($_GET['d']=='1'){$aspek='Sikap Spiritual';}
-	if($_GET['d']=='2'){$aspek='Sikap Spiritual';}
-	if($_GET['d']=='3'){$aspek='Pengetahuan';}
-	if($_GET['d']=='4'){$aspek='Keterampilan';}  
+    $ds=viewdata('tbsiswa',array('idsiswa'=>$_GET['id']))[0];  
 ?>
 
 <div class="alert alert-warning">
     <p><strong>Petunjuk:</strong></p>
-    <p>Tabel di bawah ini merupakan nilai dan predikat <?php echo $aspek;?> yang diperoleh tiap semester.
+    <p>Tabel di bawah ini merupakan nilai dan predikat Penilaian Pengetahuan yang diperoleh tiap semester.
     </p>
 </div>
 <div class="card card-primary card-outline">
     <div class="card-header">
-        <h5 class="card-title m-0">Detail Nilai <?php echo $aspek;?> Untuk <?php echo $namasiswa;?></h5>
+        <h5 class="card-title m-0">Detail Nilai Pengetahuan Untuk <?php echo $namasiswa;?></h5>
     </div>
     <div class="card-body">
         <div class="table-responsive">

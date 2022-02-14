@@ -15,7 +15,7 @@
 				// 'tgllahir'  =>$_POST['tgllahir'],
 				'idagama'   =>$_POST['agama'],
 				'idpddk'	=>$_POST['pddkortu'],
-				'hidup'	 =>$_POST['hidup'],
+				'wafat'	 =>$_POST['hidup'],
 				'idkerja'   =>$_POST['krjortu'],
 				'idhsl'	 =>$_POST['hslortu'],
 				'hubkel'	=>$_POST['hubkel'],
@@ -63,7 +63,7 @@
 				// 'tgllahir'=>$_POST['tgllahir'],
 				'idagama'=>$_POST['agama'],
 				'idpddk'=>$_POST['pddkortu'],
-				'hidup'=>$_POST['hidup'],
+				'wafat'=>$_POST['hidup'],
 				'idkerja'=>$_POST['krjortu'],
 				'idhsl'=>$_POST['hslortu'],
 				'alamat'=>$_POST['almt'],
@@ -74,7 +74,8 @@
 				'kdpos'=>$_POST['kdpos'],
 				'nohp'=>$_POST['nohp']
 			);
-			$rows=editdata('tbortu',$ortu, $field);
+            
+			$rows=editdata('tbortu',$ortu, '',$field);
 			if($rows>0){
 				echo "<script>
 						$(function() {
@@ -115,11 +116,11 @@ $(document).ready(function() {
         success: function(data) {
             $("#nmortu").val(data.nmortu);
             $("#nik").val(data.nik);
-            $("#tmplahir").val(data.tmplahir);
-            $("#tgllahir").val(data.tgllahir);
+            // $("#tmplahir").val(data.tmplahir);
+            // $("#tgllahir").val(data.tgllahir);
             $("#agama").val(data.idagama);
             $("#pddkortu").val(data.idpddk);
-            $("#hidup").val(data.hidup);
+            $("#hidup").val(data.wafat);
             $("#krjortu").val(data.idkerja);
             $("#hslortu").val(data.idhsl);
             $("#hubkel").val(data.hubkel);
@@ -131,7 +132,7 @@ $(document).ready(function() {
             $("#kdpos").val(data.kdpos);
             $("#nohp").val(data.nohp);
             $("#judul").html(data.psn);
-            $("#simpan").html(data.tmb);
+            $("#simpan").html(data.tmbl);
         }
     })
 })
@@ -289,14 +290,13 @@ $(document).ready(function() {
             </div>
             <div class="card-footer">
                 <div class="row">
-                    <a href="index.php?p=addriwayat&id=<?php echo $idsiswa;?>"
+                    <a href="index.php?p=addsiswa&id=<?php echo $idsiswa;?>"
                         class="btn btn-md btn-danger mb-2 ml-2 col-sm-2">
                         <i class="fas fa-arrow-circle-left"></i>
                         <span>&nbsp;Kembali</span>
                     </a>
                     <button type="submit" class="btn btn-primary btn-md mb-2 ml-2 col-sm-2" id="simpan" name="simpan">
-                        <i class="fas fa-fw fa-save"></i>
-                        <span>&nbsp;<?php echo $tmbl;?></span>
+                        <i class="fas fa-fw fa-save"></i> Simpan
                     </button>
                     <a href="index.php?p=addibu&id=<?php echo $idsiswa;?>"
                         class="btn btn-success btn-md mb-2 ml-2 col-sm-2">

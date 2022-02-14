@@ -237,6 +237,7 @@
 	function cquery($sql){
 		global $conn;	
 		$result=$conn->query($sql);
+	
 		return $result->num_rows;
 	}
 
@@ -313,7 +314,7 @@
 				$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys)." GROUP BY $group";
 			}
 		}
-		//var_dump($sql);die;
+		var_dump($sql);die;
 		$result=$conn->query($sql);
 		return $result->num_rows;
 	}
@@ -433,7 +434,7 @@
 		$key = array_keys($data);
 		$val = array_values($data);
 		$sql = "INSERT INTO $tbl (".implode(', ', $key). ") VALUES ('". implode("', '", $val)."')";
-		//var_dump($sql);die;
+		var_dump($sql);die;
 		$conn->query($sql);
 		return $conn->affected_rows;
 	}
@@ -456,10 +457,10 @@
 			$tbjoin=[];
 			foreach($join as $joins=>$idjoins) {
 				$tbjoin[] = "$joins USING($idjoins)";
-			}
+			}		
 			$sql = "UPDATE $tbl INNER JOIN ".implode(' ',$tbjoin)." SET " . implode(', ', $cols). " WHERE ".implode (' AND ',$where);
 		}
-		
+		//var_dump($sql);die;
 		$conn->query($sql);
 		return $conn->affected_rows;
 	}

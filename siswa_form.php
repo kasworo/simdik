@@ -183,8 +183,8 @@ $(document).ready(function() {
             $("#lain").val(e.hobi4);
             $("#fotolama").val(e.fotolama);
             $("#fotosiswa").attr("src", e.dir + e.foto);
-            $("#judul").html(data.judul);
-            $("#simpan").html(data.tmbl);
+            $("#judul").html(e.judul);
+            $("#simpan").html(e.tmbl);
         }
     })
 });
@@ -485,7 +485,7 @@ $(document).ready(function() {
                 <?php
                     if(isset($_GET['id'])):                    
                 ?>
-                <a href="index.php?p=addriwayat&id=<?php echo $idsiswa;?>" class="btn btn-success col-sm-2 ml-2 mb-2">
+                <a href="index.php?p=addayah&id=<?php echo $idsiswa;?>" class="btn btn-success col-sm-2 ml-2 mb-2">
                     <span>Berikutnya&nbsp;</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>

@@ -32,33 +32,35 @@ if(isset($_POST['upload'])) {
             $idsiswa=$ds['idsiswa'];              
             $key=array('idsiswa'=>$idsiswa); 
                     
-            $cekdata=cekdata('tbasalsd',$key);
+            $cekdata=cekdata('tbmutasi',$key);
             if($cekdata>0){
                 $datane=array(
-                    'aslsd'=>$xaslsd,
-                    'noijazah'=>$xnoijz,
-                   'tglijazah'=>$xtglijz,
-                    'lama'=>$xlamasd  
+                    'aslkesmp'=>$xaslsmp,
+                    'jnsmutasi'=>$xidreg,
+                    'nosurat'=>$xnosurat,
+                    'tglsurat'=>$xtglsurat,
+                    'alasan'=>$xalasan  
                 );
-                $edit=editdata('tbasalsd',$datane,'',$key);
+                $edit=editdata('tbmutasi',$datane,'',$key);
                 $update++;
             } 
             else {
-               $datane=array(
+                $datane=array(
                     'idsiswa'=>$idsiswa,
-                    'aslsd'=>$xaslsd,
-                    'noijazah'=>$xnoijz,
-                    'tglijazah'=>$xtglijz,
-                    'lama'=>$xlamasd
+                    'aslkesmp'=>$xaslsmp,
+                    'jnsmutasi'=>$xidreg,
+                    'nosurat'=>$xnosurat,
+                    'tglsurat'=>$xtglsurat,
+                    'alasan'=>$xalasan
                 );
-                $tambah=adddata('tbasalsd',$datane);
-			    if($tambah>0){$sukses++;} else {$gagal++;}
+                $tambah=adddata('tbmutasi',$datane);
+                if($tambah>0){$sukses++;} else {$gagal++;}
             }
         }
             
         if($gagal>0){
-           echo"<script>
-                   $(function() {
+            echo"<script>
+                $(function() {
                         toastr.error('Ada ".$gagal." Data Gagal Ditambahkan','Mohon Maaf!',{
                             timeOut:1000,
                             fadeOut:1000,
@@ -68,7 +70,7 @@ if(isset($_POST['upload'])) {
                         });
                     });
                 </script>";
-         } 
+        } 
             if($sukses>0){ 
                 echo"<script>
                     $(function() {
@@ -101,16 +103,17 @@ if(isset($_POST['upload'])) {
     }
 
 if(isset($_POST['simpan'])){
-    $ceks=cekdata('tbasalsd', array('idsiswa'=>$_POST['idsiswa']));
+    $ceks=cekdata('tbmutasi', array('idsiswa'=>$_POST['idsiswa']));
     if($ceks==0){
         $data=array(
-            'idsiswa' => $_POST['idsiswa'],
-            'aslsd' => $_POST['aslsd'],
-            'noijazah' => $conn->escape_string($_POST['noijz']),
-            'tglijazah' => $_POST['tglijz'],
-            'lama' => $_POST['lamasd']
+            'idsiswa'   => $_POST['idsiswa'],
+            'jnsmutasi'  => $_POST['jnsmutasi'],
+            'aslkesmp'  => $_POST['aslsmp'],
+            'nosurat'   => $_POST['nosurat'],
+            'tglsurat'  => $_POST['tglsurat'],
+            'alasan'    =>$_POST['alasan']
         );
-        $baru=adddata('tbasalsd',$data);
+        $baru=adddata('tbmutasi',$data);
         if($baru>0){
             echo "<script>
             $(function() {
@@ -118,7 +121,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        $('#mySDMI').hide();
+                        $('#myMutasi').hide();
                     }
                 });
             });
@@ -131,7 +134,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        $('#mySDMI').hide();
+                        $('#myMutasi').hide();
                     }
                 });
             });
@@ -140,12 +143,12 @@ if(isset($_POST['simpan'])){
     }
     else {
         $data=array(
-            'aslsd' => $_POST['aslsd'],
-            'noijazah' => $conn->escape_string($_POST['noijz']),
-            'tglijazah' => $_POST['tglijz'],
-            'lama' => $_POST['lamasd']
+            'aslkesmp'    => $_POST['aslsmp'],
+            'nosurat'   => $_POST['nosurat'],
+            'tglsurat'  => $_POST['tglsurat'],
+            'alasan'    =>$_POST['alasan']
         );
-        $update=editdata('tbasalsd', $data, '', array('idsiswa'=>$_POST['idsiswa']));
+        $update=editdata('tbmutasi', $data, '', array('idsiswa'=>$_POST['idsiswa']));
         if($update>0){
             echo "<script>
             $(function() {
@@ -153,7 +156,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        $('#mySDMI').hide();
+                        $('#myMutasi').hide();
                     }
                 });
             });
@@ -166,7 +169,7 @@ if(isset($_POST['simpan'])){
                     timeOut: 1000,
                     fadeOut: 1000,
                     onHidden: function() {
-                        $('#mySDMI').hide();
+                        $('#myMutasi').hide();
                     }
                 });
             });
@@ -200,7 +203,7 @@ if(isset($_POST['simpan'])){
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <a href="siswa_template.php?d=2" class="btn btn-success btn-sm btn-flat" target="_blank"><i
+                    <a href="siswa_rwytmp.php?d=2" class="btn btn-success btn-sm btn-flat" target="_blank"><i
                             class="fas fa-download"></i> Download</a>
                     <button type="submit" name="upload" class="btn btn-primary btn-sm btn-flat">
                         <i class="fas fa-upload"></i>&nbsp;Upload
@@ -227,7 +230,9 @@ if(isset($_POST['simpan'])){
                         <input type="hidden" class="form-control form-control-sm col-sm-6" name="idsiswa" id="idsiswa">
                         <label class="col-sm-5 ml-2">Jenis Mutasi</label>
                         <select class="form-control form-control-sm col-sm-6" name="jnsmutasi" id="jnsmutasi">
-                            
+                            <option value="">..Pilih..</option>
+                            <option value="1">Masuk</option>
+                            <option value="2">Keluar</option>
                         </select>
                     </div>
                     <div class="form-group row mb-2">
@@ -325,14 +330,15 @@ $(".btnIsi").click(function(e) {
         url: "siswa_riwayat.php",
         type: "POST",
         dataType: 'json',
-        data: "id=" + id + "&d=1",
+        data: "id=" + id + "&d=2",
         success: function(data) {            
             $(".modal-title").html(data.judul);
             $("#simpan").html(data.tmbl);
-            $("#aslsd").val(data.aslsd);
-            $("#noijz").val(data.noijz);
-            $("#tglijz").val(data.tglijz);
-            $("#lamasd").val(data.lamasd);
+            $("#jnsmutasi").val(data.mutasi);
+            $("#aslsmp").val(data.aslsmp);
+            $("#nosurat").val(data.nosrt);
+            $("#tglsurat").val(data.tglsrt);
+            $("#alasan").val(data.alasan);
             if(data.idsiswa==''){
                 $("#idsiswa").val(id);
             }

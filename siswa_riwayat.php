@@ -29,29 +29,29 @@
 		}
 	}
     else if($_POST['d']=='2'){
-		$data=cekdata('tbmutasi', array('idsiswa'=>$id));
+		$data=cekdata('tbmutasi', array('idsiswa'=>$_POST['id']));
 		if($data==0){
 			$rows=array(
 				'idsiswa'=>'',
-				'jnsmutasi' =>'',
+				'mutasi' =>'',
 				'aslsmp' =>'',
 				'nosrt' =>'',
 				'tglsrt' =>'',
 				'alasan' =>'',
-				'judul'=>'Tambah Data Riwayat Pendidikan Peserta Didik',
+				'judul'=>'Tambah Riwayat Mutasi a.n '.$nmsiswa,
 				'tmbl'=>'<i class="fas fa-save"></i> Simpan'
 			);
 		}
 		else {
-			$m=viewdata('tbrmutasi', array('idsiswa'=>$id))[0];
+			$m=viewdata('tbmutasi', array('idsiswa'=>$_POST['id']))[0];
 				$rows=array(
 					'idsiswa'=>$m['idsiswa'],
-					'jnsmutasi' =>$m['jnsmutasi'],
-					'aslsmp' =>$m['aslsmp'],
+					'mutasi' =>$m['jnsmutasi'],
+					'aslsmp' =>$m['aslkesmp'],
 					'nosrt' =>$m['nosurat'],
 					'tglsrt' =>$m['tglsurat'],
 					'alasan' =>$m['alasan'],
-					'judul'=>'Update Data Riwayat Pendidikan Peserta Didik',
+					'judul'=>'Update Riwayat Mutasi a.n '.$nmsiswa,
 					'tmbl'=>'<i class="fas fa-save"></i> Update'
 				);
 		}

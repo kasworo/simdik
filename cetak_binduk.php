@@ -487,7 +487,7 @@
 				$pddkayah=getskulortu($da['idpddk']);
 				$krjayah=getkerjaortu($da['idkerja']);
 				$gajiayah=getgajiortu($da['idhsl']);
-				$hdpayah=getkethdp($da['hidup']);
+				$hdpayah=getkethdp($da['wafat']);
 				$alamat1=$da['alamat'].', Desa '.$da['desa'];
 				$alamat2='Kecamatan '.$da['kec'].', Kabupaten '.$d['kab'];	
 				$alamat3='Provinsi '.$da['prov'].', Kode Pos '.$da['kdpos'];
@@ -514,7 +514,7 @@
 				$pddkibu=getskulortu($di['idpddk']);
 				$krjibu=getkerjaortu($di['idkerja']);
 				$gajiibu=getgajiortu($di['idhsl']);
-				$hdpibu=getkethdp($di['hidup']);
+				$hdpibu=getkethdp($di['wafat']);
 				$alamat1=$di['alamat'].', Desa '.$di['desa'];
 				$alamat2='Kecamatan '.$di['kec'].', Kabupaten '.$d['kab'];	
 				$alamat3='Provinsi '.$di['prov'].', Kode Pos '.$di['kdpos'];
@@ -1453,7 +1453,8 @@
 	$qthn=vquery($qthpel);
 	foreach($qthn as $thn){
 		$pdf->PrintCover($thn['idthpel']);    
-		$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.idthpel='$thn[idthpel]' AND (rg.idjreg='1' OR rg.idjreg='2') ORDER BY si.nis";
+		$sql="SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.idthpel BETWEEN '$awal' AND '$akhir' AND (rg.idjreg='1' OR rg.idjreg='2') ORDER BY si.nis";
+		//var_dump($sql);die;
 		$qsiswa=vquery($sql);
 		foreach($qsiswa as $ds){
 			$pdf->PrintBiodata($ds['idsiswa']);

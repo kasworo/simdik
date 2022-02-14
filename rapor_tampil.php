@@ -87,14 +87,28 @@
                     $qs=fulljoin($field,'tbsiswa s',$join,$where);
 					$no=0;
 					foreach($qs as $s):
-			       	    $no++;
+                        $no++;
                         if($_GET['d']=='1' || $_GET['d']=='2'){
-                            $qnilai="SELECT AVG(nilaisikap) as rata FROM tbnilaisikap WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]' GROUP BY idmapel";
+                            $qcek="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]'";
+                            if(cquery($qcek)>0){
+                                $qnilai="SELECT AVG(nilaisikap) as rata FROM tbnilaisikap WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]' GROUP BY aspek";
+                                $nil=vquery($qnilai)[0];
+                                $nilai=number_format($nil['rata'],2,',','.');
+                            }
+                            else {
+                                $nilai='-';
+                            }
                         }
                         if($_GET['d']=='3' || $_GET['d']=='3'){
-                            $qnilai="SELECT AVG(nilairapor) as rata FROM tbnilairapor WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]' GROUP BY idmapel";
-                            $nil=vquery($qnilai)[0];
-                            $nilai=number_format($nil['rata'],2,',','.');
+                            $qcek="SELECT nilairapor FROM tbnilairapor WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]'";
+                            if(cquery($qcek)>0){
+                                $qnilai="SELECT AVG(nilairapor) as rata FROM tbnilairapor WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]' GROUP BY idmapel";
+                                $nil=vquery($qnilai)[0];
+                                $nilai=number_format($nil['rata'],2,',','.');
+                            }
+                            else {
+                                $nilai='-';
+                            }
                         }
 
 				?>
@@ -129,19 +143,26 @@ function validAngka(a) {
 }
 $(".btnInput").click(function() {
     let id = $(this).data('id');
-    let d = "<?php echo $_GET['d'];?>";
-    if (as == '1' || as == '2') {
+    let asp = "<?php echo $_GET['d'];?>";
+    if (asp == '1' || asp == '2') {
         window.location.href = "index.php?p=inputsikap&id=" + id
-    } else if (as == '3') {
+    } else if (asp == '3') {
         window.location.href = "index.php?p=inputkognetif&id=" + id
-    } else if (as == '4') {
+    } else if (asp == '4') {
         window.location.href = "index.php?p=inputterampil&id=" + id
     }
 })
 $(".btnDetail").click(function() {
     let id = $(this).data('id');
-    let d = "<?php echo $_GET['d'];?>";
-    window.location.href = "index.php?p=detailnilai&id=" + id + "&d=" + d
+    let asp = "<?php echo $_GET['d'];?>";
+    if (asp == '1' || asp == '2') {
+        window.location.href = "index.php?p=detailsikap&id=" + id
+    } else if (asp == '3') {
+        window.location.href = "index.php?p=detailkognetif&id=" + id
+    } else if (asp == '4') {
+        window.location.href = "index.php?p=detailterampil&id=" + id
+    }
+    //window.location.href = "index.php?p=detailnilai&id=" + id + "&d=" + d
 
 })
 $(document).ready(function() {
