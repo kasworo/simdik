@@ -1,64 +1,6 @@
-<?php
-	
+<?php	
 	if(isset($_POST['simpan'])){
-		if($_POST['idkur']==''){
-			if(addkurikulum($_POST)>0)
-			{
-				echo "<script>
-						$(function() {
-							toastr.success('Tambah Data Kurikulum Berhasil!','Terima Kasih...',{
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=datakur';
-								}
-							});
-						});
-					</script>";
-			}
-			else {
-				echo "<script>
-						$(function() {
-							toastr.error('Tambah Data Kurikulum Gagal!','Mohon Maaf...',{
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=datakur';
-								}
-							});
-						});
-					</script>";
-			}
-		}
-		else {
-			if(editkurikulum($_POST)>0)
-			{
-				echo "<script>
-						$(function() {
-							toastr.success('Update Data Kurikulum Berhasil!','Terima Kasih...',{
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=datakur';
-								}
-							});
-						});
-					</script>";
-			}
-			else {
-				echo "<script>
-						$(function() {
-							toastr.error('Update Data Kurikulum Gagal!','Mohon Maaf...',{
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=datakur';
-								}
-							});
-						});
-					</script>";
-			}
-		}		
+				
 	}
 ?>
 <div class="modal fade" id="myAddKurikulum" aria-modal="true">

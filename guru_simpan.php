@@ -1,5 +1,5 @@
 <?php
-	include "config/konfigurasi.php";
+	include "dbfunction.php";
 	$tgl=date('Y-m-d');
 	if($_POST['aksi']=='simpan')
 	{

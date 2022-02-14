@@ -227,7 +227,7 @@
 			$field=array('idsiswa', 'nmsiswa','nisn','nis', 'jnsregistrasi', 'idjreg','rw.*');
 			$tbl=array(
 				'tbriwayatskul rw'=>'idsiswa',
-                'ref_jnsregistrasi'=>'idjreg'		
+				'ref_jnsregistrasi'=>'idjreg'		
 			);
 			$where =array(
 				'deleted'=>'0'

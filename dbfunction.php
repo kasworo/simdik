@@ -121,8 +121,8 @@
 	}
 
 	function KonversiHuruf($hrf)
-    {
-        if(is_numeric($hrf)){
+	{
+		if(is_numeric($hrf)){
 			$angka=$hrf;
 		}
 		else {
@@ -143,11 +143,11 @@
 			}
 		}			
 		return $angka;
-    }
+	}
 
 	function KonversiRomawi($angka)
-    {
-        switch($angka){
+	{
+		switch($angka){
 			case '1' : {$romawi='i';break;}
 			case '2' : {$romawi='ii';break;}
 			case '3' : {$romawi='iii';break;}
@@ -159,7 +159,7 @@
 			case '9' : {$romawi='ix';break;}
 		}		
 		return strtoupper($romawi);
-    }
+	}
 
 	function getskulortu($id){
 		if(isset($id)) {
@@ -208,20 +208,20 @@
 		return $data['jnsregistrasi'];
 	}
 	function getskul(){
-        $data=viewdata('tbskul')[0];
-        return $data['idskul'];
-    }
+		$data=viewdata('tbskul')[0];
+		return $data['idskul'];
+	}
 	function getidsiswa($nis,$nisn){
 		$sql="SELECT idsiswa FROM tbsiswa WHERE nis='$nis' OR nisn='$nisn'";
 		$data=vquery($sql)[0];
 		return $data['idsiswa'];
 	}
-    // function getthpel(){
-    //     global $conn;
-    //     $sql=mysqli_query($conn, "SELECT*FROM tb_thpel WHERE aktif='Y'");
-    //     $row=mysqli_fetch_array($sql);
-    //     return $row['kdthpel'];
-    // }
+	// function getthpel(){
+	//	 global $conn;
+	//	 $sql=mysqli_query($conn, "SELECT*FROM tb_thpel WHERE aktif='Y'");
+	//	 $row=mysqli_fetch_array($sql);
+	//	 return $row['kdthpel'];
+	// }
 
 	
 	function vquery($sql){
@@ -244,15 +244,14 @@
 	function fulljoin($field,$tbl, $join, $where='', $group=''){
 		global $conn;
 		$rows=[];
+		$keys=[];
 		foreach($field as $kol) {
 			$cols[]= $kol;
 		}
 		foreach($join as $joins=>$idjoins) {
 			$tbjoin[] = "$joins USING($idjoins)";
 		}
-		foreach($where as $w=>$nil) {
-			$keys[]= "$w = '$nil'";
-		} 
+	
 		if($where=='' && $group==''){
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin);
 		}	 
@@ -260,9 +259,15 @@
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin)." GROUP BY $group";
 		}
 		else if($group==''){
+			foreach($where as $w=>$nil) {
+				$keys[]= "$w = '$nil'";
+			}
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys);
 		}
 		else {
+			foreach($where as $w=>$nil) {
+				$keys[]= "$w = '$nil'";
+			}
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
 		}
 		//var_dump($sql);
@@ -275,7 +280,7 @@
 
 	function cekfulljoin($field, $tbl, $join, $where='', $group=''){
 		global $conn;
-		$rows=[];
+		$cols=[];
 		foreach($field as $kol) {
 			$cols[]= $kol;
 		}
@@ -314,7 +319,7 @@
 				$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys)." GROUP BY $group";
 			}
 		}
-		var_dump($sql);die;
+		//var_dump($sql);die;
 		$result=$conn->query($sql);
 		return $result->num_rows;
 	}
@@ -330,8 +335,8 @@
 		}
 		foreach($where as $w=>$nil) {
 			$keys[]= "$w = '$nil'";
-		} 
-	   
+		}
+
 		if($where=='' && $group==''){
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin);
 		}	 
@@ -344,7 +349,7 @@
 		else {
 			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
 		}
-		var_dump($sql);die;
+		//var_dump($sql);die;
 		$result=$conn->query($sql);
 		while($row=$result->fetch_assoc()){
 			$rows[]=$row;
@@ -392,7 +397,7 @@
 		}		
 		return $rows;
 	}
-   
+	
 	function cekdata($tbl, $key='', $grup='', $ord=''){
 		global $conn;
 		if($key==''){
@@ -434,7 +439,7 @@
 		$key = array_keys($data);
 		$val = array_values($data);
 		$sql = "INSERT INTO $tbl (".implode(', ', $key). ") VALUES ('". implode("', '", $val)."')";
-		var_dump($sql);die;
+		//var_dump($sql);die;
 		$conn->query($sql);
 		return $conn->affected_rows;
 	}
@@ -445,15 +450,15 @@
 		foreach($data as $key=>$val) {
 			$cols[] = "$key = '$val'";
 		}
-        $where=[];
+		$where=[];
 		foreach($field as $wh=>$nil) {
 			$where[] = "$wh = '$nil'";
-		}        
+		}
 		
-        if($join==''){
+		if($join==''){
 			$sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE ".implode (' AND ',$where);
 		}
-        else {
+		else {
 			$tbjoin=[];
 			foreach($join as $joins=>$idjoins) {
 				$tbjoin[] = "$joins USING($idjoins)";

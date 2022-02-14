@@ -1,16 +1,6 @@
 <?php
 	require_once "assets/library/PHPExcel.php";
-	include "config/konfigurasi.php";
-	include "config/function_skul.php";
-	function viewguru($data){
-		global $conn;
-		$sql=$conn->query($data);
-		$rows=[];
-		while($row=$sql->fetch_assoc()){
-			$rows[]=$row;
-		}
-		return $rows;
-	}
+	include "dbfunction.php";
 	$objPHPExcel = new PHPExcel();
 	$objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
 		->setLastModifiedBy("Kasworo Wardani")
@@ -20,7 +10,7 @@
 	$semua=0;
 	$no=0;
 	$baris=6;
-    $nama="tb_gtk";
+	$nama="tb_gtk";
 	$objPHPExcel->setActiveSheetIndex()
 		->mergeCells('A1:Q1')
 		->setCellValue('A1', 'TEMPLATE DATA GURU DAN TU')
@@ -60,8 +50,8 @@
 		->setCellValue('P5', '(16)')
 		->setCellValue('Q3', 'Jabatan')
 		->setCellValue('Q5', '(17)');
-	    $sql="SELECT*FROM tbgtk WHERE idskul='$idskul'";
-		foreach(viewguru($sql) as $s){
+		$gtk=viewdata('tbgtk',array('idskul'=>$idskul));
+		foreach($gtk as $s){
 			$no++;
 			$objPHPExcel->setActiveSheetIndex()
 				->setCellValue("A$baris", $no)

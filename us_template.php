@@ -9,12 +9,12 @@ $objPHPExcel = new PHPExcel();
 //$var_soal = "$_REQUEST[ujian]";
 // Set properties
 $objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
-	  ->setLastModifiedBy("Kasworo Wardani")
-	  ->setTitle("Office 2007 XLSX Test Document")
-	  ->setSubject("Office 2007 XLSX Test Document")
-	  ->setDescription("Soal Export")
-	  ->setKeywords("office 2007 openxml php")
-	  ->setCategory("Daftar nilai");
+	->setLastModifiedBy("Kasworo Wardani")
+	->setTitle("Office 2007 XLSX Test Document")
+	->setSubject("Office 2007 XLSX Test Document")
+	->setDescription("Soal Export")
+	->setKeywords("office 2007 openxml php")
+	->setCategory("Daftar nilai");
  
 // Add some data
 
@@ -54,7 +54,7 @@ while($pd=mysqli_fetch_array($qpd))
 	$no++;
 	$baris++;
 	$objPHPExcel->setActiveSheetIndex(0)
-	  ->setCellValue("A$baris", $no)->setCellValue("B$baris",$pd['idsiswa'])->setCellValue("C$baris", $pd['nisn'])->setCellValue("D$baris", $pd['nama'])->setCellValue("E$baris", '')->setCellValue("F$baris", '')->setCellValue("G$baris", '')->setCellValue("H$baris", '')->setCellValue("I$baris", '')->setCellValue("J$baris", '')->setCellValue("K$baris", '')->setCellValue("L$baris", '')->setCellValue("M$baris", '');
+	->setCellValue("A$baris", $no)->setCellValue("B$baris",$pd['idsiswa'])->setCellValue("C$baris", $pd['nisn'])->setCellValue("D$baris", $pd['nama'])->setCellValue("E$baris", '')->setCellValue("F$baris", '')->setCellValue("G$baris", '')->setCellValue("H$baris", '')->setCellValue("I$baris", '')->setCellValue("J$baris", '')->setCellValue("K$baris", '')->setCellValue("L$baris", '')->setCellValue("M$baris", '');
 }
 $semua=$baris;
 $objPHPExcel->getActiveSheet()->mergeCells("A1:".$objPHPExcel

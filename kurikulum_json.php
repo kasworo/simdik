@@ -1,8 +1,6 @@
 <?php
-    include "config/function_kbm.php";
-    $id=$_POST['id'];
-    $qkur="SELECT*FROM tbkurikulum WHERE idkur='$id'";
-    $kur=viewkurikulum($qkur);
+    include "dbfunction.php";;
+    $kur=viewdata('tbkurikulum',array('idkur'=>$_POST['id']));
     foreach($kur as $k){
         $rows=array(
             'idkur'=>$k['idkur'],
