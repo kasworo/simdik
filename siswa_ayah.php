@@ -29,13 +29,14 @@
 			);
 			$rows=adddata('tbortu',$ortu);
 			if($rows>0){
+
 				echo "<script>
 						$(function() {
 							toastr.success('Tambah Data Ayah Kandung Berhasil!','Terima Kasih...',{
 								timeOut:1000,
 								fadeOut:1000,
 								onHidden:function(){
-									window.location.href='index.php?p=datasiswa';
+                                    window.location.href='index.php?p=addayah&id=".$idsiswa."';
 								}
 							});
 						});
@@ -137,8 +138,7 @@ $(document).ready(function() {
     })
 })
 </script>
-<div class="col-sm-12">
-    <div class="card card-primary card-outline">
+<div class="card card-primary card-outline">
         <div class="card-header">
             <h5 class="card-title m-0" id="judul">Data Ayah Kandung</h5>
         </div>
@@ -307,7 +307,6 @@ $(document).ready(function() {
             </div>
         </form>
     </div>
-</div>
 <script type="text/javascript">
 $(document).ready(function() {
     $('#tgllahir').datetimepicker({

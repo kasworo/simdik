@@ -16,7 +16,8 @@
 			'tbkelas'=>'idkelas',
 			'tbthpel'=>'idthpel' 
 		);
-		$cekregis=cekfulljoin('*', 'tbregistrasi', $join, $keyreg);
+		$sqlr="SELECT idsiswa FROM tbregistrasi INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='idsiswa'='$_POST[idsiswa]' AND 'idthpel'='$_POST[kdthpel]'";
+		$cekregis=cquery($sqlr);
 		if($cekregis===0){
 			$data=array(
 				'idsiswa'=>$_POST['idsiswa'],
@@ -140,7 +141,7 @@
 						'idkelas'=>$xidkelas,
 						'tglreg'=>$xtglreg
 					);					
-					$edit=editdata('tbriwayatskul',$datane,'',$key);
+					$edit=editdata('tbregistrasi',$datane,'',$key);
 					$update++;
 				} else {
 					$datane=array(
@@ -277,9 +278,8 @@
 								onchange="pilkelas(this.value)">
 								<option value="">..Pilih..</option>
 								<?php
-									$fkls=array('idkelas', 'nmkelas');
-									$tbl=array('tbskul'=>'idjenjang');
-									$qkls=fulljoin($fkls,'tbkelas',$tbl);
+									$sqkls="SELECT idkelas, nmkelas FROM tbkelas INNER JOIN tbskul USING(idjenjang)";
+									$qkls=vquery($sqkls);
 									foreach ($qkls as $kl):
 								?>
 								<option value="<?php echo $kl['idkelas'];?>"><?php echo $kl['nmkelas'];?></option>
@@ -288,14 +288,15 @@
 						</div>
 						<div class="form-group row mb-2">
 							<label class="col-sm-5">Terdaftar Sebagai</label>
-							<select class="form-control input-sm col-sm-6" id="idreg" name="idreg" disabled="disabled">
+							<select class="form-control input-sm col-sm-6" id="idreg" name="idreg">
 								<option value="">..Pilih..</option>
 								<?php
-									$qreg=$conn->query("SELECT*FROM ref_jnsregistrasi LIMIT 0,5");
-									while($rg=$qreg->fetch_array()):
+									$sqreg="SELECT*FROM ref_jnsregistrasi LIMIT 0,5";
+									$qreg=vquery($sqreg);
+									foreach ($qreg as $rg):
 								?>
 								<option value="<?php echo $rg['idjreg'];?>"><?php echo $rg['jnsregistrasi'];?></option>
-								<?php endwhile?>
+								<?php endforeach?>
 							</select>
 						</div>
 					</div>
@@ -312,8 +313,8 @@
 		</div>
 	</div>
 </div>
-<div class="col-sm-12">
-	<div class="card card-secondary card-outline">
+
+<div class="card card-secondary card-outline">
 		<div class="card-header">
 			<h4 class="card-title">Registrasi Peserta Didik</h4>
 			<div class="card-tools">
@@ -352,29 +353,25 @@
 					</thead>
 					<tbody>
 						<?php
-							$field=array('idsiswa', 'idthpel','nmsiswa','nisn','nis', 'nmkelas', 'idjreg');
-							$tbl=array(
-								'tbregistrasi'=>'idsiswa',
-								'tbkelas'=>'idkelas',
-								'tbthpel tp'=>'idthpel'
-							);
-							$where =array(
-								'tp.aktif'=>'1',
-								'deleted'=>'0'
-							); 
-							
+								
+							$sql="SELECT idsiswa, nis, nisn, nmsiswa, nmkelas, r.idthpel FROM tbsiswa LEFT JOIN tbregistrasi r USING(idsiswa) LEFT JOIN tbkelas USING(idkelas) LEFT JOIN tbthpel USING(idthpel) WHERE deleted='0' AND aktif='1' OR idjreg IS NULL GROUP BY idsiswa ORDER BY nis";
+							var_dump($sql);		
 							$no=0;
-							$qs=leftjoin($field,'tbsiswa', $tbl, $where);
+							$qs=vquery($sql);
 							foreach($qs as $s):
 							$no++;
+							
 						?>
 						<tr>
 							<td style="text-align:center"><?php echo $no.'.';?></td>
 							<td style="text-align: center" title="<?php echo $s['idsiswa'];?>">
 								<?php echo $s['nis'].' / '.$s['nisn'];?></td>
-							<td><?php echo ucwords(strtolower($s['nmsiswa']));?>
+							<td>
+								<?php echo ucwords(strtolower($s['nmsiswa']));?>
 							</td>
-							<td style="text-align: center"><?php echo $s['nmkelas'];?></td>
+							<td style="text-align: center">
+								<?php echo $s['nmkelas'];?>
+							</td>
 							<td style="text-align:center">
 								<button data-target="#myRegPD" data-toggle="modal" data-id="<?php echo $s['idsiswa'];?>"
 									class="btn btn-sm btn-secondary btn-flat col-sm-8 btnRegistrasi">
@@ -388,7 +385,6 @@
 			</div>
 		</div>
 	</div>
-</div>
 <script type="text/javascript" src="js/pilihkelas.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -419,7 +415,7 @@ $("#kdrombel").change(function() {
 $(".btnRegistrasi").click(function() {
 	var id = $(this).data('id');
 	$.ajax({
-		url: 'rombel_json.php',
+		url: 'siswa_isikelas.php',
 		type: 'post',
 		dataType: 'json',
 		data: 'id=' + id,

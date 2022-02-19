@@ -136,6 +136,8 @@
 			$this->SetXY(24.725,2.5);
 			$this->Cell(5.75,0.575,'Nomor Induk Siswa Nasional',0,0,'L');
 			$this->SetXY(20.75,3.075);
+			$this->SetLineWidth(0);
+			$this->SetDrawColor(2,2,2);
 			$c=strlen($nis);
 			$this->SetFont('Times','BI',12);
 			$t=6-$c;
@@ -153,9 +155,22 @@
 			$this->y0 = $this->GetY();
 		}
 
+		function PasFoto($id){
+			$this->SetLineWidth(0);
+			$this->SetDrawColor(2,2,2);
+			$this->Rect(28.5,4.5,2.8,3.2);
+			$this->SetFont('Times','',10);
+			$this->SetXY(28.75,5.25);
+			$this->MultiCell(2.5,0.375,'tempelkan pas foto masuk ukuran 3 x 4 di sini',0,'C');
+			$this->Rect(28.5,15.0,2.8,3.2);
+			$this->SetXY(28.75,15.75);
+			$this->MultiCell(2.5,0.375,'tempelkan pas foto keluar ukuran 3 x 4 di sini',0,'C');
+		}
+
 		function BiodataIsi($id)
 		{						
-			$d=viewdata('tbsiswa',array('idsiswa'=>$id))[0];									
+			$d=viewdata('tbsiswa',array('idsiswa'=>$id))[0];	
+			$this->PasFoto($id);
 			$this->SetFont('Times','B',11);
 			$this->SetXY(2.75,4.5);			
 			$this->Cell(0.75,0.5725,'A.');
@@ -436,7 +451,8 @@
 				$mu=viewdata('tbmutasi', $km)[0];
 				$aslsmp=$mu['aslkesmp'];
 				$nosurat=$mu['nosurat'];
-				$tglsurat=indonesian_date($mu['tglsurat']);		$alasan=$mu['alasan'];	
+				$tglsurat=indonesian_date($mu['tglsurat']);
+				$alasan=$mu['alasan'];	
 			}
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'a.');
@@ -785,6 +801,39 @@
 			$this->Cell(12.5,0.5725,'Meninggalkan Sekolah');
 			$this->Ln();
 			$this->SetFont('Times','',11);
+			$kp=array(
+				'idsiswa'=>$id,
+				'jnsmutasi'=>'2'
+			);
+			if(cekdata('tbmutasi',$kp)>0){
+				$dp=viewdata('tbmutasi',$kp)[0];
+				$sebab='Pindah Sekolah / Mutasi';
+				$tglmutasi=indonesian_date($dp['tglsurat']);
+				$nosurat=$dp['nosurat'];
+				$nmsmp=$dp['aslkesmp'];
+				$alasan=$dp['alasan'];
+			}
+			else {
+				$kdo=array(
+					'idsiswa'=>$id,
+					'jnsmutasi'=>'3'
+				);
+				if(cekdata('tbmutasi',$kdo)>0){
+					$do=viewdata('tbmutasi',$kdo)[0];
+					$sebab='Keluar / Dropout';
+					$tglmutasi=indonesian_date($do['tglsurat']);					
+					$nosurat=$do['nosurat'];
+					$nmsmp=$do['aslkesmp'];
+					$alasan=$do['alasan'];
+				}
+				else {
+					$sebab='-';
+					$tglmutasi='-';
+					$nosurat='-';
+					$nmsmp='-';
+					$alasan='-';
+				}
+			}
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725,'1.');
 			$this->Cell(4.0,0.5725,'Pindah / Keluar');
@@ -793,27 +842,33 @@
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'a.');
-			$this->Cell(3.5,0.5725,'Nomor Surat');
+			$this->Cell(3.5,0.5725,'Sebab');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725, $sebab);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'b.');
-			$this->Cell(3.5,0.5725,'Tanggal Surat');
+			$this->Cell(3.5,0.5725,'Nomor Surat');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725, $nosurat);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'c.');
-			$this->Cell(3.5,0.5725,'Alasan Pindah');
+			$this->Cell(3.5,0.5725,'Tanggal');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$tglmutasi);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'d.');
+			$this->Cell(3.5,0.5725,'Alasan');
+			$this->Cell(0.25,0.5725,':');
+			$this->Cell(8.25,0.5725,$alasan);
+			$this->Ln();
+			$this->Cell(1.5,0.5725);
+			$this->Cell(0.5,0.5725,'e.');
 			$this->Cell(3.5,0.5725,'Nama SMP/ MTs');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$nmsmp);
 			$this->Ln();
 			$this->Cell(0.75,0.5725);
 			$this->Cell(0.75,0.5725,'2.');
@@ -821,35 +876,59 @@
 			$this->Cell(0.25,0.5725);
 			$this->Cell(8.25,0.5725);
 			$this->Ln();
+			$kl=array(
+				'idsiswa'=>$id
+			);
+			$ceklulus=cekdata('tblulusan',$kl);
+			if($ceklulus>0){
+				$dl=viewdata('tblulusan',$kl)[0];
+				$tgllulus=indonesian_date($dl['tgllulus']);
+				$tglijz0=indonesian_date($dl['tglijazah']);
+				$noijz0=$dl['noijazah'];
+				$nmslta=$dl['nmslta'];
+				if($dl['lanjut']=='1'){
+					$lanjut='Ya';
+				}
+				else {
+					$lanjut='Tidak';
+				}
+			}
+			else {
+				$tgllulus='-';
+				$tglijz0='-';
+				$noijz0='-';
+				$lanjut='-';
+				$nmslta='-';
+			}
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'a.');
 			$this->Cell(3.5,0.5725,'Tanggal Lulus');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$tgllulus);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'b.');
 			$this->Cell(3.5,0.5725,'Nomor Ijazah');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$noijz0);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'c.');
 			$this->Cell(3.5,0.5725,'Tanggal Ijazah');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$tglijz0);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'d.');
 			$this->Cell(3.5,0.5725,'Melanjutkan');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);
+			$this->Cell(8.25,0.5725,$lanjut);
 			$this->Ln();
 			$this->Cell(1.5,0.5725);
 			$this->Cell(0.5,0.5725,'e.');
 			$this->Cell(3.5,0.5725,'Nama SMA / SMK');
 			$this->Cell(0.25,0.5725,':');
-			$this->Cell(8.25,0.5725);			
+			$this->Cell(8.25,0.5725,$nmslta);			
 			$this->Ln(0.75);
 			$this->SetFont('Times','B',11);
 			$this->Cell(0.75,0.5725,'H.');
@@ -937,7 +1016,8 @@
 				$y0=3.5;
 				$this->SetXY(2.75,$y0);				
 			}
-			
+			$this->SetLineWidth(0);
+			$this->SetDrawColor(2,2,2);
 			$this->SetFont('Times','',10);			
 			$this->Cell(1.0,1.725,'No.','LTBR',0,'C');
 			$this->Cell(8.25,1.725,'Mata Pelajaran','TBR',0,'C');			
@@ -971,19 +1051,31 @@
 					$this->Cell(1.0,0.575,'Nilai','BR',0,'C');
 					$this->Cell(1.40,0.575,'Predikat','BR',0,'C');
 					$i++;
+				}
+				for($j=$i;$j<2;$j++){
+					$this->SetXY($j*4.8+12,$y0);
+					$this->Cell(4.8,0.575,'','TBR',0,'C');
+					$this->SetXY($j*4.8+12,$y0+0.575);
+					$this->Cell(2.40,0.575,'Pengetahuan','BR',0,'C');
+					$this->Cell(2.40,0.575,'Keterampilan','BR',0,'C');
+					$this->SetXY($j*4.8+12,$y0+1.15);			
+					$this->Cell(1.0,0.575,'Nilai','BR',0,'C');
+					$this->Cell(1.40,0.575,'Predikat','BR',0,'C');
+					$this->Cell(1.0,0.575,'Nilai','BR',0,'C');
+					$this->Cell(1.40,0.575,'Predikat','BR',0,'C');
 				}				
-				$this->SetXY($i*4.8+12,$y0);
+				$this->SetXY($j*4.8+12,$y0);
 				$this->Cell(4.8,0.575,'Rata-rata','TR',0,'C');
-				$this->SetXY($i*4.8+12,$y0+0.575);
+				$this->SetXY($j*4.8+12,$y0+0.575);
 				$this->Cell(4.80,0.575,'Nilai Rapor','BR',0,'C');
-				$this->SetXY($i*4.8+12,$y0+1.15);			
+				$this->SetXY($j*4.8+12,$y0+1.15);			
 				$this->Cell(2.40,0.575,'Pengetahuan','BR',0,'C');
 				$this->Cell(2.40,0.575,'Keterampilan','BR',0,'C');
-				$this->SetXY(($i+1)*4.8+12,$y0);
+				$this->SetXY(($j+1)*4.8+12,$y0);
 				$this->Cell(4.8,0.575,'Nilai Akhir','TR',0,'C');
-				$this->SetXY(($i+1)*4.8+12,$y0+0.575);
+				$this->SetXY(($j+1)*4.8+12,$y0+0.575);
 				$this->Cell(4.8,0.575,'Kelulusan','BR',0,'C');
-				$this->SetXY(($i+1)*4.8+12,$y0+1.15);			
+				$this->SetXY(($j+1)*4.8+12,$y0+1.15);			
 				$this->Cell(2.40,0.575,'US','BR',0,'C');
 				$this->Cell(2.40,0.575,'Ijazah','BR',0,'C');			   
 			}
@@ -1001,6 +1093,8 @@
 				$y0=5.225;
 				$this->SetXY(2.75,$y0);				
 			}
+			$this->SetLineWidth(0);
+			$this->SetDrawColor(2,2,2);
 			$qthpel = GetKolom($awal, $akhir,$opset);
 			$j=0;			
 			$qmp=viewdata('tbmapel');
@@ -1071,13 +1165,23 @@
 							$mot=vquery($qmot)[0];
 							$nilaimot=$mot['nilairapor'];
 							$predmot=$mot['predikat'];
-						} 
+						}
 						$this->SetXY($i*4.8 + 14.4,$j*0.575+$y0);
 						$this->Cell(1.0,0.575,$nilaimot,'BR',0,'C');
 						$this->SetXY($i*4.8 + 15.4,$j*0.575+$y0);
 						$this->Cell(1.40,0.575,$predmot,'BR',0,'C');
 						$i++;
-					} 
+					}
+					for($k=$i;$k<2;$k++){
+						$this->SetXY($k*4.8 + 12.0,$j*0.575+$y0);
+						$this->Cell(1.0,0.575,'','BR',0,'C');
+						$this->SetXY($k*4.8+13.0,$j*0.575+$y0);
+						$this->Cell(1.40,0.575,'','BR',0,'C');
+						$this->SetXY($k*4.8 + 14.4,$j*0.575+$y0);
+						$this->Cell(1.0,0.575,'','BR',0,'C');
+						$this->SetXY($k*4.8 + 15.4,$j*0.575+$y0);
+						$this->Cell(1.40,0.575,'','BR',0,'C');
+					}
 					$qrkog="SELECT AVG(nilairapor) as kognetif FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='3' GROUP BY idmapel";
 					if(cquery($qrkog)==0){
 						$nilairkog='-';
@@ -1107,8 +1211,8 @@
 						$nilaijz=round($ijz['nilaiijz']);
 					}
 					$this->Cell(2.4,0.575,$nilaijz,'BR',0,'C');
-			   }
-			   $j++;							
+				}
+				$j++;							
 			}
 			$y1=$y0+0.125;
 			$this->SetXY(2.75,$j*0.575+$y1);
@@ -1136,8 +1240,7 @@
 					else {
 						$sos=vquery($qsos)[0]; 
 						$nilaisos=KonversiNilai($sos['nilaisikap']);
-					} 
-				   
+					}
 					$this->SetXY($i*4.8+12,$j*0.575+$y1+0.575);				
 					$this->Cell(4.8,0.575,$nilaisos,'BR',0,'C');
 					$i++;				
@@ -1155,6 +1258,7 @@
 					}					
 					$this->SetXY($i*4.8+12,$j*0.575+$y1);				
 					$this->Cell(4.8,0.575,$nilaisp,'TBR',0,'C');
+
 					$qsos="SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'";
 					if(cquery($qsos)==0){
 						$nilaisos='-';
@@ -1166,8 +1270,14 @@
 					$this->SetXY($i*4.8+12,$j*0.575+$y1+0.575);				
 					$this->Cell(4.8,0.575,$nilaisos,'BR',0,'C');
 					$i++;				
-				}  
-				$this->SetXY($i*4.8+12.0,$j*0.575+$y1);  
+				}
+				for($k=$i;$k<2;$k++){
+					$this->SetXY($i*4.8+12,$j*0.575+$y1);
+					$this->Cell(4.8,0.575,'','TBR',0,'C');
+					$this->SetXY($k*4.8+12,$j*0.575+$y1+0.575);				
+					$this->Cell(4.8,0.575,'','BR',0,'C');
+				}				  
+				$this->SetXY($k*4.8+12.0,$j*0.575+$y1);  
 				$qsp="SELECT AVG(nilaisikap) AS akspr FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='1' GROUP BY idsiswa";
 				if(cquery($qsp)==0){
 					$nilairsp='-';
@@ -1178,7 +1288,7 @@
 				} 
 				$this->Cell(4.8,0.575,$nilairsp,'TBR',0,'C');
 				$this->Cell(4.8,0.575,'','TBR',0,'C');
-				$this->SetXY($i*4.8+12.0,$j*0.575+$y1+0.575);	
+				$this->SetXY($k*4.8+12.0,$j*0.575+$y1+0.575);	
 				$qso="SELECT AVG(nilaisikap) AS aksos FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='2' GROUP BY idsiswa"; 
 				if(cquery($qso)==0){
 					$nilairso='-';
@@ -1234,6 +1344,10 @@
 						$this->Cell(4.8,0.575,$nilaiekskul,$brd,0,'C');
 						$i++;					
 					}
+					for($l=$i;$l<2;$l++){
+						$this->SetXY($l*4.8+12.0,($j+$k)*0.575+$y2);
+						$this->Cell(4.8,0.575,'',$brd,0,'C');
+					}
 					$qreks="SELECT AVG(nilaieks) as nrkpeks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' GROUP BY idekskul";					
 					if(cquery($qreks)==0){
 						$nilaiekskul='-';
@@ -1260,7 +1374,7 @@
 			if(JmlKolom($awal, $akhir, $opset)==4){
 				foreach ($qthpel as $th){
 					$qabs="SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
-				   	if(cquery($qabs)==0){
+					if(cquery($qabs)==0){
 						$sakit='-';
 						$ijin='-';
 						$alpa='-';
@@ -1348,11 +1462,12 @@
 				}					 
 			}
 			else {
-				 foreach ($qthpel as $th){
+				foreach ($qthpel as $th){
 					$this->SetXY($i*4.8+12,($j+$k)*0.575 + $y4+0.575);
 					$this->Cell(4.8,0.575,'','BR',0,'C');  
 					$i++;										
 				}
+
 				$this->Cell(4.8,0.575,'','BR',0,'C');  
 				$this->Cell(4.8,0.575,'','BR',0,'C');   
 			}
@@ -1406,7 +1521,7 @@
 			$this->SetLineWidth(0.001);
 			$this->SetMargins(2.75,1.75,1.25);
 			$this->SetAutoPageBreak(true,2);
-			$this->AddPage();			
+			$this->AddPage();		
 			$this->BiodataTitle($id);
 			$this->BiodataIsi($id);	
 		}

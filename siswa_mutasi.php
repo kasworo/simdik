@@ -288,7 +288,7 @@ if(isset($_POST['simpan'])){
 				</thead>
 				<tbody>
 					<?php
-							$sql="SELECT idsiswa, nmsiswa, nisn, nis, jnsmutasi, aslkesmp FROM tbsiswa LEFT JOIN tbmutasi USING(idsiswa) LEFT JOIN tbregistrasi USING(idsiswa) WHERE deleted = '0' AND (idjreg = '2' OR idjreg='6') GROUP BY idsiswa";
+							$sql="SELECT idsiswa, nmsiswa, nisn, nis, jnsmutasi, aslkesmp FROM tbsiswa LEFT JOIN tbmutasi USING(idsiswa) LEFT JOIN tbregistrasi USING(idsiswa) WHERE deleted = '0' AND (idjreg = '2' OR idjreg='6') GROUP BY idsiswa ORDER BY nis";
 							$no=0;
 							$qs=vquery($sql);							
 							foreach($qs as $s):
@@ -312,8 +312,11 @@ if(isset($_POST['simpan'])){
 						<td style="text-align: left"><?php echo $s['aslkesmp'];;?></td>
 						<td style="text-align:center">
 							<a href="#" data-toggle="modal" data-id="<?php echo $s['idsiswa'];?>" data-target="#myMutasi"
-								class="btn btn-sm btn-info btnIsi">
-								<i class="fas fa-edit"></i>&nbsp;Isi Riwayat
+								class="btn btn-xs btn-info btnIsi">
+								<i class="fas fa-edit"></i>&nbsp;Detail
+							</a>
+							<a href="cetak_rekomendasi.php?id=<?php echo $s['idsiswa'];?>" target="_blank"	class="btn btn-xs btn-default">
+								<i class="fas fa-print"></i>&nbsp;Cetak
 							</a>
 						</td>
 					</tr>

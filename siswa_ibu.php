@@ -1,6 +1,7 @@
 <?php
 	$idsiswa=$_GET['id'];
-	if(isset($_POST['simpan'])){		
+	
+    if(isset($_POST['simpan'])){		
 		$field=array(
 			'hubkel' =>$_POST['hubkel'],
 			'idsiswa'=>$_POST['idsiswa']
@@ -15,7 +16,7 @@
 				// 'tgllahir'  =>$_POST['tgllahir'],
 				'idagama'   =>$_POST['agama'],
 				'idpddk'	=>$_POST['pddkortu'],
-				'hidup'	 =>$_POST['hidup'],
+				'wafat'	 =>$_POST['hidup'],
 				'idkerja'   =>$_POST['krjortu'],
 				'idhsl'	 =>$_POST['hslortu'],
 				'hubkel'	=>$_POST['hubkel'],
@@ -35,7 +36,7 @@
 								timeOut:1000,
 								fadeOut:1000,
 								onHidden:function(){
-									window.location.href='index.php?p=datasiswa';
+									window.location.href='index.php?p=addibu&id=".$idsiswa."';
 								}
 							});
 						});
@@ -48,7 +49,7 @@
 								timeOut:1000,
 								fadeOut:1000,
 								onHidden:function(){
-									window.location.href='index.php?p=addIbu&id=".$idsiswa."';
+									window.location.href='index.php?p=addibu&id=".$idsiswa."';
 								}
 							});
 						});
@@ -63,7 +64,7 @@
 				// 'tgllahir'=>$_POST['tgllahir'],
 				'idagama'=>$_POST['agama'],
 				'idpddk'=>$_POST['pddkortu'],
-				'hidup'=>$_POST['hidup'],
+				'wafat'=>$_POST['hidup'],
 				'idkerja'=>$_POST['krjortu'],
 				'idhsl'=>$_POST['hslortu'],
 				'alamat'=>$_POST['almt'],

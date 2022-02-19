@@ -11,7 +11,7 @@
 	$semua=0;
 	$no=0;
 	$baris=6;
-    
+	
 	if($_GET['d']=='1'){
 		$nama="tb_asalsd";
 		$objPHPExcel->setActiveSheetIndex(0)
@@ -82,7 +82,7 @@
 		}			
 	}
 	else {
-        $nama="tb_mutasi";
+		$nama="tb_mutasi";
 		$objPHPExcel->setActiveSheetIndex(0)
 			->setCellValue('A1', 'TEMPLATE MUTASI PESERTA DIDIK')
 			->mergeCells('A1:N1')

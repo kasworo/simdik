@@ -1,4 +1,6 @@
 <?php
+	session_start();
+	if(!isset($_SESSION['login'])){header("Location: login.php");exit;}
 	require('assets/library/fpdf/fpdf.php'); 
 	include "dbfunction.php";
 	
@@ -98,7 +100,7 @@
 			}
 			else {
 				if($hal==1){$opset=0;$no=1;} else {$opset=26;$no=26;}
-				$sql="SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa, s.gender, r.idjreg, r.idkelas FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) WHERE  r.idjreg='2' OR r.idjreg='6' GROUP BY r.idsiswa ORDER BY r.tglreg, s.nis LIMIT 25 OFFSET $opset";
+				$sql="SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa, s.gender, r.idjreg, r.idkelas FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) WHERE  r.idjreg='2' OR r.idjreg='6' GROUP BY r.idsiswa ORDER BY s.nis, r.tglreg LIMIT 25 OFFSET $opset";
 				$qs=vquery($sql);
 				$i=0;
 				foreach ($qs as $s) {

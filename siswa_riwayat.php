@@ -1,8 +1,8 @@
 <?php 
-    include "dbfunction.php";
+	include "dbfunction.php";
 	$ds=viewdata('tbsiswa',array('idsiswa'=>$_POST['id']))[0];
 	$nmsiswa=$ds['nmsiswa'];
-    if($_POST['d']=='1'){
+	if($_POST['d']=='1'){
 		$data=cekdata('tbasalsd', array('idsiswa'=>$_POST['id']));
 		if($data==0){
 			$rows=array(
@@ -28,7 +28,8 @@
 			);
 		}
 	}
-    else if($_POST['d']=='2'){
+	
+	if($_POST['d']=='2'){
 		$data=cekdata('tbmutasi', array('idsiswa'=>$_POST['id']));
 		if($data==0){
 			$rows=array(
@@ -52,6 +53,35 @@
 					'tglsrt' =>$m['tglsurat'],
 					'alasan' =>$m['alasan'],
 					'judul'=>'Update Riwayat Mutasi a.n '.$nmsiswa,
+					'tmbl'=>'<i class="fas fa-save"></i> Update'
+				);
+		}
+	}
+
+	if($_POST['d']=='3'){
+		$data=cekdata('tblulusan', array('idsiswa'=>$_POST['id']));
+		if($data==0){
+			$rows=array(
+				'idsiswa'=>'',
+				'tgllulus' =>'',
+				'nmslta' =>'',
+				'noijazah' =>'',
+				'tglsurat' =>'',
+				'lanjut'=>'',
+				'judul'=>'Isi Data Kelulusan a.n '.$nmsiswa,
+				'tmbl'=>'<i class="fas fa-save"></i> Simpan'
+			);
+		}
+		else {
+			$m=viewdata('tblulusan', array('idsiswa'=>$_POST['id']))[0];
+				$rows=array(
+					'idsiswa'=>$m['idsiswa'],
+					'tgllulus' =>$m['tgllulus'],
+					'nmslta' =>$m['nmslta'],
+					'noijazah' =>$m['noijazah'],
+					'tglijazah' =>$m['tglijazah'],
+					'lanjut' =>$m['lanjut'],
+					'judul'=>'Update Data Kelulusan a.n '.$nmsiswa,
 					'tmbl'=>'<i class="fas fa-save"></i> Update'
 				);
 		}

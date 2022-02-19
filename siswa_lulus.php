@@ -30,194 +30,97 @@
 				$xtglijz = $data->val($i,7);
 				$xlanjut = $data->val($i,8);
 				$xslta = $data->val($i,9);			
-				if(strlen($nmagama)==1){$xagama=$nmagama;}
-				else {
-					switch ($nmagama) {
-						case 'Islam':{ $xagama='A';break;}
-						case 'Kristen':{ $xagama='B';break;}
-						case 'Katholik':{ $xagama='C';break;}
-						case 'Hindu':{ $xagama='D';break;}
-						case 'Buddha':{ $xagama='E';break;}
-						case 'Konghucu':{ $xagama='F';break;}
-						default: {$xagama='';break;}
-					}
-				}
-				if($xnis==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom NIS a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:10000,
-								fadeOut:10000
-							});
-						});
-					</script>";
-				}
-				else if(strlen($xnisn)<>10 || $xnisn==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom NISN a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:10000,
-								fadeOut:10000
-							});
-						});
-					</script>";
-				}
-				else if(strlen($xnama)<1 || $xnama==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom Nama Lengkap a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:1000,
-								fadeOut:1000
-							});
-						});
-					</script>";
-				}
-				else if(strlen($xtmplhr)<1 || $xtmplhr==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom Tempat Lahir a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:1000,
-								fadeOut:1000
-							});
-						});
-					</script>";
-				}
-				else if(strlen($xtgllhr)<1 || $xtgllhr==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom Tanggal Lahir a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:1000,
-								fadeOut:1000
-							});
-						});
-					</script>";
-				}
-				else if(strlen($xjekel)>1 || $xjekel==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom Jenis Kelamin a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:1000,
-								fadeOut:1000
-							});
-						});
-					</script>";
-				}
-				else if($xagama==''){
-					echo "<script>
-						$(function() {
-							toastr.error('Cek Kolom Agama a.n ".$xnama."','Mohon Maaf!',{
-								timeOut:1000,
-								fadeOut:1000
-							});
-						});
-					</script>";
-				}
-				else {
-					$key=array(
-						'nisn'=>$xnisn,
-						'nis'=>$xnis
-					);
-					$ceksiswa=cekdata('tbsiswa',$key);
-					if($ceksiswa>0){
-						$datasiswa=array(
-							'idskul'=>$idskul,
-							'nmsiswa' =>$xnama,
-							'nik' =>$xnik,
-							'tmplahir' => $xtmplhr,
-							'tgllahir' =>$xtgllhr,
-							'gender' =>$xjekel,
-							'idagama' =>$xagama,
-							'anake' =>$xanak,
-							'sdr' =>$xsdr,
-							'warganegara' =>'1',
-							'goldarah' =>$xdrh,
-							'rwysakit' =>$xsakit,
-							'kebkhusus' =>$xkeb,
-							'ikuts' =>$xikut,
-							'transpr' =>$xtrans,
-							'jarak' =>$xjrk,
-							'waktu' =>$xwkt,
-							'alamat' =>$xalmt,
-							'desa' =>$xdesa,
-							'kec' =>$xkec,
-							'kab' =>$xkab,
-							'prov' =>$xprov,
-							'kdpos' =>$xkdpos,
-							'lintang' =>$xltg,
-							'bujur' =>$xbjr,
-							'nohp' =>$xnohp,
-							'hobi1' =>$xolga,
-							'hobi2' =>$xseni,
-							'hobi3' =>$xorgn,
-							'hobi4' =>$xlain,
-							'deleted'=>'0'
-						);						
-						if(editdata('tbsiswa',$datasiswa,'',$key)>0){ $update++;} else {$batal++;}
-					} 
-					else {
-						$datasiswa=array(
-							'idskul'=>$idskul,
-							'nmsiswa' =>$xnama,
-							'nik' =>$xnik,
-							'nis' =>$xnis,
-							'nisn' =>$xnisn,
-							'tmplahir' => $xtmplhr,
-							'tgllahir' =>$xtgllhr,
-							'gender' =>$xjekel,
-							'idagama' =>$xagama,
-							'anake' =>$xanak,
-							'sdr' =>$xsdr,
-							'warganegara' =>'1',
-							'goldarah' =>$xdrh,
-							'rwysakit' =>$xsakit,
-							'kebkhusus' =>$xkeb,
-							'ikuts' =>$xikut,
-							'transpr' =>$xtrans,
-							'jarak' =>$xjrk,
-							'waktu' =>$xwkt,
-							'alamat' =>$xalmt,
-							'desa' =>$xdesa,
-							'kec' =>$xkec,
-							'kab' =>$xkab,
-							'prov' =>$xprov,
-							'kdpos' =>$xkdpos,
-							'lintang' =>$xltg,
-							'bujur' =>$xbjr,
-							'nohp' =>$xnohp,
-							'hobi1' =>$xolga,
-							'hobi2' =>$xseni,
-							'hobi3' =>$xorgn,
-							'hobi4' =>$xlain
-						);
-						if(adddata('tbsiswa',$datasiswa)>0){ $sukses++;} else {$gagal++;}
-					}
-				}
 			}
-			echo "<script>
-				$(function() {
-					toastr.info('Ada ".$sukses." data ditambah, ".$update." data diupdate, ".$gagal." data gagal ditambahkan!','Terimakasih',{
-					timeOut:2000,
-					fadeOut:2000
-				});
-			});
-			</script>";
 		}
 	}
-	// $field=array('MAX(idkelas) as maks');
-    // $join=array(
-    //     'tbjenjang'=>'idjenjang',
-    //     'tbskul'=>'idjenjang'
-    // );
+	
 	$sqkl="SELECT MAX(idkelas) as kdkelas, RIGHT(tp.nmthpel,1) as aktahun FROM tbregistrasi r INNER JOIN tbthpel tp USING(idthpel) WHERE RIGHT(tp.nmthpel,1)='2' AND tp.aktif='1'";
 	$kl=vquery($sqkl)[0];
-    $kelas=$kl['kdkelas'];
+	$kelas=$kl['kdkelas'];
+
+	if(isset($_POST['simpan'])){
+		$ceks=cekdata('tblulusan', array('idsiswa'=>$_POST['idsiswa']));
+		if($ceks==0){
+			$data=array(
+				'idsiswa'   => $_POST['idsiswa'],
+				'tgllulus'  => $_POST['tgllulus'],
+				'noijazah'   => $_POST['noijazah'],
+				'tglijazah'  => $_POST['tglijazah'],
+				'lanjut'	=>$_POST['lanjut'],
+				'nmslta'  => $_POST['nmslta'],
+			);
+			$baru=adddata('tblulusan',$data);
+			if($baru>0){
+				echo "<script>
+				$(function() {
+					toastr.success('Tambah Riwayat Pendidikan Siswa Berhasil!', 'Terima Kasih...', {
+						timeOut: 1000,
+						fadeOut: 1000,
+						onHidden: function() {
+							$('#myLulusPD').hide();
+						}
+					});
+				});
+				</script>";
+			}
+			else {
+				echo "<script>
+				$(function() {
+					toastr.error('Tambah Riwayat Pendidikan Siswa Gagal!', 'Mohon Maaf...', {
+						timeOut: 1000,
+						fadeOut: 1000,
+						onHidden: function() {
+							$('#myLulusPD').hide();
+						}
+					});
+				});
+				</script>";
+			}
+		}
+		else {
+			$data=array(
+				'tgllulus'  => $_POST['tgllulus'],
+				'noijazah'   => $_POST['noijazah'],
+				'tglijazah'  => $_POST['tglijazah'],
+				'lanjut'	=>$_POST['lanjut'],
+				'nmslta'  => $_POST['nmslta'],
+			);
+			$update=editdata('tblulusan', $data, '', array('idsiswa'=>$_POST['idsiswa']));
+			if($update>0){
+				echo "<script>
+				$(function() {
+					toastr.success('Ubah Riwayat Pendidikan Siswa Berhasil!', 'Terima Kasih...', {
+						timeOut: 1000,
+						fadeOut: 1000,
+						onHidden: function() {
+							$('#myLulusPD').hide();
+						}
+					});
+				});
+				</script>";
+			}
+			else {
+				echo "<script>
+				$(function() {
+					toastr.error('Ubah Riwayat Pendidikan Siswa Gagal!', 'Mohon Maaf...', {
+						timeOut: 1000,
+						fadeOut: 1000,
+						onHidden: function() {
+							$('#myLulusPD').hide();
+						}
+					});
+				});
+				</script>";
+			}
+		}
+	}
 ?>
-<div class="modal fade" id="myLulusPD" aria-modal="true">
+<div class="modal fade" id="myImportLulus" aria-modal="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form method="POST" enctype="multipart/form-data" action="">
 				<div class="modal-header">
-					<h5 class="modal-title">Import Data Kelulusan Peserta Didik</h5>
+					<h5 class="modal-title">Import Riwayat Sekolah</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
@@ -225,10 +128,10 @@
 				<div class="modal-body">
 					<div class="col-sm-12">
 						<div class="row">
-							<label for="filetmp">Pilih File Template</label>
+							<label for="filerwy">Pilih File Template</label>
 							<div class="custom-file">
-								<input type="file" class="custom-file-input file" id="filetmp" name="filetmp">
-								<label class="custom-file-label" for="filetmp">Pilih file</label>
+								<input type="file" class="custom-file-input file" id="filerwy" name="filerwy">
+								<label class="custom-file-label" for="filerwy">Pilih file</label>
 							</div>
 							<p style="color:red;margin-top:10px"><em>Hanya mendukung file *.xls (Microsoft Excel
 									97-2003)</em></p>
@@ -236,7 +139,7 @@
 					</div>
 				</div>
 				<div class="modal-footer justify-content-between">
-					<a href="siswa_lulustmp.php" class="btn btn-success btn-sm btn-flat" target="_blank">
+					<a href="siswa_rwytmp.php?d=2" class="btn btn-success btn-sm btn-flat" target="_blank">
 						<i class="fas fa-download"></i> Download
 					</a>
 					<button type="submit" name="upload" class="btn btn-primary btn-sm btn-flat">
@@ -250,13 +153,68 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="myLulusPD" aria-modal="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Riwayat lulusan</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<form method="POST" action="">
+				<div class="modal-body">					
+					<div class="form-group row mb-2">
+						<input type="hidden" class="form-control form-control-sm col-sm-6" name="idsiswa" id="idsiswa">
+						<label class="col-sm-5 ml-2">Tanggal Lulus</label>
+						<input class="form-control form-control-sm col-sm-6" name="tgllulus" id="tgllulus">
+					</div>
+					<div class="form-group row mb-2">
+						<label class="col-sm-5 ml-2">Nomor Seri Ijazah</label>
+						<input class="form-control form-control-sm col-sm-6" name="noijazah" id="noijazah">
+					</div>
+					<div class="form-group row mb-2">
+						<label class="col-sm-5 ml-2">Tanggal Ijazah</label>
+						<input class="form-control form-control-sm col-sm-6" name="tglijazah" id="tglijazah">
+					</div>
+					<div class="form-group row mb-2">
+						<label class="col-sm-5 ml-2">Melanjutkan</label>
+						<select class="form-control form-control-sm col-sm-6" name="lanjut" id="lanjut">
+							<option value="">..Pilih..</option>
+							<option value="1">Ya</option>
+							<option value="0">Tidak</option>
+						</select>
+					</div>
+					<div class="form-group row mb-2">
+						<label class="col-sm-5 ml-2">Nama Sekolah</label>
+						<input class="form-control form-control-sm col-sm-6" name="nmslta" id="nmslta">
+					</div>
+				</div>
+				<div class="modal-footer justify-content-between">
+					<button type="submit" class="btn btn-success col-4" id="simpan" name="simpan">
+						<i class="fas fa-save"></i> Simpan
+					</button>
+					<button type="button" class="btn btn-danger col-4" data-dismiss="modal">
+						<i class="fas fa-power-off"></i> Tutup
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 <div class="card card-secondary card-outline">
 	<div class="card-header">
 		<h4 class="card-title">Data Peserta Didik Tingkat Akhir</h4>
 		<div class="card-tools">
-			<button class="btn btn-flat btn-secondary btn-sm" data-toggle="modal" data-target="#myLulusPD">
-				<i class="fas fa-cloud-upload-alt"></i>&nbsp;Import Data Lulusan
-			</button>
+			<form action="" method="post">				
+				<button type="submit" class="btn btn-info btn-sm" id="btnTambah" name="lulus">
+					<i class="fas fa-plus-circle"></i>&nbsp;Tambah
+				</button>
+				<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myImportLulus">
+					<i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
+				</button>
+			</form>
 		</div>
 	</div>
 	<div class="card-body">
@@ -267,25 +225,50 @@
 						<th style="text-align: center;width:2.5%">No.</th>
 						<th style="text-align: center;">Nama Peserta</th>
 						<th style="text-align: center;width:17.5%">NIS / NISN</th>
-						<th style="text-align: center;width:17.5%">Kelas</th>
-						<th style="text-align: center;width:20%">Aksi</th>
+						<th style="text-align: center;width:15%">Tanggal Ijazah</th>
+						<th style="text-align: center;width:17.5%">Nomor Ijazah</th>
+						<th style="text-align: center;width:12.5%">Melanjutkan</th>
+						<th style="text-align: center;width:12.5%">Aksi</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
-						$sql="SELECT s.nis, s.nisn, s.nmsiswa, k.nmkelas FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbkelas k USING(idkelas) INNER JOIN tbthpel t USING(idthpel) WHERE k.idkelas='$kelas' AND s.deleted='0' AND t.aktif='1'";
+						$sql="SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa, k.nmkelas FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbkelas k USING(idkelas) INNER JOIN tbthpel t USING(idthpel) WHERE k.idkelas='$kelas' AND s.deleted='0' AND t.aktif='1'";
 						$qs=vquery($sql);
 						$no=0;
 						foreach($qs as $s)
 						{
 							$no++;
+							$key=array(
+								'idsiswa'=>$s['idsiswa']
+							);
+							$ceklulus=cekdata('tblulusan',$key);
+							if($ceklulus>0){
+								$dl=viewdata('tblulusan',$key)[0];
+								$tglijz=indonesian_date($dl['tglijazah']);
+								$noijz=$dl['noijazah'];
+								if($dl['lanjut']=='1'){
+									$lanjut='<label class="badge badge-success">Melanjutkan</label>';
+								}
+								else {
+									$lanjut='<label class="badge badge-danger">Tidak</label>';
+								}
+							}
+							else {
+								$tglijz='<label class="badge badge-warning">Belum Diisi</label>';
+								$noijz='<label class="badge badge-warning">Belum Diisi</label>';
+								$lanjut='<label class="badge badge-warning">Belum Diisi</label>';
+							}
 					?>
 					<tr>
 						<td style="text-align:center"><?php echo $no.'.';?></td>
-						<td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
+						<td title="<?php echo $s['idsiswa'];?>">
+							<?php echo ucwords(strtolower($s['nmsiswa']));?>
 						</td>
 						<td><?php echo $s['nis'].' / '.$s['nisn'];?></td>
-						<td><?php echo $s['nmkelas'];?></td>
+						<td style="text-align:center"><?php echo $tglijz; ?></td>
+						<td style="text-align:center"><?php echo $noijz; ?></td>
+						<td style="text-align:center"><?php echo $lanjut; ?></td>
 						<td style="text-align: center">
 							<button class="btn btn-xs btn-success btnLulus" data-id="<?php echo $s['idsiswa'];?>" data-toggle="modal" data-target="#myLulusPD">
 								<i class="fas fa-sign-out-alt"></i>&nbsp;Isi Riwayat
@@ -314,59 +297,26 @@ $(function() {
 $(".btnLulus").click(function(e) {
 	e.preventDefault();
 	let id = $(this).data('id');
-	window.location.href = "index.php?p=addsiswa&id=" + id
-
-})
-
-$(".btnHapus").click(function() {
-	var id = $(this).data('id');
-	Swal.fire({
-		title: 'Anda Yakin?',
-		text: "Menghapus Data Peserta Didik" + id,
-		icon: 'question',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Hapus',
-		cancelButtonText: 'Batal'
-	}).then((result) => {
-		if (result.value) {
-			$.ajax({
-				type: "POST",
-				url: "siswa_simpan.php",
-				data: "aksi=hapus&id=" + id,
-				success: function(data) {
-					toastr.success(data);
-				}
-			})
-			window.location.reload();
+	$.ajax({
+		url: "siswa_riwayat.php",
+		type: "POST",
+		dataType: 'json',
+		data: "id=" + id + "&d=3",
+		success: function(data) {			
+			$(".modal-title").html(data.judul);
+			$("#simpan").html(data.tmbl);
+			$("#tgllulus").val(data.tgllulus);
+			$("#nmslta").val(data.nmslta);
+			$("#noijazah").val(data.noijazah);
+			$("#tglijazah").val(data.tglijazah);
+			$("#lanjut").val(data.lanjut);
+			if(data.idsiswa==''){
+				$("#idsiswa").val(id);
+			}
+			else {
+				$("#idsiswa").val(data.idsiswa);
+			}
 		}
 	})
-})
-
-$("#hapusall").click(function() {
-	var id = $(this).data('id');
-	Swal.fire({
-		title: 'Anda Yakin?',
-		text: "Menghapus Seluruh	Data Peserta Didik" + id,
-		icon: 'question',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Hapus',
-		cancelButtonText: 'Batal'
-	}).then((result) => {
-		if (result.value) {
-			$.ajax({
-				type: "POST",
-				url: "siswa_simpan.php",
-				data: "aksi=kosong&id=" + id,
-				success: function(data) {
-					toastr.success(data);
-				}
-			})
-			window.location.reload();
-		}
-	})
-})
+});
 </script>

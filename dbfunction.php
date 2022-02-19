@@ -216,13 +216,6 @@
 		$data=vquery($sql)[0];
 		return $data['idsiswa'];
 	}
-	// function getthpel(){
-	//	 global $conn;
-	//	 $sql=mysqli_query($conn, "SELECT*FROM tb_thpel WHERE aktif='Y'");
-	//	 $row=mysqli_fetch_array($sql);
-	//	 return $row['kdthpel'];
-	// }
-
 	
 	function vquery($sql){
 		global $conn;
@@ -241,121 +234,6 @@
 		return $result->num_rows;
 	}
 
-	function fulljoin($field,$tbl, $join, $where='', $group=''){
-		global $conn;
-		$rows=[];
-		$keys=[];
-		foreach($field as $kol) {
-			$cols[]= $kol;
-		}
-		foreach($join as $joins=>$idjoins) {
-			$tbjoin[] = "$joins USING($idjoins)";
-		}
-	
-		if($where=='' && $group==''){
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin);
-		}	 
-		else if($where==''){
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin)." GROUP BY $group";
-		}
-		else if($group==''){
-			foreach($where as $w=>$nil) {
-				$keys[]= "$w = '$nil'";
-			}
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys);
-		}
-		else {
-			foreach($where as $w=>$nil) {
-				$keys[]= "$w = '$nil'";
-			}
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
-		}
-		//var_dump($sql);
-		$result=$conn->query($sql);
-		while($row=$result->fetch_assoc()){
-			$rows[]=$row;
-		}		
-		return $rows;
-	}
-
-	function cekfulljoin($field, $tbl, $join, $where='', $group=''){
-		global $conn;
-		$cols=[];
-		foreach($field as $kol) {
-			$cols[]= $kol;
-		}
-		foreach($join as $joins=>$idjoins) {
-			$tbjoin[] = "$joins USING($idjoins)";
-		}
-		foreach($where as $w=>$nil) {
-			$keys[]= "$w = '$nil'";
-		}
-		
-		if($field=='*'){
-			if($where=='' && $group==''){
-				$sql="SELECT*FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin);
-			}	 
-			else if($where==''){
-				$sql="SELECT*FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin)." GROUP BY $group";
-			}
-			else if($group==''){
-				$sql="SELECT*FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys);
-			}
-			else {
-				$sql="SELECT*FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys)." GROUP BY $group";
-			}
-		}
-		else {
-			if($where=='' && $group==''){
-				$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin);
-			}	 
-			else if($where==''){
-				$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin)." GROUP BY $group";
-			}
-			else if($group==''){
-				$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys);
-			}
-			else {
-				$sql="SELECT ".implode(', ',$cols)." FROM $tbl INNER JOIN ".implode(' INNER JOIN ',$tbjoin). " WHERE ".implode('AND ',$keys)." GROUP BY $group";
-			}
-		}
-		//var_dump($sql);die;
-		$result=$conn->query($sql);
-		return $result->num_rows;
-	}
-
-	function leftjoin($field,$tbl, $join, $where='', $group=''){
-		global $conn;
-		$rows=[];
-		foreach($field as $kol) {
-			$cols[]= $kol;
-		}
-		foreach($join as $joins=>$idjoins) {
-			$tbjoin[] = "$joins USING($idjoins)";
-		}
-		foreach($where as $w=>$nil) {
-			$keys[]= "$w = '$nil'";
-		}
-
-		if($where=='' && $group==''){
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin);
-		}	 
-		else if($where==''){
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin)." GROUP BY $group";
-		}
-		else if($group==''){
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys);
-		}
-		else {
-			$sql="SELECT ".implode(', ',$cols)." FROM $tbl LEFT JOIN ".implode(' LEFT JOIN ',$tbjoin). " WHERE ".implode(' AND ',$keys)." GROUP BY $group";
-		}
-		//var_dump($sql);die;
-		$result=$conn->query($sql);
-		while($row=$result->fetch_assoc()){
-			$rows[]=$row;
-		}		
-		return $rows;
-	}
 	
 	function viewdata($tbl, $key='', $grup='',$ord=''){
 		global $conn;
@@ -430,6 +308,7 @@
 				$sql="SELECT*FROM $tbl WHERE ".implode (' AND ',$where)." GROUP BY $grup";
 			}
 		}
+		//var_dump($sql);
 		$result=$conn->query($sql);
 		return $result->num_rows;
 	}

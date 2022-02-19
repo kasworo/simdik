@@ -45,17 +45,19 @@
                 'hobi1'         => $_POST['olahrg'],
                 'hobi2'         => $_POST['seni'],
                 'hobi3'         => $_POST['orgns'],
-                'hobi4'         => $_POST['lain']
+                'hobi4'         => $_POST['lain'],
+                'deleted'       =>'0'
             );
             $baru=adddata('tbsiswa',$data);
 			if($baru>0){
+                $idsiswa=getidsiswa($_POST['nis'], $_POST['nisn']);
 				echo "<script>
 					$(function() {
 							toastr.success('Tambah Data Siswa Berhasil!','Terima Kasih...',{
 								timeOut:1000,
 								fadeOut:1000,
 								onHidden:function(){
-									window.location.href='index.php?p=datasiswa';
+									window.location.href='index.php?p=addsiswa&id=$idsiswa';
 								}
 							});
 						});
@@ -118,7 +120,7 @@
 								timeOut:1000,
 								fadeOut:1000,
 								onHidden:function(){
-									window.location.href='index.php?p=addriwayat&id=".$idsiswa."';
+									window.location.href='index.php?p=addsiswa&id=".$idsiswa."';
 								}
 							});
 						});
@@ -191,7 +193,7 @@ $(document).ready(function() {
 </script>
 <div class="card card-primary card-outline">
     <form action="" method="post" enctype="multipart/form-data" id="FormSiswa">
-        <input type="hidden" class="form-control" name="idskul" id="idskul" value="<?php echo $idskul;?>">
+        <input type="hidden" class="form-control" name="idskul" id="idskul" value="<?php echo getskul();?>">
         <div class="card-header">
             <h5 class="card-title m-0" id="judul">Data Peserta Didik</h5>
         </div>

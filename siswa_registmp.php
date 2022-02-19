@@ -10,7 +10,7 @@
 	$semua=0;
 	$no=0;
 	$baris=6;
-    $nama="tb_registrasi";
+	$nama="tb_registrasi";
 	$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1', 'TEMPLATE DATA REGISTRASI')
 		->mergeCells('A1:H1')
@@ -21,7 +21,7 @@
 		->mergeCells('E3:E4')
 		->mergeCells('F3:F4')
 		->mergeCells('G3:G4')
-        ->mergeCells('H3:H4')
+		->mergeCells('H3:H4')
 		->setCellValue('A3', 'No')
 		->setCellValue('A5', '(1)')
 		->setCellValue('B3', 'N I S')
@@ -34,16 +34,16 @@
 		->setCellValue('E5', '(5)')
 		->setCellValue('F3', 'ID Kelas')
 		->setCellValue('F5', '(6)')
-        ->setCellValue('G3', 'Kode Tahun')
+		->setCellValue('G3', 'Kode Tahun')
 		->setCellValue('G5', '(7)')
-        ->setCellValue('H3', 'Ket.')
+		->setCellValue('H3', 'Ket.')
 		->setCellValue('H5', '(8)');
 	$field=array('idsiswa', 'nmsiswa','nisn','nis', 'jnsregistrasi', 'idjreg','rg.*', 'nmkelas','nmthpel');
 	$tbl=array(
-	    'tbregistrasi rg'=>'idsiswa',
-        'tbkelas'=>'idkelas',
-        'tbthpel tp'=>'idthpel',
-        'ref_jnsregistrasi'=>'idjreg'		
+		'tbregistrasi rg'=>'idsiswa',
+		'tbkelas'=>'idkelas',
+		'tbthpel tp'=>'idthpel',
+		'ref_jnsregistrasi'=>'idjreg'		
 	);
 	$where =array(
 		'deleted'=>'0'
@@ -86,7 +86,7 @@
 	$objPHPExcel->getSheet(0)->getColumnDimension('F')->setWidth(36);
 	$objPHPExcel->getSheet(0)->getColumnDimension('G')->setWidth(16);
 	$objPHPExcel->getSheet(0)->getColumnDimension('H')->setWidth(8);
-    $objPHPExcel->getActiveSheet()->setTitle($nama);
+	$objPHPExcel->getActiveSheet()->setTitle($nama);
 	$objPHPExcel->setActiveSheetIndex(0);
 	header('Content-Type: application/vnd.ms-excel');
 	header('Content-Disposition: attachment;filename="'.$nama.'.xls"');
