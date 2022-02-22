@@ -1,16 +1,14 @@
 <?php
- /*session_start();
- if(!isset($_SESSION['beeuser'])){header("Location: login.php");}*/
-require_once '../assets/library/PHPExcel.php';
-include "../config/konfigurasi.php";
+require_once 'assets/library/PHPExcel.php';
+include "dvfunction.php";
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
-      ->setLastModifiedBy("Kasworo Wardani")
-      ->setTitle("Office 2007 XLSX Test Document")
-      ->setSubject("Office 2007 XLSX Test Document")
-       ->setDescription("Soal Export")
-       ->setKeywords("office 2007 openxml php")
-       ->setCategory("Daftar User");
+	->setLastModifiedBy("Kasworo Wardani")
+	->setTitle("Office 2007 XLSX Test Document")
+	->setSubject("Office 2007 XLSX Test Document")
+	->setDescription("Soal Export")
+	->setKeywords("office 2007 openxml php")
+	->setCategory("Daftar User");
 $objPHPExcel->setActiveSheetIndex(0)
   ->mergeCells('A1:N1')
   ->mergeCells('A3:A4')
@@ -58,24 +56,24 @@ $objPHPExcel->setActiveSheetIndex(0)
   $qsiswa=$conn->query("SELECT*FROM tbuser");
   $ceksiswa=$qsiswa->num_rows;
   if($ceksiswa>0){
-    while($s=$qsiswa->fetch_array())
-    {
-        $no++;
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue("A$baris", $no)->setCellValue("b$baris",$s['username'])->setCellValue("C$baris",ucwords(strtolower($s['nama'])))->setCellValue("D$baris",ucwords(strtolower($s['tmplahir'])))->setCellValue("E$baris",$s['tgllahir'])->setCellValue("F$baris",$s['gender'])->setCellValue("G$baris",$s['agama'])->setCellValue("H$baris",$s['alamat'])->setCellValue("I$baris",$s['desa'])->setCellValue("J$baris",$s['kec'])->setCellValue("K$baris",$s['kab'])->setCellValue("L$baris",$s['prov'])->setCellValue("M$baris",$s['kdpos'])->setCellValue("N$baris",$s['nohp']);
-        $baris++;
-    }
+	while($s=$qsiswa->fetch_array())
+	{
+		$no++;
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue("A$baris", $no)->setCellValue("b$baris",$s['username'])->setCellValue("C$baris",ucwords(strtolower($s['nama'])))->setCellValue("D$baris",ucwords(strtolower($s['tmplahir'])))->setCellValue("E$baris",$s['tgllahir'])->setCellValue("F$baris",$s['gender'])->setCellValue("G$baris",$s['agama'])->setCellValue("H$baris",$s['alamat'])->setCellValue("I$baris",$s['desa'])->setCellValue("J$baris",$s['kec'])->setCellValue("K$baris",$s['kab'])->setCellValue("L$baris",$s['prov'])->setCellValue("M$baris",$s['kdpos'])->setCellValue("N$baris",$s['nohp']);
+		$baris++;
+	}
   }
   else
   {
-    while($no<70)
-    {
-        $no++;
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue("A$baris", $no)->setCellValue("B$baris",'')->setCellValue("C$baris",'')->setCellValue("D$baris", '')->setCellValue("E$baris", '')->setCellValue("F$baris", '')->setCellValue("G$baris", '')->setCellValue("H$baris", '')->setCellValue("I$baris", '')->setCellValue("J$baris", '')->setCellValue("K$baris", '')->setCellValue("L$baris", '')->setCellValue("M$baris", '')->setCellValue("N$baris", '');
-        $baris++; 
-    }
-    }
+	while($no<70)
+	{
+		$no++;
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue("A$baris", $no)->setCellValue("B$baris",'')->setCellValue("C$baris",'')->setCellValue("D$baris", '')->setCellValue("E$baris", '')->setCellValue("F$baris", '')->setCellValue("G$baris", '')->setCellValue("H$baris", '')->setCellValue("I$baris", '')->setCellValue("J$baris", '')->setCellValue("K$baris", '')->setCellValue("L$baris", '')->setCellValue("M$baris", '')->setCellValue("N$baris", '');
+		$baris++; 
+	}
+	}
 $semua=$baris-1;
 $objPHPExcel->getActiveSheet()->freezePane('A6');
 

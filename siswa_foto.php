@@ -26,4 +26,3 @@
 	else{
 		echo "error";
 	}
-?>

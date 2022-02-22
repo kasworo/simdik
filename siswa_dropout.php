@@ -131,13 +131,13 @@ if (isset($_POST['simpan'])) {
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <a href="siswa_rwytmp.php?d=2" class="btn btn-success btn-sm" target="_blank">
+                    <a href="siswa_rwytmp.php?d=2" class="btn btn-success btn-sm btn-flat" target="_blank">
                         <i class="fas fa-download"></i> Download
                     </a>
-                    <button type="submit" name="upload" class="btn btn-primary btn-sm">
+                    <button type="submit" name="upload" class="btn btn-primary btn-sm btn-flat">
                         <i class="fas fa-upload"></i>&nbsp;Upload
                     </button>
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+                    <button type="button" class="btn btn-danger btn-sm btn-flat" data-dismiss="modal">
                         <i class="fas fa-power-off"></i> Tutup
                     </button>
                 </div>
@@ -203,9 +203,9 @@ if (isset($_POST['simpan'])) {
                 <button type="submit" class="btn btn-info btn-sm" id="btnTambah" name="lulus">
                     <i class="fas fa-plus-circle"></i>&nbsp;Tambah
                 </button>
-                <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myImportLulus">
+                <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myImportLulus">
                     <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-                </a>
+                </button>
             </form>
         </div>
     </div>
@@ -215,39 +215,20 @@ if (isset($_POST['simpan'])) {
                 <thead>
                     <tr>
                         <th style="text-align: center;width:2.5%">No.</th>
-                        <th style="text-align: center;">Nama Peserta</th>
+                        <th style="text-align: center;">Nama Peserta Didik</th>
                         <th style="text-align: center;width:17.5%">NIS / NISN</th>
-                        <th style="text-align: center;width:15%">Tanggal Ijazah</th>
-                        <th style="text-align: center;width:17.5%">Nomor Ijazah</th>
-                        <th style="text-align: center;width:12.5%">Melanjutkan</th>
+                        <th style="text-align: center;width:15%">Tanggal</th>
+                        <th style="text-align: center;width:27.5%">Alasan</th>
                         <th style="text-align: center;width:12.5%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel t USING(idthpel) WHERE r.idjreg='8'";
+                    $sql = "SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel t USING(idthpel) WHERE r.idjreg='7'";
                     $qs = vquery($sql);
                     $no = 0;
                     foreach ($qs as $s) {
                         $no++;
-                        $key = array(
-                            'idsiswa' => $s['idsiswa']
-                        );
-                        $ceklulus = cekdata('tblulusan', $key);
-                        if ($ceklulus > 0) {
-                            $dl = viewdata('tblulusan', $key)[0];
-                            $tglijz = indonesian_date($dl['tglijazah']);
-                            $noijz = $dl['noijazah'];
-                            if ($dl['lanjut'] == '1') {
-                                $lanjut = '<label class="badge badge-success">Melanjutkan</label>';
-                            } else {
-                                $lanjut = '<label class="badge badge-danger">Tidak</label>';
-                            }
-                        } else {
-                            $tglijz = '<label class="badge badge-warning">Belum Diisi</label>';
-                            $noijz = '<label class="badge badge-warning">Belum Diisi</label>';
-                            $lanjut = '<label class="badge badge-warning">Belum Diisi</label>';
-                        }
                     ?>
                         <tr>
                             <td style="text-align:center"><?php echo $no . '.'; ?></td>
@@ -255,12 +236,11 @@ if (isset($_POST['simpan'])) {
                                 <?php echo ucwords(strtolower($s['nmsiswa'])); ?>
                             </td>
                             <td><?php echo $s['nis'] . ' / ' . $s['nisn']; ?></td>
-                            <td style="text-align:center"><?php echo $tglijz; ?></td>
-                            <td style="text-align:center"><?php echo $noijz; ?></td>
-                            <td style="text-align:center"><?php echo $lanjut; ?></td>
+                            <td style="text-align:center"></td>
+                            <td style="text-align:center"></td>
                             <td style="text-align: center">
                                 <button class="btn btn-xs btn-success btnLulus" data-id="<?php echo $s['idsiswa']; ?>" data-toggle="modal" data-target="#myLulusPD">
-                                    <i class="fas fa-sign-out-alt"></i>&nbsp;Isi Riwayat
+                                    <i class="fas fa-sign-out-alt"></i>&nbsp;Lengkapi
                                 </button>
                             </td>
                         </tr>

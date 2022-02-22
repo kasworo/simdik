@@ -15,7 +15,6 @@ $objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
 	->setDescription("Soal Export")
 	->setKeywords("office 2007 openxml php")
 	->setCategory("Daftar nilai");
- 
 // Add some data
 
 $objPHPExcel->setActiveSheetIndex(0)

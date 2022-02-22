@@ -1,57 +1,56 @@
 <?php
-	if($level=='3'){
-		$sql="SELECT idsiswa FROM tbsiswa WHERE username='$_COOKIE[id]'";
-		$row=$conn->query($sql);
-		$r=$row->fetch_array();
-		$idsiswa=$r['idsiswa'];
-	}
-	else {
-		if(isset($_GET['id'])){
-            $idsiswa=$_GET['id'];
-        };
-	}
-    
-	if(isset($_POST['simpan'])) {
-        if(empty($_POST['idsiswa'])){
-            $data=array(
-                'idskul'        => $_POST['idskul'],
-                'nmsiswa'       => $_POST['nmsiswa'],
-                'nik'           => $_POST['nik'],
-                'nis'           => $_POST['nis'],
-                'nisn'          => $_POST['nisn'],
-                'tmplahir'      => $_POST['tmplahir'],
-                'tgllahir'      => $_POST['tgllahir'],
-                'gender'        => $_POST['gender'],
-                'idagama'       => $_POST['agama'],
-                'anake'         => $_POST['anake'],
-                'sdr'           => $_POST['saudara'],
-                'warganegara'   => $_POST['warganegara'],
-                'goldarah'      => $_POST['goldarah'],
-                'rwysakit'      => $_POST['penyakit'],
-                'kebkhusus'     => $_POST['kebkhusus'],
-                'ikuts'         => $_POST['reftgl'],
-                'transpr'       => $_POST['transpor'],
-                'jarak'         => $_POST['jarak'],
-                'waktu'         => $_POST['waktu'],
-                'alamat'        => $_POST['almt'],
-                'desa'          => $_POST['desa'],
-                'kec'           => $_POST['kec'],
-                'kab'           => $_POST['kab'],
-                'prov'          => $_POST['prov'],
-                'kdpos'         => $_POST['kdpos'],
-                'lintang'       => $_POST['longitude'],
-                'bujur'         => $_POST['latitude'],
-                'nohp'          => $_POST['nohp'],
-                'hobi1'         => $_POST['olahrg'],
-                'hobi2'         => $_POST['seni'],
-                'hobi3'         => $_POST['orgns'],
-                'hobi4'         => $_POST['lain'],
-                'deleted'       =>'0'
-            );
-            $baru=adddata('tbsiswa',$data);
-			if($baru>0){
-                $idsiswa=getidsiswa($_POST['nis'], $_POST['nisn']);
-				echo "<script>
+if ($level == '3') {
+    $sql = "SELECT idsiswa FROM tbsiswa WHERE username='$_COOKIE[id]'";
+    $row = $conn->query($sql);
+    $r = $row->fetch_array();
+    $idsiswa = $r['idsiswa'];
+} else {
+    if (isset($_GET['id'])) {
+        $idsiswa = $_GET['id'];
+    };
+}
+
+if (isset($_POST['simpan'])) {
+    if (empty($_POST['idsiswa'])) {
+        $data = array(
+            'idskul'        => $_POST['idskul'],
+            'nmsiswa'       => $_POST['nmsiswa'],
+            'nik'           => $_POST['nik'],
+            'nis'           => $_POST['nis'],
+            'nisn'          => $_POST['nisn'],
+            'tmplahir'      => $_POST['tmplahir'],
+            'tgllahir'      => $_POST['tgllahir'],
+            'gender'        => $_POST['gender'],
+            'idagama'       => $_POST['agama'],
+            'anake'         => $_POST['anake'],
+            'sdr'           => $_POST['saudara'],
+            'warganegara'   => $_POST['warganegara'],
+            'goldarah'      => $_POST['goldarah'],
+            'rwysakit'      => $_POST['penyakit'],
+            'kebkhusus'     => $_POST['kebkhusus'],
+            'ikuts'         => $_POST['reftgl'],
+            'transpr'       => $_POST['transpor'],
+            'jarak'         => $_POST['jarak'],
+            'waktu'         => $_POST['waktu'],
+            'alamat'        => $_POST['almt'],
+            'desa'          => $_POST['desa'],
+            'kec'           => $_POST['kec'],
+            'kab'           => $_POST['kab'],
+            'prov'          => $_POST['prov'],
+            'kdpos'         => $_POST['kdpos'],
+            'lintang'       => $_POST['longitude'],
+            'bujur'         => $_POST['latitude'],
+            'nohp'          => $_POST['nohp'],
+            'hobi1'         => $_POST['olahrg'],
+            'hobi2'         => $_POST['seni'],
+            'hobi3'         => $_POST['orgns'],
+            'hobi4'         => $_POST['lain'],
+            'deleted'       => '0'
+        );
+        $baru = adddata('tbsiswa', $data);
+        if ($baru > 0) {
+            $idsiswa = getidsiswa($_POST['nis'], $_POST['nisn']);
+            echo "<script>
 					$(function() {
 							toastr.success('Tambah Data Siswa Berhasil!','Terima Kasih...',{
 								timeOut:1000,
@@ -62,9 +61,8 @@
 							});
 						});
 					</script>";
-			}
-			else {
-				echo "<script>
+        } else {
+            echo "<script>
 						$(function() {
 							toastr.error('Tambah Data Siswa Gagal!','Mohon Maaf...',{
 								timeOut:1000,
@@ -75,59 +73,57 @@
 							});
 						});
 					</script>";
-			}
-		}
-		else {
-            $data=array(
-                'nmsiswa'       => $_POST['nmsiswa'],
-                'nik'           => $_POST['nik'],
-                'nis'           => $_POST['nis'],
-                'nisn'          => $_POST['nisn'],
-                'tmplahir'      => $_POST['tmplahir'],
-                'tgllahir'      => $_POST['tgllahir'],
-                'gender'        => $_POST['gender'],
-                'idagama'       => $_POST['agama'],
-                'anake'         => $_POST['anake'],
-                'sdr'           => $_POST['saudara'],
-                'warganegara'   => $_POST['warganegara'],
-                'goldarah'      => $_POST['goldarah'],
-                'rwysakit'      => $_POST['penyakit'],
-                'kebkhusus'     => $_POST['kebkhusus'],
-                'ikuts'         => $_POST['reftgl'],
-                'transpr'       => $_POST['transpor'],
-                'jarak'         => $_POST['jarak'],
-                'waktu'         => $_POST['waktu'],
-                'alamat'        => $_POST['almt'],
-                'desa'          => $_POST['desa'],
-                'kec'           => $_POST['kec'],
-                'kab'           => $_POST['kab'],
-                'prov'          => $_POST['prov'],
-                'kdpos'         => $_POST['kdpos'],
-                'lintang'       => $_POST['longitude'],
-                'bujur'         => $_POST['latitude'],
-                'nohp'          => $_POST['nohp'],
-                'hobi1'         => $_POST['olahrg'],
-                'hobi2'         => $_POST['seni'],
-                'hobi3'         => $_POST['orgns'],
-                'hobi4'         => $_POST['lain']
-            );
-            $field=array('idsiswa'=>$_POST['idsiswa']);
-            $update=editdata('tbsiswa',$data,'',$field);
-			if($update>0){
-				echo "<script>
+        }
+    } else {
+        $data = array(
+            'nmsiswa'       => $_POST['nmsiswa'],
+            'nik'           => $_POST['nik'],
+            'nis'           => $_POST['nis'],
+            'nisn'          => $_POST['nisn'],
+            'tmplahir'      => $_POST['tmplahir'],
+            'tgllahir'      => $_POST['tgllahir'],
+            'gender'        => $_POST['gender'],
+            'idagama'       => $_POST['agama'],
+            'anake'         => $_POST['anake'],
+            'sdr'           => $_POST['saudara'],
+            'warganegara'   => $_POST['warganegara'],
+            'goldarah'      => $_POST['goldarah'],
+            'rwysakit'      => $_POST['penyakit'],
+            'kebkhusus'     => $_POST['kebkhusus'],
+            'ikuts'         => $_POST['reftgl'],
+            'transpr'       => $_POST['transpor'],
+            'jarak'         => $_POST['jarak'],
+            'waktu'         => $_POST['waktu'],
+            'alamat'        => $_POST['almt'],
+            'desa'          => $_POST['desa'],
+            'kec'           => $_POST['kec'],
+            'kab'           => $_POST['kab'],
+            'prov'          => $_POST['prov'],
+            'kdpos'         => $_POST['kdpos'],
+            'lintang'       => $_POST['longitude'],
+            'bujur'         => $_POST['latitude'],
+            'nohp'          => $_POST['nohp'],
+            'hobi1'         => $_POST['olahrg'],
+            'hobi2'         => $_POST['seni'],
+            'hobi3'         => $_POST['orgns'],
+            'hobi4'         => $_POST['lain']
+        );
+        $field = array('idsiswa' => $_POST['idsiswa']);
+        $update = editdata('tbsiswa', $data, '', $field);
+        if ($update > 0) {
+            echo "<script>
 						$(function() {
 							toastr.info('Update Data Siswa Berhasil!','Terima Kasih...',{
 								timeOut:1000,
 								fadeOut:1000,
 								onHidden:function(){
-									window.location.href='index.php?p=addsiswa&id=".$idsiswa."';
+									window.location.href='index.php?p=addsiswa&id=" . $idsiswa . "';
 								}
 							});
 						});
 					</script>";
-			}
-			else {
-				echo "<script>
+        } else {
+            echo "<script>
 						$(function() {
 							toastr.error('Update Data Siswa Gagal!','Mohon Maaf...',{
 								timeOut:1000,
@@ -138,13 +134,13 @@
 							});
 						});
 					</script>";
-			}
-		}
-	}
+        }
+    }
+}
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
-    let id = "<?php echo $idsiswa;?>";
+    let id = "<?php echo $idsiswa; ?>";
     $.ajax({
         url: "siswa_json.php",
         type: "POST",
@@ -193,7 +189,7 @@ $(document).ready(function() {
 </script>
 <div class="card card-primary card-outline">
     <form action="" method="post" enctype="multipart/form-data" id="FormSiswa">
-        <input type="hidden" class="form-control" name="idskul" id="idskul" value="<?php echo getskul();?>">
+        <input type="hidden" class="form-control" name="idskul" id="idskul" value="<?php echo getskul(); ?>">
         <div class="card-header">
             <h5 class="card-title m-0" id="judul">Data Peserta Didik</h5>
         </div>
@@ -474,7 +470,7 @@ $(document).ready(function() {
         </div>
         <div class="card-footer">
             <div class="row">
-                <?php if($level=='1'): ?>
+                <?php if ($level == '1') : ?>
                 <a href="index.php?p=datasiswa" class="btn btn-danger col-sm-2 ml-2 mb-2">
                     <i class="fas fa-arrow-circle-left"></i>
                     <span>&nbsp;Kembali</span>
@@ -485,9 +481,9 @@ $(document).ready(function() {
                     <span>&nbsp;Simpan</span>
                 </button>
                 <?php
-                    if(isset($_GET['id'])):                    
+                if (isset($_GET['id'])) :
                 ?>
-                <a href="index.php?p=addayah&id=<?php echo $idsiswa;?>" class="btn btn-success col-sm-2 ml-2 mb-2">
+                <a href="index.php?p=addayah&id=<?php echo $idsiswa; ?>" class="btn btn-success col-sm-2 ml-2 mb-2">
                     <span>Berikutnya&nbsp;</span>
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>
