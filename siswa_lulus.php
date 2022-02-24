@@ -102,8 +102,57 @@ if (isset($_POST['simpan'])) {
 						}
 					});
 				});
-				</script>";
+			</script>";
         }
+    }
+}
+if (isset($_POST['lulus'])) {
+    $sqt = "SELECT right(nmthpel,1) as cekth FROM tbthpel WHERE aktif='1'";
+    $ct = vquery($sqt)[0];
+    if ($ct['cekth'] == '1') {
+        echo "<script>
+				$(function() {
+					toastr.error('Tidak Diperkenankan Meluluskan Pada Semester Ganjil!', 'Mohon Maaf...', {
+						timeOut: 1000,
+						fadeOut: 1000,
+						onHidden: function() {
+							$('#myLulusPD').hide();
+						}
+					});
+				});
+				</script>";
+    } else {
+        $sql = "SELECT idsiswa,idthpel FROM tbregistrasi INNER JOIN tbregistrasi_detil USING(idreg) INNER JOIN tbthpel USING(idthpel) WHERE idkelas='9' AND aktif='1' AND idjreg='4'";
+        $sukses = 0;
+        $gagal = 0;
+        $dreg = vquery($sql);
+        foreach ($dreg as $reg) {
+            $sqlcek = "SELECT*FROM tbregistrasi WHERE idsiswa='$reg[idsiswa]' AND idthpel='$reg[idthpel]' AND idjreg='8'";
+            $ceklulus = cquery($sqlcek);
+            if ($ceklulus == 0) {
+                $data = array(
+                    'idsiswa' => $reg['idsiswa'],
+                    'idthpel' => $reg['idthpel'],
+                    'idjreg' => '8'
+                );
+                if (adddata('tbregistrasi', $data) > 0) {
+                    $sukses++;
+                }
+            } else {
+                $gagal++;
+            }
+        }
+        echo "<script>
+                    $(function() {
+                        toastr.info('Peserta Didik Berhasil Dilulusin!', 'Informasi', {
+                            timeOut: 1000,
+                            fadeOut: 1000,
+                            onHidden: function() {
+                                $('#myLulusPD').hide();
+                            }
+                        });
+                    });
+                    </script>";
     }
 }
 ?>
@@ -216,16 +265,16 @@ if (isset($_POST['simpan'])) {
                     <tr>
                         <th style="text-align: center;width:2.5%">No.</th>
                         <th style="text-align: center;">Nama Peserta</th>
-                        <th style="text-align: center;width:17.5%">NIS / NISN</th>
-                        <th style="text-align: center;width:15%">Tanggal Ijazah</th>
-                        <th style="text-align: center;width:17.5%">Nomor Ijazah</th>
+                        <th style="text-align: center;width:15%">NIS / NISN</th>
+                        <th style="text-align: center;width:15%">Tanggal</th>
+                        <th style="text-align: center;width:20%">Nomor Ijazah</th>
                         <th style="text-align: center;width:12.5%">Melanjutkan</th>
-                        <th style="text-align: center;width:12.5%">Aksi</th>
+                        <th style="text-align: center;width:10%">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel t USING(idthpel) WHERE r.idjreg='8'";
+                    $sql = "SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel t USING(idthpel) WHERE r.idjreg='8' AND t.aktif='1' ORDER BY s.nis";
                     $qs = vquery($sql);
                     $no = 0;
                     foreach ($qs as $s) {
@@ -254,13 +303,13 @@ if (isset($_POST['simpan'])) {
                             <td title="<?php echo $s['idsiswa']; ?>">
                                 <?php echo ucwords(strtolower($s['nmsiswa'])); ?>
                             </td>
-                            <td><?php echo $s['nis'] . ' / ' . $s['nisn']; ?></td>
+                            <td style="text-align:center"><?php echo $s['nis'] . ' / ' . $s['nisn']; ?></td>
                             <td style="text-align:center"><?php echo $tglijz; ?></td>
                             <td style="text-align:center"><?php echo $noijz; ?></td>
                             <td style="text-align:center"><?php echo $lanjut; ?></td>
                             <td style="text-align: center">
-                                <button class="btn btn-xs btn-success btnLulus" data-id="<?php echo $s['idsiswa']; ?>" data-toggle="modal" data-target="#myLulusPD">
-                                    <i class="fas fa-sign-out-alt"></i>&nbsp;Isi Riwayat
+                                <button class="btn btn-xs btn-secondary btnLulus" data-id="<?php echo $s['idsiswa']; ?>" data-toggle="modal" data-target="#myLulusPD">
+                                    <i class="fas fa-edit"></i>&nbsp;Lengkapi
                                 </button>
                             </td>
                         </tr>

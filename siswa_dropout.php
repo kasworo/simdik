@@ -146,7 +146,7 @@ if (isset($_POST['simpan'])) {
     </div>
 </div>
 
-<div class="modal fade" id="myLulusPD" aria-modal="true">
+<div class="modal fade" id="myDropOut" aria-modal="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -197,15 +197,15 @@ if (isset($_POST['simpan'])) {
 </div>
 <div class="card card-secondary card-outline">
     <div class="card-header">
-        <h4 class="card-title">Data Peserta Didik Tingkat Akhir</h4>
+        <h4 class="card-title">Data Peserta Didik Drop Out</h4>
         <div class="card-tools">
             <form action="" method="post">
                 <button type="submit" class="btn btn-info btn-sm" id="btnTambah" name="lulus">
                     <i class="fas fa-plus-circle"></i>&nbsp;Tambah
                 </button>
-                <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myImportLulus">
+                <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myImportLulus">
                     <i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-                </button>
+                </a>
             </form>
         </div>
     </div>
@@ -239,7 +239,7 @@ if (isset($_POST['simpan'])) {
                             <td style="text-align:center"></td>
                             <td style="text-align:center"></td>
                             <td style="text-align: center">
-                                <button class="btn btn-xs btn-success btnLulus" data-id="<?php echo $s['idsiswa']; ?>" data-toggle="modal" data-target="#myLulusPD">
+                                <button class="btn btn-xs btn-success btnDO" data-id="<?php echo $s['idsiswa']; ?>" data-toggle="modal" data-target="#myDropOut">
                                     <i class="fas fa-sign-out-alt"></i>&nbsp;Lengkapi
                                 </button>
                             </td>
@@ -263,14 +263,14 @@ if (isset($_POST['simpan'])) {
         });
     });
 
-    $(".btnLulus").click(function(e) {
+    $(".btnDO").click(function(e) {
         e.preventDefault();
         let id = $(this).data('id');
         $.ajax({
             url: "siswa_riwayat.php",
             type: "POST",
             dataType: 'json',
-            data: "id=" + id + "&d=3",
+            data: "id=" + id + "&d=4",
             success: function(data) {
                 $(".modal-title").html(data.judul);
                 $("#simpan").html(data.tmbl);

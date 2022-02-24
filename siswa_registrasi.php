@@ -7,88 +7,77 @@ if (isset($_POST['simpan'])) {
 	} else {
 		$tgl = date('Y-m-d');
 	}
-	$keyreg = array(
+	$dtr = array(
 		'idsiswa' => $_POST['idsiswa'],
+		'idjreg' => $_POST['idreg'],
 		'idthpel' => $_POST['kdthpel']
 	);
-	$join = array(
-		'tbkelas' => 'idkelas',
-		'tbthpel' => 'idthpel'
-	);
-	$sqlr = "SELECT idsiswa FROM tbregistrasi INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='idsiswa'='$_POST[idsiswa]' AND 'idthpel'='$_POST[kdthpel]'";
+	$reg = viewdata('tbregistrasi', $dtr)[0];
+	$sqlr = "SELECT idsiswa FROM tbregistrasi INNER JOIN tbregistrasi_detil USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='$_POST[idsiswa]' AND idthpel='$_POST[kdthpel]' AND idjreg='$_POST[idreg]'";
 	$cekregis = cquery($sqlr);
 	if ($cekregis === 0) {
 		$data = array(
-			'idsiswa' => $_POST['idsiswa'],
-			'idjreg' => $_POST['idreg'],
+			'idreg' => $reg['idreg'],
 			'idkelas' => $_POST['kdkelas'],
-			'idthpel' => $_POST['kdthpel'],
 			'tglreg' => $tgl
 		);
-		//var_dump($data);
-		$rows = adddata('tbregistrasi', $data);
+		$rows = adddata('tbregistrasi_detil', $data);
 		if ($rows > 0) {
 			echo "<script>
-						$(function() {
-							toastr.success('Maping Rombel Untuk Peserta Didik Berhasil!','Terimakasih', {
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=regsiswa';
-								}
-							});
-						});
-					</script>";
+				$(function() {
+					toastr.success('Registrasi Rombel Untuk Peserta Didik Berhasil!','Terimakasih', {
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden:function(){
+							window.location.href='index.php?p=regsiswa';
+						}
+					});
+				});
+			</script>";
 		} else {
 			echo "<script>
-						$(function() {
-							toastr.error('Maping Rombel Untuk Peserta Didik Gagal!','Mohon Maaf', {
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=regsiswa';
-								}
-							});
-						});
-					</script>";
+				$(function() {
+					toastr.error('Registrasi Rombel Untuk Peserta Didik Gagal!','Mohon Maaf', {
+					timeOut:1000,
+					fadeOut:1000,
+					onHidden:function(){
+						window.location.href='index.php?p=regsiswa';
+					}
+				});
+			});
+			</script>";
 		}
-		//exit;
 	} else {
 		$data = array(
-			'idjreg' => $_POST['idreg'],
 			'idkelas' => $_POST['kdkelas'],
 			'tglreg' => $tgl
 		);
-		$join = array('tbkelas' => 'idkelas');
-		$field = array(
-			'idsiswa' => $_POST['idsiswa'],
-			'idthpel' => $_POST['kdthpel']
-		);
-		$rows = editdata('tbregistrasi', $data, $join, $field);
+		$key = array('idjreg' => $_POST['idreg']);
+		$rows = editdata('tbregistrasi_detil', $data, '', $key);
 		if ($rows > 0) {
 			echo "<script>
-						$(function() {
-							toastr.success('Update Maping Rombel Untuk Peserta Didik Berhasil!','Terimakasih', {
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=regsiswa';
-								}
-							});
-						});
-					</script>";
+					$(function() {
+						toastr.success('Update Rombel Untuk Peserta Didik Berhasil!','Terimakasih', {
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden:function(){
+							window.location.href='index.php?p=regsiswa';
+						}
+					});
+				});
+			</script>";
 		} else {
 			echo "<script>
-						$(function() {
-							toastr.error('Update Maping Rombel Untuk Peserta Didik Gagal!','Mohon Maaf', {
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=regsiswa';
-								}
-							});
-						});
-					</script>";
+					$(function() {
+						toastr.error('Update Rombel Untuk Peserta Didik Gagal!','Mohon Maaf', {
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden:function(){
+							window.location.href='index.php?p=regsiswa';
+						}
+					});
+				});
+			</script>";
 		}
 		//exit;
 	}
@@ -127,22 +116,31 @@ if (isset($_POST['upload'])) {
 				'idsiswa' => $idsiswa,
 				'idthpel' => $idthpel
 			);
-			$cekdata = cekdata('tbregistrasi', $key);
-			if ($cekdata > 0) {
-				$datane = array(
-					'idjreg' => $xidreg,
-					'idkelas' => $xidkelas,
-					'tglreg' => $xtglreg
+			if (cekdata('tbregistrasi', $key) > 0) {
+				$dr = viewdata('tbregistrasi', $key)[0];
+				$keyrg = array(
+					'idreg' => $dr['idreg']
 				);
-				$edit = editdata('tbregistrasi', $datane, '', $key);
+				if (cekdata('tbregistrasi_detil', $keyrg) > 0) {
+					$datane = array(
+						'idkelas' => $xidkelas,
+						'tglreg' => $xtglreg
+					);
+					editdata('tbregistrasi_detail', $datane, '', $keyrg);
+				} else {
+					$datane = array(
+						'idreg' => $dr['idreg'],
+						'idkelas' => $xidkelas,
+						'tglreg' => $xtglreg
+					);
+					adddata('tbregistrasi_detil', $datane);
+				}
 				$update++;
 			} else {
 				$datane = array(
 					'idjreg' => $xidreg,
 					'idsiswa' => $idsiswa,
-					'idkelas' => $xidkelas,
 					'idthpel' => $idthpel,
-					'tglreg' => $xtglreg
 				);
 				$tambah = adddata('tbregistrasi', $datane);
 				if ($tambah > 0) {
@@ -247,7 +245,7 @@ if (isset($_POST['upload'])) {
 						</div>
 						<div class="form-group row mb-2">
 							<label class="col-sm-5">Tahun Pelajaran</label>
-							<select class="form-control input-sm col-sm-6" id="kdthpel" name="kdthpel">
+							<select class="form-control input-sm col-sm-6" id="kdthpel" name="kdthpel" readonly>
 								<option value="">..Pilih..</option>
 								<?php
 								$qtp = viewdata('tbthpel', $key);
@@ -260,8 +258,22 @@ if (isset($_POST['upload'])) {
 							</select>
 						</div>
 						<div class="form-group row mb-2">
+							<label class="col-sm-5">Terdaftar Sebagai</label>
+							<select class="form-control input-sm col-sm-6" id="idreg" name="idreg" readonly>
+								<option value="">..Pilih..</option>
+								<?php
+								$sqreg = "SELECT*FROM ref_jnsregistrasi";
+								$qreg = vquery($sqreg);
+								foreach ($qreg as $rg) :
+								?>
+									<option value="<?php echo $rg['idjreg']; ?>"><?php echo $rg['jnsregistrasi']; ?>
+									</option>
+								<?php endforeach ?>
+							</select>
+						</div>
+						<div class="form-group row mb-2">
 							<label class="col-sm-5">Kelas</label>
-							<select class="form-control input-sm col-sm-6" id="kdkelas" name="kdkelas" onchange="pilkelas(this.value)">
+							<select class="form-control input-sm col-sm-6" id="kdkelas" name="kdkelas">
 								<option value="">..Pilih..</option>
 								<?php
 								$sqkls = "SELECT idkelas, nmkelas FROM tbkelas INNER JOIN tbskul USING(idjenjang)";
@@ -269,20 +281,6 @@ if (isset($_POST['upload'])) {
 								foreach ($qkls as $kl) :
 								?>
 									<option value="<?php echo $kl['idkelas']; ?>"><?php echo $kl['nmkelas']; ?></option>
-								<?php endforeach ?>
-							</select>
-						</div>
-						<div class="form-group row mb-2">
-							<label class="col-sm-5">Terdaftar Sebagai</label>
-							<select class="form-control input-sm col-sm-6" id="idreg" name="idreg">
-								<option value="">..Pilih..</option>
-								<?php
-								$sqreg = "SELECT*FROM ref_jnsregistrasi LIMIT 0,5";
-								$qreg = vquery($sqreg);
-								foreach ($qreg as $rg) :
-								?>
-									<option value="<?php echo $rg['idjreg']; ?>"><?php echo $rg['jnsregistrasi']; ?>
-									</option>
 								<?php endforeach ?>
 							</select>
 						</div>
@@ -341,7 +339,7 @@ if (isset($_POST['upload'])) {
 				<tbody>
 					<?php
 
-					$sql = "SELECT idsiswa, nis, nisn, nmsiswa, nmkelas, r.idthpel FROM tbsiswa INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbregistrasi_detil rd USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE deleted='0' AND aktif='1' OR idjreg IS NULL GROUP BY idsiswa ORDER BY nis";
+					$sql = "SELECT idsiswa, nis, nisn, nmsiswa, nmkelas, r.idthpel FROM tbsiswa INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel USING(idthpel) LEFT JOIN tbregistrasi_detil rd USING(idreg) LEFT JOIN tbkelas USING(idkelas) WHERE deleted='0' AND aktif='1' AND idjreg<6 GROUP BY idsiswa ORDER BY nis";
 					$no = 0;
 					$qs = vquery($sql);
 					foreach ($qs as $s) :
@@ -370,7 +368,6 @@ if (isset($_POST['upload'])) {
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="js/pilihkelas.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#myRegPD").on('hidden.bs.modal', function() {
@@ -388,14 +385,14 @@ if (isset($_POST['upload'])) {
 			"responsive": true,
 		});
 	});
-	$("#kdrombel").change(function() {
-		var rmb = $(this).val();
-		if (rmb == '' || rmb == null) {
-			toastr.error('Pilih Rombel Dulu!');
-		} else {
-			$("#idreg").removeAttr('disabled');
-		}
-	})
+	// $("#kdrombel").change(function() {
+	// 	var rmb = $(this).val();
+	// 	if (rmb == '' || rmb == null) {
+	// 		toastr.error('Pilih Rombel Dulu!');
+	// 	} else {
+	// 		$("#idreg").removeAttr('disabled');
+	// 	}
+	// })
 
 	$(".btnRegistrasi").click(function() {
 		let id = $(this).data('id');
@@ -409,7 +406,6 @@ if (isset($_POST['upload'])) {
 				$("#idsiswa").val(e.idsiswa);
 				$("#nmsiswa").val(e.nmsiswa);
 				$("#kdkelas").val(e.kelas);
-				$("#kdrombel").val(e.rombel);
 				$("#idreg").val(e.regis);
 				$("#simpan").html(e.tmb);
 			}

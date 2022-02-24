@@ -88,7 +88,7 @@ if (empty($_COOKIE['id'])) { {
 					</div>
 					<?php
 					$kabeh = cekdata('tbthpel', '', "LEFT(nmthpel,4)");
-					if ($kabeh > 5) {
+					if ($kabeh >= 5) {
 						$offset = $kabeh - 5;
 						$sql = "SELECT LEFT(desthpel,9) as namathpel, MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbthpel GROUP BY LEFT(nmthpel,4) ORDER BY idthpel LIMIT 5 OFFSET $offset";
 					} else {

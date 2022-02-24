@@ -9,8 +9,8 @@ if ($cek > 0) {
     $data = array(
         'idsiswa' => $m['idsiswa'],
         'nmsiswa' => ucwords(strtolower($m['nmsiswa'])),
-        'regis' => $m['idjreg'],
-        'tahun' => $m['idthpel'],
+        // 'regis' => $m['idjreg'],
+        // 'tahun' => $m['idthpel'],
         'judul' => $judul,
         'tmb' => $tmb
     );

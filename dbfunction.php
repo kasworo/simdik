@@ -390,7 +390,6 @@ function cquery($sql)
 {
 	global $conn;
 	$result = $conn->query($sql);
-
 	return $result->num_rows;
 }
 
@@ -452,7 +451,6 @@ function cekdata($tbl, $key = '', $grup = '', $ord = '')
 			$sql = "SELECT*FROM $tbl WHERE " . implode(' AND ', $where) . " GROUP BY $grup";
 		}
 	}
-	//var_dump($sql);
 	$result = $conn->query($sql);
 	return $result->num_rows;
 }
@@ -463,7 +461,8 @@ function adddata($tbl, $data)
 	$key = array_keys($data);
 	$val = array_values($data);
 	$sql = "INSERT INTO $tbl (" . implode(', ', $key) . ") VALUES ('" . implode("', '", $val) . "')";
-	//var_dump($sql);die;
+	// var_dump($sql);
+	// die;
 	$conn->query($sql);
 	return $conn->affected_rows;
 }

@@ -1,8 +1,8 @@
 <?php
-if(isset($_POST['upload'])) {
+if (isset($_POST['upload'])) {
 	require_once 'assets/library/PHPExcel.php';
 	require_once 'assets/library/excel_reader.php';
-	if(empty($_FILES['filerwy']['tmp_name'])) {
+	if (empty($_FILES['filerwy']['tmp_name'])) {
 		echo "<script>
 		$(function() {
 			toastr.error('File Template Riwayat Sekolah Kosong!', 'Mohon Maaf!', {
@@ -10,58 +10,59 @@ if(isset($_POST['upload'])) {
 				fadeOut: 1000
 			});
 		});
-		</script>"; 
-	} 
-	else {
-		$data = new Spreadsheet_Excel_Reader($_FILES['filerwy']['tmp_name']);		
-		$baris = $data->rowcount($sheet_index=0);
-		$isidata=$baris-5;		
+		</script>";
+	} else {
+		$data = new Spreadsheet_Excel_Reader($_FILES['filerwy']['tmp_name']);
+		$baris = $data->rowcount($sheet_index = 0);
+		$isidata = $baris - 5;
 		$sukses = 0;
 		$gagal = 0;
-		$update=0;
-		for ($i=6; $i<=$baris; $i++)
-		{
-			$xnis=$data->val($i,2);		   
-			$xnisn=$data->val($i,3);
-			$xidreg=$data->val($i,5);
-			$xaslsd=$data->val($i,6);
-			$xnoijz=$data->val($i,7);
-			$xtglijz=$data->val($i,8);
-			$xlamasd=$data->val($i,9);
-			$ds=viewdata('tbsiswa',array('nis'=>$xnis,'nisn'=>$xnisn))[0];
-			$idsiswa=$ds['idsiswa'];			  
-			$key=array('idsiswa'=>$idsiswa); 
-					
-			$cekdata=cekdata('tbmutasi',$key);
-			if($cekdata>0){
-				$datane=array(
-					'aslkesmp'=>$xaslsmp,
-					'jnsmutasi'=>$xidreg,
-					'nosurat'=>$xnosurat,
-					'tglsurat'=>$xtglsurat,
-					'alasan'=>$xalasan  
+		$update = 0;
+		for ($i = 6; $i <= $baris; $i++) {
+			$xnis = $data->val($i, 2);
+			$xnisn = $data->val($i, 3);
+			$xidreg = $data->val($i, 5);
+			$xaslsd = $data->val($i, 6);
+			$xnoijz = $data->val($i, 7);
+			$xtglijz = $data->val($i, 8);
+			$xlamasd = $data->val($i, 9);
+			$ds = viewdata('tbsiswa', array('nis' => $xnis, 'nisn' => $xnisn))[0];
+			$idsiswa = $ds['idsiswa'];
+			$key = array('idsiswa' => $idsiswa);
+
+			$cekdata = cekdata('tbmutasi', $key);
+			if ($cekdata > 0) {
+				$datane = array(
+					'aslkesmp' => $xaslsmp,
+					'jnsmutasi' => $xidreg,
+					'nosurat' => $xnosurat,
+					'tglsurat' => $xtglsurat,
+					'alasan' => $xalasan
 				);
-				$edit=editdata('tbmutasi',$datane,'',$key);
+				$edit = editdata('tbmutasi', $datane, '', $key);
 				$update++;
-			} 
-			else {
-				$datane=array(
-					'idsiswa'=>$idsiswa,
-					'aslkesmp'=>$xaslsmp,
-					'jnsmutasi'=>$xidreg,
-					'nosurat'=>$xnosurat,
-					'tglsurat'=>$xtglsurat,
-					'alasan'=>$xalasan
+			} else {
+				$datane = array(
+					'idsiswa' => $idsiswa,
+					'aslkesmp' => $xaslsmp,
+					'jnsmutasi' => $xidreg,
+					'nosurat' => $xnosurat,
+					'tglsurat' => $xtglsurat,
+					'alasan' => $xalasan
 				);
-				$tambah=adddata('tbmutasi',$datane);
-				if($tambah>0){$sukses++;} else {$gagal++;}
+				$tambah = adddata('tbmutasi', $datane);
+				if ($tambah > 0) {
+					$sukses++;
+				} else {
+					$gagal++;
+				}
 			}
 		}
-			
-		if($gagal>0){
-			echo"<script>
+
+		if ($gagal > 0) {
+			echo "<script>
 				$(function() {
-						toastr.error('Ada ".$gagal." Data Gagal Ditambahkan','Mohon Maaf!',{
+						toastr.error('Ada " . $gagal . " Data Gagal Ditambahkan','Mohon Maaf!',{
 							timeOut:1000,
 							fadeOut:1000,
 							onHidden:function(){
@@ -70,11 +71,11 @@ if(isset($_POST['upload'])) {
 						});
 					});
 				</script>";
-		} 
-			if($sukses>0){ 
-				echo"<script>
+		}
+		if ($sukses > 0) {
+			echo "<script>
 					$(function() {
-						toastr.success('Ada ".$sukses." Data Berhasil Ditambahkan','Terima Kasih',{
+						toastr.success('Ada " . $sukses . " Data Berhasil Ditambahkan','Terima Kasih',{
 							timeOut:1000,
 							fadeOut:1000,
 							onHidden:function(){
@@ -83,12 +84,11 @@ if(isset($_POST['upload'])) {
 						});
 					});
 				</script>";
-			} 
-			if($update>0)
-			{ 
-				echo"<script>
+		}
+		if ($update > 0) {
+			echo "<script>
 					$(function() {
-						toastr.warning('Ada ".$update." Data Berhasil Diupdate!','Terima Kasih',{
+						toastr.warning('Ada " . $update . " Data Berhasil Diupdate!','Terima Kasih',{
 							timeOut:1000,
 							fadeOut:1000,
 							onHidden:function(){
@@ -97,24 +97,23 @@ if(isset($_POST['upload'])) {
 						});
 					});
 				</script>";
-			}			
-				
 		}
 	}
+}
 
-if(isset($_POST['simpan'])){
-	$ceks=cekdata('tbmutasi', array('idsiswa'=>$_POST['idsiswa']));
-	if($ceks==0){
-		$data=array(
+if (isset($_POST['simpan'])) {
+	$ceks = cekdata('tbmutasi', array('idsiswa' => $_POST['idsiswa']));
+	if ($ceks == 0) {
+		$data = array(
 			'idsiswa'   => $_POST['idsiswa'],
 			'jnsmutasi'  => $_POST['jnsmutasi'],
 			'aslkesmp'  => $_POST['aslsmp'],
 			'nosurat'   => $_POST['nosurat'],
 			'tglsurat'  => $_POST['tglsurat'],
-			'alasan'	=>$_POST['alasan']
+			'alasan'	=> $_POST['alasan']
 		);
-		$baru=adddata('tbmutasi',$data);
-		if($baru>0){
+		$baru = adddata('tbmutasi', $data);
+		if ($baru > 0) {
 			echo "<script>
 			$(function() {
 				toastr.success('Tambah Riwayat Pendidikan Siswa Berhasil!', 'Terima Kasih...', {
@@ -126,8 +125,7 @@ if(isset($_POST['simpan'])){
 				});
 			});
 			</script>";
-		}
-		else {
+		} else {
 			echo "<script>
 			$(function() {
 				toastr.error('Tambah Riwayat Pendidikan Siswa Gagal!', 'Mohon Maaf...', {
@@ -140,16 +138,15 @@ if(isset($_POST['simpan'])){
 			});
 			</script>";
 		}
-	}
-	else {
-		$data=array(
+	} else {
+		$data = array(
 			'aslkesmp'	=> $_POST['aslsmp'],
 			'nosurat'   => $_POST['nosurat'],
 			'tglsurat'  => $_POST['tglsurat'],
-			'alasan'	=>$_POST['alasan']
+			'alasan'	=> $_POST['alasan']
 		);
-		$update=editdata('tbmutasi', $data, '', array('idsiswa'=>$_POST['idsiswa']));
-		if($update>0){
+		$update = editdata('tbmutasi', $data, '', array('idsiswa' => $_POST['idsiswa']));
+		if ($update > 0) {
 			echo "<script>
 			$(function() {
 				toastr.success('Ubah Riwayat Pendidikan Siswa Berhasil!', 'Terima Kasih...', {
@@ -161,8 +158,7 @@ if(isset($_POST['simpan'])){
 				});
 			});
 			</script>";
-		}
-		else {
+		} else {
 			echo "<script>
 			$(function() {
 				toastr.error('Ubah Riwayat Pendidikan Siswa Gagal!', 'Mohon Maaf...', {
@@ -203,13 +199,11 @@ if(isset($_POST['simpan'])){
 					</div>
 				</div>
 				<div class="modal-footer justify-content-between">
-					<a href="siswa_rwytmp.php?d=2" class="btn btn-success btn-sm btn-flat" target="_blank"><i
-							class="fas fa-download"></i> Download</a>
+					<a href="siswa_rwytmp.php?d=2" class="btn btn-success btn-sm btn-flat" target="_blank"><i class="fas fa-download"></i> Download</a>
 					<button type="submit" name="upload" class="btn btn-primary btn-sm btn-flat">
 						<i class="fas fa-upload"></i>&nbsp;Upload
 					</button>
-					<button type="button" class="btn btn-danger btn-sm btn-flat" data-dismiss="modal"><i
-							class="fas fa-power-off"></i> Tutup</button>
+					<button type="button" class="btn btn-danger btn-sm btn-flat" data-dismiss="modal"><i class="fas fa-power-off"></i> Tutup</button>
 				</div>
 			</form>
 		</div>
@@ -226,7 +220,7 @@ if(isset($_POST['simpan'])){
 				</button>
 			</div>
 			<form method="POST" action="">
-				<div class="modal-body">					
+				<div class="modal-body">
 					<div class="form-group row mb-2">
 						<input type="hidden" class="form-control form-control-sm col-sm-6" name="idsiswa" id="idsiswa">
 						<label class="col-sm-5 ml-2">Jenis Mutasi</label>
@@ -288,79 +282,77 @@ if(isset($_POST['simpan'])){
 				</thead>
 				<tbody>
 					<?php
-							$sql="SELECT idsiswa, nmsiswa, nisn, nis, jnsmutasi, aslkesmp FROM tbsiswa LEFT JOIN tbmutasi USING(idsiswa) LEFT JOIN tbregistrasi USING(idsiswa) WHERE deleted = '0' AND (idjreg = '2' OR idjreg='6') GROUP BY idsiswa ORDER BY nis";
-							$no=0;
-							$qs=vquery($sql);							
-							foreach($qs as $s):
-							$no++;
-							if($s['jnsmutasi']=='1'){
-								$mutasi="<label class='badge badge-success'>Masuk</label>";
-							}
-							else if($s['jnsmutasi']=='2'){
-								$mutasi="<label class='badge badge-danger'>Keluar</label>";
-							}
-							else {
-								$mutasi="<label class='badge badge-warning'>Belum Diisi</label>";
-							}
-						?>
-					<tr>
-						<td style="text-align:center"><?php echo $no.'.';?></td>
-						<td title="<?php echo $s['idsiswa'];?>"><?php echo ucwords(strtolower($s['nmsiswa']));?>
-						</td>
-						<td style="text-align: center"><?php echo $s['nis'].' / '.$s['nisn'];?></td>
-						<td style="text-align: center"><?php echo $mutasi;?></td>
-						<td style="text-align: left"><?php echo $s['aslkesmp'];;?></td>
-						<td style="text-align:center">
-							<a href="#" data-toggle="modal" data-id="<?php echo $s['idsiswa'];?>" data-target="#myMutasi"
-								class="btn btn-xs btn-info btnIsi">
-								<i class="fas fa-edit"></i>&nbsp;Detail
-							</a>
-							<a href="cetak_rekomendasi.php?id=<?php echo $s['idsiswa'];?>" target="_blank"	class="btn btn-xs btn-default">
-								<i class="fas fa-print"></i>&nbsp;Cetak
-							</a>
-						</td>
-					</tr>
-					<?php endforeach?>
+					$sql = "SELECT idsiswa, nmsiswa, nisn, nis, jnsmutasi, aslkesmp FROM tbsiswa LEFT JOIN tbmutasi USING(idsiswa) LEFT JOIN tbregistrasi USING(idsiswa) WHERE deleted = '0' AND (idjreg = '2' OR idjreg='6') GROUP BY idsiswa ORDER BY nis";
+					$no = 0;
+					$qs = vquery($sql);
+					foreach ($qs as $s) :
+						$no++;
+						if ($s['jnsmutasi'] == '1') {
+							$mutasi = "<label class='badge badge-success'>Masuk</label>";
+							$cetak = "cetak_rekomendasi.php?id=" . $s['idsiswa'];
+						} else if ($s['jnsmutasi'] == '2') {
+							$mutasi = "<label class='badge badge-danger'>Keluar</label>";
+							$cetak = "cetak_pindah.php?id=" . $s['idsiswa'];
+						} else {
+							$mutasi = "<label class='badge badge-warning'>Belum Diisi</label>";
+						}
+					?>
+						<tr>
+							<td style="text-align:center"><?php echo $no . '.'; ?></td>
+							<td title="<?php echo $s['idsiswa']; ?>"><?php echo ucwords(strtolower($s['nmsiswa'])); ?>
+							</td>
+							<td style="text-align: center"><?php echo $s['nis'] . ' / ' . $s['nisn']; ?></td>
+							<td style="text-align: center"><?php echo $mutasi; ?></td>
+							<td style="text-align: left"><?php echo $s['aslkesmp'];; ?></td>
+							<td style="text-align:center">
+								<a href="#" data-toggle="modal" data-id="<?php echo $s['idsiswa']; ?>" data-target="#myMutasi" class="btn btn-xs btn-info btnIsi">
+									<i class="fas fa-edit"></i>&nbsp;Detail
+								</a>
+								<a href="<?php echo $cetak; ?>" target="_blank" class="btn btn-xs btn-default">
+									<i class="fas fa-print"></i>&nbsp;Cetak
+								</a>
+							</td>
+						</tr>
+					<?php endforeach ?>
 				</tbody>
 			</table>
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
-$(".btnIsi").click(function(e) {
-	e.preventDefault();
-	let id = $(this).data('id');
-	$.ajax({
-		url: "siswa_riwayat.php",
-		type: "POST",
-		dataType: 'json',
-		data: "id=" + id + "&d=2",
-		success: function(data) {			
-			$(".modal-title").html(data.judul);
-			$("#simpan").html(data.tmbl);
-			$("#jnsmutasi").val(data.mutasi);
-			$("#aslsmp").val(data.aslsmp);
-			$("#nosurat").val(data.nosrt);
-			$("#tglsurat").val(data.tglsrt);
-			$("#alasan").val(data.alasan);
-			if(data.idsiswa==''){
-				$("#idsiswa").val(id);
+	$(".btnIsi").click(function(e) {
+		e.preventDefault();
+		let id = $(this).data('id');
+		$.ajax({
+			url: "siswa_riwayat.php",
+			type: "POST",
+			dataType: 'json',
+			data: "id=" + id + "&d=2",
+			success: function(data) {
+				$(".modal-title").html(data.judul);
+				$("#simpan").html(data.tmbl);
+				$("#jnsmutasi").val(data.mutasi);
+				$("#aslsmp").val(data.aslsmp);
+				$("#nosurat").val(data.nosrt);
+				$("#tglsurat").val(data.tglsrt);
+				$("#alasan").val(data.alasan);
+				if (data.idsiswa == '') {
+					$("#idsiswa").val(id);
+				} else {
+					$("#idsiswa").val(data.idsiswa);
+				}
 			}
-			else {
-				$("#idsiswa").val(data.idsiswa);
-			}
-		}
-	})
-});
-$(function() {
-	$('#tb_siswa').DataTable({
-		"paging": true,
-		"lengthChange": false,
-		"searching": true,
-		"ordering": false,
-		"info": false,
-		"autoWidth": false,
-		"responsive": true,
+		})
 	});
-});
+	$(function() {
+		$('#tb_siswa').DataTable({
+			"paging": true,
+			"lengthChange": false,
+			"searching": true,
+			"ordering": false,
+			"info": false,
+			"autoWidth": false,
+			"responsive": true,
+		});
+	});
 </script>

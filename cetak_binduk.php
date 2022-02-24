@@ -6,6 +6,7 @@ if (!isset($_SESSION['login'])) {
 }
 require('assets/library/fpdf/fpdf.php');
 include "dbfunction.php";
+
 function GetKolom($awal, $akhir, $ofset)
 {
 	$sql = "SELECT idthpel, nmthpel, desthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir' ORDER BY idthpel LIMIT 4 OFFSET $ofset";
@@ -19,7 +20,7 @@ function JmlKolom($awal, $akhir, $ofset)
 
 function CekRegis($ids)
 {
-	$sql = "SELECT r.idthpel, desthpel FROM tbregistrasi r INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='$ids'";
+	$sql = "SELECT r.idthpel, desthpel FROM tbregistrasi r INNER JOIN tbregistrasi_detil rd USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='$ids'";
 	return cquery($sql);
 }
 
@@ -1073,6 +1074,7 @@ class PDF extends FPDF
 
 	function GetTableJudul($awal, $akhir, $hal)
 	{
+
 		if ($hal == 1) {
 			$opset = 0;
 			$y0 = 4.5;
@@ -1088,6 +1090,7 @@ class PDF extends FPDF
 		$this->Cell(1.0, 1.725, 'No.', 'LTBR', 0, 'C');
 		$this->Cell(8.25, 1.725, 'Mata Pelajaran', 'TBR', 0, 'C');
 		$i = 0;
+
 		$qthpel = GetKolom($awal, $akhir, $opset);
 		if (JmlKolom($awal, $akhir, $opset) == 4) {
 			foreach ($qthpel as $th) {
@@ -1573,19 +1576,20 @@ class PDF extends FPDF
 	function PrintNilai($id)
 	{
 		$this->SetLineWidth(0.001);
-		$qthmasuk = "SELECT idthpel FROM tbregistrasi WHERE idsiswa='$id' AND idjreg='2'";
-		if (cquery($qthmasuk) > 0) {
-			$qthakhir = "SELECT MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
-			$tha = vquery($qthakhir)[0];
-			$akhir = $tha['akhir'];
-			$qthp = "SELECT MIN(idthpel) as awal FROM tbthpel WHERE idthpel<='$akhir' ORDER BY idthpel DESC LIMIT 6";
-			$thp = vquery($qthp)[0];
-			$awal = $thp['awal'];
-		} else {
+		$cekregis = CekRegis($id);
+		if ($cekregis >= 6) {
 			$qthakhir = "SELECT MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
 			$tha = vquery($qthakhir)[0];
 			$akhir = $tha['akhir'];
 			$awal = $tha['awal'];
+		} else {
+			$qthakhir = "SELECT MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
+			$tha = vquery($qthakhir)[0];
+			$akhir = $tha['akhir'];
+
+			$qthp = "SELECT MIN(idthpel) as awal FROM tbthpel WHERE idthpel<='$akhir' ORDER BY idthpel DESC LIMIT 6";
+			$thp = vquery($qthp)[0];
+			$awal = $thp['awal'];
 		}
 		$qthpel = "SELECT idthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir'";
 		$nthpel = cquery($qthpel);
@@ -1611,7 +1615,6 @@ $qthn = vquery($qthpel);
 foreach ($qthn as $thn) {
 	$pdf->PrintCover($thn['idthpel']);
 	$sql = "SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.idthpel BETWEEN '$awal' AND '$akhir' AND (rg.idjreg='1' OR rg.idjreg='2') ORDER BY si.nis";
-	//var_dump($sql);
 	$qsiswa = vquery($sql);
 	foreach ($qsiswa as $ds) {
 		$pdf->PrintBiodata($ds['idsiswa']);

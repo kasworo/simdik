@@ -293,18 +293,22 @@ if (isset($_POST['upload'])) {
 	}
 }
 
-if (isset($_POST['simpan'])) {
-	if ($_POST['idreg'] == '1' || $_POST['idreg'] == '4') {
-		$idthn = array('idthpel' => $_POST['kdthpel']);
-		$th = viewdata('tbthpel', $idthn)[0];
-		$tgl = $th['awal'];
-	} else {
-		$tgl = date('Y-m-d');
-	}
-
-	$sqlr = "SELECT idsiswa FROM tbregistrasi INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='idsiswa'='$_POST[idsiswa]' AND 'idthpel'='$_POST[kdthpel]' AND idjreg='$_POST[idreg]'";
+if (isset($_POST['simpan']) && isset($_POST['idreg'])) {
+	$sqlr = "SELECT idsiswa FROM tbregistrasi INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='$_POST[idsiswa]' AND 'idthpel'='$_POST[kdthpel]' AND idjreg='$_POST[idreg]'";
 	$cekregis = cquery($sqlr);
-	if ($cekregis === 0) {
+	if ($cekregis > 0) {
+		echo "<script>
+			$(function() {
+				toastr.warning('Peserta Didik Sudah Pernah Teregistrasi!','Mohon Maaf', {
+					timeOut:1000,
+					fadeOut:1000,
+					onHidden:function(){
+						window.location.href='index.php?p=datasiswa';
+					}
+				});
+			});
+		</script>";
+	} else {
 		$data = array(
 			'idsiswa' => $_POST['idsiswa'],
 			'idjreg' => $_POST['idreg'],
@@ -313,28 +317,28 @@ if (isset($_POST['simpan'])) {
 		$rows = adddata('tbregistrasi', $data);
 		if ($rows > 0) {
 			echo "<script>
-						$(function() {
-							toastr.success('Registrasi Untuk Peserta Didik Berhasil!','Terima Kasih', {
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=datasiswa';
-								}
-							});
-						});
-					</script>";
+				$(function() {
+					toastr.success('Registrasi Untuk Peserta Didik Berhasil!','Terima Kasih', {
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden:function(){
+							window.location.href='index.php?p=datasiswa';
+						}
+					});
+				});
+			</script>";
 		} else {
 			echo "<script>
-						$(function() {
-							toastr.error('Registrasi Untuk Peserta Didik Gagal!','Mohon Maaf', {
-								timeOut:1000,
-								fadeOut:1000,
-								onHidden:function(){
-									window.location.href='index.php?p=datasiswa';
-								}
-							});
-						});
-					</script>";
+					$(function() {
+						toastr.error('Registrasi Untuk Peserta Didik Gagal!','Mohon Maaf', {
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden:function(){
+							window.location.href='index.php?p=datasiswa';
+						}
+					});
+				});
+			</script>";
 		}
 	}
 }
