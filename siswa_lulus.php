@@ -1,8 +1,8 @@
 <?php
-require_once 'assets/library/PHPExcel.php';
-require_once 'assets/library/excel_reader.php';
 if (isset($_POST['upload'])) {
-    if (empty($_FILES['filetmp']['tmp_name'])) {
+    require_once 'assets/library/PHPExcel.php';
+    require_once 'assets/library/excel_reader.php';
+    if (empty($_FILES['tmplulus']['tmp_name'])) {
         echo "<script>
 				$(function() {
 					toastr.error('File Template Kosong!','Mohon Maaf!',{
@@ -12,14 +12,13 @@ if (isset($_POST['upload'])) {
 				});
 			</script>";
     } else {
-        $data = new Spreadsheet_Excel_Reader($_FILES['filetmp']['tmp_name']);
+        $data = new Spreadsheet_Excel_Reader($_FILES['tmplulus']['tmp_name']);
         $baris = $data->rowcount($sheet_index = 0);
         $isidata = $baris - 5;
         $sukses = 0;
         $gagal = 0;
         $update = 0;
         $batal = 0;
-        $idskul = getskul();
         for ($i = 6; $i <= $baris; $i++) {
             $xnis = $data->val($i, 2);
             $xnisn = $data->val($i, 3);
@@ -29,6 +28,79 @@ if (isset($_POST['upload'])) {
             $xtglijz = $data->val($i, 7);
             $xlanjut = $data->val($i, 8);
             $xslta = $data->val($i, 9);
+            $ds = viewdata('tbsiswa', array('nis' => $xnis, 'nisn' => $xnisn))[0];
+            $idsiswa = $ds['idsiswa'];
+            $sqlcek = "SELECT idsiswa FROM tblulusan INNER JOIN tbsiswa USING(idsiswa) WHERE nis='$xnis'";
+            if (cquery($sqlcek) == 0) {
+                $datane = array(
+                    'idsiswa'   => $idsiswa,
+                    'tgllulus'  => $xtglak,
+                    'noijazah'   => $xnoijz,
+                    'tglijazah'  => $xtglijz,
+                    'lanjut'    => $xlanjut,
+                    'nmslta'  => $xslta
+                );
+                $baru = adddata('tblulusan', $datane);
+                if ($baru > 0) {
+                    echo "<script>
+                        $(function() {
+                            toastr.success('Tambah Riwayat Pendidikan Siswa Berhasil!', 'Terima Kasih...', {
+                                timeOut: 1000,
+                                fadeOut: 1000,
+                                onHidden: function() {
+                                    $('#myLulusPD').hide();
+                                }
+                            });
+                        });
+                        </script>";
+                } else {
+                    echo "<script>
+                        $(function() {
+                            toastr.error('Tambah Riwayat Pendidikan Siswa Gagal!', 'Mohon Maaf...', {
+                                timeOut: 1000,
+                                fadeOut: 1000,
+                                onHidden: function() {
+                                    $('#myLulusPD').hide();
+                                }
+                            });
+                        });
+                        </script>";
+                }
+            } else {
+                $datane = array(
+                    'tgllulus'  => $xtglak,
+                    'noijazah'   => $xnoijz,
+                    'tglijazah'  => $xtglijz,
+                    'lanjut'    => $xlanjut,
+                    'nmslta'  => $xslta
+                );
+                $update = editdata('tblulusan', $datane, '', array('idsiswa' => $idsiswa));
+                if ($update > 0) {
+                    echo "<script>
+                        $(function() {
+                            toastr.success('Ubah Riwayat Pendidikan Siswa Berhasil!', 'Terima Kasih...', {
+                                timeOut: 1000,
+                                fadeOut: 1000,
+                                onHidden: function() {
+                                    $('#myLulusPD').hide();
+                                }
+                            });
+                        });
+                        </script>";
+                } else {
+                    echo "<script>
+                        $(function() {
+                            toastr.error('Ubah Riwayat Pendidikan Siswa Gagal!', 'Mohon Maaf...', {
+                                timeOut: 1000,
+                                fadeOut: 1000,
+                                onHidden: function() {
+                                    $('#myLulusPD').hide();
+                                }
+                            });
+                        });
+                    </script>";
+                }
+            }
         }
     }
 }
@@ -42,7 +114,7 @@ if (isset($_POST['simpan'])) {
             'noijazah'   => $_POST['noijazah'],
             'tglijazah'  => $_POST['tglijazah'],
             'lanjut'    => $_POST['lanjut'],
-            'nmslta'  => $_POST['nmslta'],
+            'nmslta'  => $_POST['nmslta']
         );
         $baru = adddata('tblulusan', $data);
         if ($baru > 0) {
@@ -76,7 +148,7 @@ if (isset($_POST['simpan'])) {
             'noijazah'   => $_POST['noijazah'],
             'tglijazah'  => $_POST['tglijazah'],
             'lanjut'    => $_POST['lanjut'],
-            'nmslta'  => $_POST['nmslta'],
+            'nmslta'  => $_POST['nmslta']
         );
         $update = editdata('tblulusan', $data, '', array('idsiswa' => $_POST['idsiswa']));
         if ($update > 0) {
@@ -123,6 +195,7 @@ if (isset($_POST['lulus'])) {
 				</script>";
     } else {
         $sql = "SELECT idsiswa,idthpel FROM tbregistrasi INNER JOIN tbregistrasi_detil USING(idreg) INNER JOIN tbthpel USING(idthpel) WHERE idkelas='9' AND aktif='1' AND idjreg='4'";
+
         $sukses = 0;
         $gagal = 0;
         $dreg = vquery($sql);
@@ -136,23 +209,25 @@ if (isset($_POST['lulus'])) {
                     'idjreg' => '8'
                 );
                 if (adddata('tbregistrasi', $data) > 0) {
+                    //editdata('tbsiswa', array('deleted' => '0'), '', array('idsiswa' => $reg['idsiswa']));
                     $sukses++;
+                } else {
                 }
-            } else {
-                $gagal++;
             }
+            // else {
+            //     editdata('tbsiswa', array('deleted' => '0'), '', array('idsiswa' => $reg['idsiswa']));
+            // }
         }
         echo "<script>
-                    $(function() {
-                        toastr.info('Peserta Didik Berhasil Dilulusin!', 'Informasi', {
-                            timeOut: 1000,
-                            fadeOut: 1000,
-                            onHidden: function() {
-                                $('#myLulusPD').hide();
-                            }
-                        });
-                    });
-                    </script>";
+                $(function(){
+                    toastr.info('Peserta Didik Berhasil Dilulusin!', 'Informasi', {
+                    timeOut: 1000,
+                    fadeOut: 1000,
+                    onHidden: function() {
+                    }
+                });
+            });
+        </script>";
     }
 }
 ?>
@@ -171,7 +246,7 @@ if (isset($_POST['lulus'])) {
                         <div class="row">
                             <label for="filerwy">Pilih File Template</label>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input file" id="filerwy" name="filerwy">
+                                <input type="file" class="custom-file-input file" id="tmplulus" name="tmplulus">
                                 <label class="custom-file-label" for="filerwy">Pilih file</label>
                             </div>
                             <p style="color:red;margin-top:10px"><em>Hanya mendukung file *.xls (Microsoft Excel
@@ -180,7 +255,7 @@ if (isset($_POST['lulus'])) {
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <a href="siswa_rwytmp.php?d=2" class="btn btn-success btn-sm" target="_blank">
+                    <a href="siswa_lulustmp.php" class="btn btn-success btn-sm" target="_blank">
                         <i class="fas fa-download"></i> Download
                     </a>
                     <button type="submit" name="upload" class="btn btn-primary btn-sm">
@@ -246,7 +321,7 @@ if (isset($_POST['lulus'])) {
 </div>
 <div class="card card-secondary card-outline">
     <div class="card-header">
-        <h4 class="card-title">Data Peserta Didik Tingkat Akhir</h4>
+        <h4 class="card-title">Data Peserta Didik Tingkat Akhir Periode <?php echo $tapel; ?></h4>
         <div class="card-tools">
             <form action="" method="post">
                 <button type="submit" class="btn btn-info btn-sm" id="btnTambah" name="lulus">

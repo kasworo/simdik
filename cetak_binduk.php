@@ -18,10 +18,53 @@ function JmlKolom($awal, $akhir, $ofset)
 	return cquery($sql);
 }
 
+function CekMutasi($ids)
+{
+	$sql = "SELECT*FROM tbregistrasi WHERE idsiswa='$ids' AND idjreg='6'";
+	return cquery($sql);
+}
+
 function CekRegis($ids)
 {
 	$sql = "SELECT r.idthpel, desthpel FROM tbregistrasi r INNER JOIN tbregistrasi_detil rd USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='$ids'";
 	return cquery($sql);
+}
+
+function CekDropOut($ids)
+{
+	$sql = "SELECT*FROM tbregistrasi WHERE idsiswa='$ids' AND idjreg='7'";
+	return cquery($sql);
+}
+
+function CekLulus($ids)
+{
+	$sql = "SELECT*FROM tbregistrasi WHERE idsiswa='$ids' AND idjreg='8'";
+	return cquery($sql);
+}
+
+function IsiKepAkhir($id, $th)
+{
+	$kctt = array(
+		'idsiswa' => $id,
+		'idthpel' => $th
+	);
+	$cekctt = cekdata('tbakhirtahun', $kctt);
+	//$data[] = '';
+	if ($cekctt > 0) {
+		$ctt = viewdata('tbakhirtahun', $kctt)[0];
+		$data = array(
+			'tgl' => indonesian_date($ctt['tglcatatan']),
+			'catatan' => $ctt['catatan'],
+			'lainnya' => '-'
+		);
+	} else {
+		$data = array(
+			'tgl' => '',
+			'catatan' => '',
+			'lainnya' => ''
+		);
+	}
+	return $data;
 }
 
 function KonversiNilai($angka)
@@ -44,7 +87,7 @@ function KonversiNilai($angka)
 				break;
 			}
 		default: {
-				$huruf = '-';
+				$huruf = '';
 				break;
 			}
 	}
@@ -55,19 +98,19 @@ function GetHubkel($hk)
 {
 	switch ($hk) {
 		case '3': {
-				$huruf = 'A (Amat Baik)';
+				$huruf = 'Kakak';
 				break;
 			}
-		case '3': {
-				$huruf = 'B (Baik)';
+		case '4': {
+				$huruf = 'Paman / Bibi';
 				break;
 			}
-		case '2': {
-				$huruf = 'C (Cukup)';
+		case '5': {
+				$huruf = 'Kakek / Nenek';
 				break;
 			}
-		case '1': {
-				$huruf = 'D (Kurang)';
+		case '6': {
+				$huruf = 'Famili Lain';
 				break;
 			}
 		default: {
@@ -81,7 +124,7 @@ function GetHubkel($hk)
 function RapikanAbsen($angka)
 {
 	if ($angka == 0) {
-		$absen = '-';
+		$absen = '- hari';
 	} else {
 		$absen = $angka . ' hari';
 	}
@@ -468,9 +511,9 @@ class PDF extends FPDF
 
 		if (cekdata('tbasalsd', array('idsiswa' => $id)) == 0) {
 			$aslsd = '-';
-			$noijz = '-';
-			$tglijz = '-';
-			$lamasd = '-';
+			$noijz = '';
+			$tglijz = '';
+			$lamasd = '';
 		} else {
 			$rw = viewdata('tbasalsd', array('idsiswa' => $id))[0];
 			$aslsd = $rw['aslsd'];
@@ -519,10 +562,10 @@ class PDF extends FPDF
 			'jnsmutasi' => '1'
 		);
 		if (cekdata('tbmutasi', $km) == 0) {
-			$aslsmp = '-';
-			$nosurat = '-';
-			$tglsurat = '-';
-			$alasan = '-';
+			$aslsmp = '';
+			$nosurat = '';
+			$tglsurat = '';
+			$alasan = '';
 		} else {
 			$mu = viewdata('tbmutasi', $km)[0];
 			$aslsmp = $mu['aslkesmp'];
@@ -771,7 +814,7 @@ class PDF extends FPDF
 			$alamat2 = 'Kecamatan ' . $dw['kec'] . ', Kabupaten ' . $d['kab'];
 			$alamat3 = 'Provinsi ' . $dw['prov'] . ', Kode Pos ' . $dw['kdpos'];
 			$nohp = $dw['nohp'];
-			$hubkel = $dw['hubkel'];
+			$hubkel = GetHubKel($dw['hubkel']);
 		}
 		$this->SetFont('Times', '', 11);
 		$this->Cell(0.75, 0.5725);
@@ -1072,7 +1115,7 @@ class PDF extends FPDF
 		}
 	}
 
-	function GetTableJudul($awal, $akhir, $hal)
+	function GetTableJudul($id, $awal, $akhir, $hal)
 	{
 
 		if ($hal == 1) {
@@ -1107,45 +1150,73 @@ class PDF extends FPDF
 				$i++;
 			}
 		} else {
-			foreach ($qthpel as $th) {
-				$this->SetXY($i * 4.8 + 12, $y0);
-				$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
-				$this->SetXY($i * 4.8 + 12, $y0 + 0.575);
-				$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
-				$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-				$this->SetXY($i * 4.8 + 12, $y0 + 1.15);
-				$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-				$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-				$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-				$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-				$i++;
-			}
-			for ($j = $i; $j < 2; $j++) {
+			if (CekLulus($id) > 0) {
+				foreach ($qthpel as $th) {
+					$this->SetXY($i * 4.8 + 12, $y0);
+					$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, $y0 + 0.575);
+					$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+					$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, $y0 + 1.15);
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					$i++;
+				}
+				for ($j = $i; $j < 2; $j++) {
+					$this->SetXY($j * 4.8 + 12, $y0);
+					$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+					$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
+					$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+					$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+					$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+				}
 				$this->SetXY($j * 4.8 + 12, $y0);
-				$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+				$this->Cell(4.8, 0.575, 'Rata-rata', 'TR', 0, 'C');
 				$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
+				$this->Cell(4.80, 0.575, 'Nilai Rapor', 'BR', 0, 'C');
+				$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
 				$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
 				$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-				$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
-				$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-				$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-				$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-				$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+				$this->SetXY(($j + 1) * 4.8 + 12, $y0);
+				$this->Cell(4.8, 0.575, 'Nilai Akhir', 'TR', 0, 'C');
+				$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 0.575);
+				$this->Cell(4.8, 0.575, 'Kelulusan', 'BR', 0, 'C');
+				$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 1.15);
+				$this->Cell(2.40, 0.575, 'US', 'BR', 0, 'C');
+				$this->Cell(2.40, 0.575, 'Ijazah', 'BR', 0, 'C');
+			} else {
+				foreach ($qthpel as $th) {
+					$this->SetXY($i * 4.8 + 12, $y0);
+					$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, $y0 + 0.575);
+					$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+					$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, $y0 + 1.15);
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					$i++;
+				}
+				for ($j = $i; $j < 4; $j++) {
+					$this->SetXY($j * 4.8 + 12, $y0);
+					$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+					$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
+					$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+					$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+					$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+				}
 			}
-			$this->SetXY($j * 4.8 + 12, $y0);
-			$this->Cell(4.8, 0.575, 'Rata-rata', 'TR', 0, 'C');
-			$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
-			$this->Cell(4.80, 0.575, 'Nilai Rapor', 'BR', 0, 'C');
-			$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
-			$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
-			$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-			$this->SetXY(($j + 1) * 4.8 + 12, $y0);
-			$this->Cell(4.8, 0.575, 'Nilai Akhir', 'TR', 0, 'C');
-			$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 0.575);
-			$this->Cell(4.8, 0.575, 'Kelulusan', 'BR', 0, 'C');
-			$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 1.15);
-			$this->Cell(2.40, 0.575, 'US', 'BR', 0, 'C');
-			$this->Cell(2.40, 0.575, 'Ijazah', 'BR', 0, 'C');
 		}
 	}
 
@@ -1177,8 +1248,8 @@ class PDF extends FPDF
 				foreach ($qthpel as $th) {
 					$qkog = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='3'";
 					if (cquery($qkog) == 0) {
-						$nilaikog = '-';
-						$predkog = '-';
+						$nilaikog = '';
+						$predkog = '';
 					} else {
 						$kog = vquery($qkog)[0];
 						$nilaikog = $kog['nilairapor'];
@@ -1190,8 +1261,8 @@ class PDF extends FPDF
 					$this->Cell(1.40, 0.575, $predkog, 'BR', 0, 'C');
 					$qmot = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='4'";
 					if (cquery($qmot) == 0) {
-						$nilaimot = '-';
-						$predmot = '-';
+						$nilaimot = '';
+						$predmot = '';
 					} else {
 						$mot = vquery($qmot)[0];
 						$nilaimot = $mot['nilairapor'];
@@ -1204,71 +1275,114 @@ class PDF extends FPDF
 					$i++;
 				}
 			} else {
-				foreach ($qthpel as $th) {
-					$qkog = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='3'";
-					if (cquery($qkog) == 0) {
-						$nilaikog = '-';
-						$predkog = '-';
-					} else {
-						$kog = vquery($qkog)[0];
-						$nilaikog = $kog['nilairapor'];
-						$predkog = $kog['predikat'];
+				if (CekLulus($id) > 0) {
+					foreach ($qthpel as $th) {
+						$qkog = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='3'";
+						if (cquery($qkog) == 0) {
+							$nilaikog = '';
+							$predkog = '';
+						} else {
+							$kog = vquery($qkog)[0];
+							$nilaikog = $kog['nilairapor'];
+							$predkog = $kog['predikat'];
+						}
+						$this->SetXY($i * 4.8 + 12.0, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, $nilaikog, 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 13.0, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, $predkog, 'BR', 0, 'C');
+						$qmot = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='4'";
+						if (cquery($qmot) == 0) {
+							$nilaimot = '';
+							$predmot = '';
+						} else {
+							$mot = vquery($qmot)[0];
+							$nilaimot = $mot['nilairapor'];
+							$predmot = $mot['predikat'];
+						}
+						$this->SetXY($i * 4.8 + 14.4, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, $nilaimot, 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 15.4, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, $predmot, 'BR', 0, 'C');
+						$i++;
 					}
-					$this->SetXY($i * 4.8 + 12.0, $j * 0.575 + $y0);
-					$this->Cell(1.0, 0.575, $nilaikog, 'BR', 0, 'C');
-					$this->SetXY($i * 4.8 + 13.0, $j * 0.575 + $y0);
-					$this->Cell(1.40, 0.575, $predkog, 'BR', 0, 'C');
-					$qmot = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='4'";
-					if (cquery($qmot) == 0) {
-						$nilaimot = '-';
-						$predmot = '-';
-					} else {
-						$mot = vquery($qmot)[0];
-						$nilaimot = $mot['nilairapor'];
-						$predmot = $mot['predikat'];
+					for ($k = $i; $k < 2; $k++) {
+						$this->SetXY($k * 4.8 + 12.0, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($k * 4.8 + 13.0, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($k * 4.8 + 14.4, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($k * 4.8 + 15.4, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, '', 'BR', 0, 'C');
 					}
-					$this->SetXY($i * 4.8 + 14.4, $j * 0.575 + $y0);
-					$this->Cell(1.0, 0.575, $nilaimot, 'BR', 0, 'C');
-					$this->SetXY($i * 4.8 + 15.4, $j * 0.575 + $y0);
-					$this->Cell(1.40, 0.575, $predmot, 'BR', 0, 'C');
-					$i++;
-				}
-				for ($k = $i; $k < 2; $k++) {
-					$this->SetXY($k * 4.8 + 12.0, $j * 0.575 + $y0);
-					$this->Cell(1.0, 0.575, '', 'BR', 0, 'C');
-					$this->SetXY($k * 4.8 + 13.0, $j * 0.575 + $y0);
-					$this->Cell(1.40, 0.575, '', 'BR', 0, 'C');
-					$this->SetXY($k * 4.8 + 14.4, $j * 0.575 + $y0);
-					$this->Cell(1.0, 0.575, '', 'BR', 0, 'C');
-					$this->SetXY($k * 4.8 + 15.4, $j * 0.575 + $y0);
-					$this->Cell(1.40, 0.575, '', 'BR', 0, 'C');
-				}
-				$qrkog = "SELECT AVG(nilairapor) as kognetif FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='3' GROUP BY idmapel";
-				if (cquery($qrkog) == 0) {
-					$nilairkog = '-';
-				} else {
-					$rkog = vquery($qrkog)[0];
-					$nilairkog = number_format($rkog['kognetif'], 2, ',', '.');
-				}
+					$qrkog = "SELECT AVG(nilairapor) as kognetif FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='3' GROUP BY idmapel";
+					if (cquery($qrkog) == 0) {
+						$nilairkog = '';
+					} else {
+						$rkog = vquery($qrkog)[0];
+						$nilairkog = number_format($rkog['kognetif'], 2, ',', '.');
+					}
 
-				$this->Cell(2.4, 0.575, $nilairkog, 'BR', 0, 'C');
-				$qrmot = "SELECT AVG(nilairapor) as motorik FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='4' GROUP BY idmapel";
-				if (cquery($qrmot) == 0) {
-					$nilairmot = '-';
+					$qrmot = "SELECT AVG(nilairapor) as motorik FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND aspek='4' GROUP BY idmapel";
+					if (cquery($qrmot) == 0) {
+						$nilairmot = '';
+					} else {
+						$rmot = vquery($qrmot)[0];
+						$nilairmot = number_format($rmot['motorik'], 2, ',', '.');
+					}
+					$this->Cell(2.4, 0.575, $nilairkog, 'BR', 0, 'C');
+					$this->Cell(2.4, 0.575, $nilairmot, 'BR', 0, 'C');
+					$this->Cell(2.4, 0.575, '', 'BR', 0, 'C');
+					$sqijz = "SELECT nilaiijz FROM tbnilaiijz WHERE idsiswa='$id' AND idmapel='$mp[idmapel]'";
+
+					if (cquery($sqijz) == 0) {
+						$nilaijz = '';
+					} else {
+						$ijz = vquery($sqijz)[0];
+						$nilaijz = $ijz['nilaiijz'];
+					}
+					$this->Cell(2.4, 0.575, $nilaijz, 'BR', 0, 'C');
 				} else {
-					$rmot = vquery($qrmot)[0];
-					$nilairmot = number_format($rmot['motorik'], 2, ',', '.');
+					foreach ($qthpel as $th) {
+						$qkog = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='3'";
+						if (cquery($qkog) == 0) {
+							$nilaikog = '';
+							$predkog = '';
+						} else {
+							$kog = vquery($qkog)[0];
+							$nilaikog = $kog['nilairapor'];
+							$predkog = $kog['predikat'];
+						}
+						$this->SetXY($i * 4.8 + 12.0, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, $nilaikog, 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 13.0, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, $predkog, 'BR', 0, 'C');
+						$qmot = "SELECT nilairapor,predikat FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' AND idthpel='$th[idthpel]'AND aspek='4'";
+						if (cquery($qmot) == 0) {
+							$nilaimot = '';
+							$predmot = '';
+						} else {
+							$mot = vquery($qmot)[0];
+							$nilaimot = $mot['nilairapor'];
+							$predmot = $mot['predikat'];
+						}
+						$this->SetXY($i * 4.8 + 14.4, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, $nilaimot, 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 15.4, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, $predmot, 'BR', 0, 'C');
+						$i++;
+					}
+					for ($k = $i; $k < 4; $k++) {
+						$this->SetXY($k * 4.8 + 12.0, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($k * 4.8 + 13.0, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($k * 4.8 + 14.4, $j * 0.575 + $y0);
+						$this->Cell(1.0, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($k * 4.8 + 15.4, $j * 0.575 + $y0);
+						$this->Cell(1.40, 0.575, '', 'BR', 0, 'C');
+					}
 				}
-				$this->Cell(2.4, 0.575, $nilairmot, 'BR', 0, 'C');
-				$this->Cell(2.4, 0.575, '', 'BR', 0, 'C');
-				$qijz = "SELECT AVG(nilairapor) as nilaiijz FROM tbnilairapor WHERE idsiswa='$id' AND idmapel='$mp[idmapel]' GROUP BY idmapel";
-				if (cquery($qijz) == 0) {
-					$nilaijz = '-';
-				} else {
-					$ijz = vquery($qijz)[0];
-					$nilaijz = round($ijz['nilaiijz']);
-				}
-				$this->Cell(2.4, 0.575, $nilaijz, 'BR', 0, 'C');
 			}
 			$j++;
 		}
@@ -1283,7 +1397,7 @@ class PDF extends FPDF
 			foreach ($qthpel as $th) {
 				$qsp = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='1'";
 				if (cquery($qsp) == 0) {
-					$nilaisp = '-';
+					$nilaisp = '';
 				} else {
 					$sp = vquery($qsp)[0];
 					$nilaisp = KonversiNilai($sp['nilaisikap']);
@@ -1292,7 +1406,7 @@ class PDF extends FPDF
 				$this->Cell(4.8, 0.575, $nilaisp, 'TBR', 0, 'C');
 				$qsos = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'";
 				if (cquery($qsos) == 0) {
-					$nilaisos = '-';
+					$nilaisos = '';
 				} else {
 					$sos = vquery($qsos)[0];
 					$nilaisos = KonversiNilai($sos['nilaisikap']);
@@ -1302,117 +1416,194 @@ class PDF extends FPDF
 				$i++;
 			}
 		} else {
-			foreach ($qthpel as $th) {
-				$qsp = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='1'";
+			if (CekLulus($id) > 0) {
+				foreach ($qthpel as $th) {
+					$qsp = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='1'";
+					if (cquery($qsp) == 0) {
+						$nilaisp = '';
+					} else {
+						$sp = vquery($qsp)[0];
+						$nilaisp = KonversiNilai($sp['nilaisikap']);
+					}
+					$this->SetXY($i * 4.8 + 12, $j * 0.575 + $y1);
+					$this->Cell(4.8, 0.575, $nilaisp, 'TBR', 0, 'C');
+
+					$qsos = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'";
+					if (cquery($qsos) == 0) {
+						$nilaisos = '';
+					} else {
+						$sos = vquery($qsos)[0];
+						$nilaisos = KonversiNilai($sos['nilaisikap']);
+					}
+					$this->SetXY($i * 4.8 + 12, $j * 0.575 + $y1 + 0.575);
+					$this->Cell(4.8, 0.575, $nilaisos, 'BR', 0, 'C');
+					$i++;
+				}
+				$qsp = "SELECT AVG(nilaisikap) AS akspr FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='1' GROUP BY idsiswa";
 				if (cquery($qsp) == 0) {
-					$nilaisp = '-';
+					$nilairsp = '';
 				} else {
 					$sp = vquery($qsp)[0];
-					$nilaisp = KonversiNilai($sp['nilaisikap']);
+					$nilairsp = KonversiNilai($sp['akspr']);
 				}
-				$this->SetXY($i * 4.8 + 12, $j * 0.575 + $y1);
-				$this->Cell(4.8, 0.575, $nilaisp, 'TBR', 0, 'C');
-
-				$qsos = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'";
-				if (cquery($qsos) == 0) {
-					$nilaisos = '-';
+				$qso = "SELECT AVG(nilaisikap) AS aksos FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='2' GROUP BY idsiswa";
+				if (cquery($qso) == 0) {
+					$nilairso = '';
 				} else {
-					$sos = vquery($qsos)[0];
-					$nilaisos = KonversiNilai($sos['nilaisikap']);
+					$so = vquery($qso)[0];
+					$nilairso = KonversiNilai($so['aksos']);
 				}
-				$this->SetXY($i * 4.8 + 12, $j * 0.575 + $y1 + 0.575);
-				$this->Cell(4.8, 0.575, $nilaisos, 'BR', 0, 'C');
-				$i++;
-			}
-			for ($k = $i; $k < 2; $k++) {
-				$this->SetXY($i * 4.8 + 12, $j * 0.575 + $y1);
-				$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-				$this->SetXY($k * 4.8 + 12, $j * 0.575 + $y1 + 0.575);
-				$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-			}
-			$this->SetXY($k * 4.8 + 12.0, $j * 0.575 + $y1);
-			$qsp = "SELECT AVG(nilaisikap) AS akspr FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='1' GROUP BY idsiswa";
-			if (cquery($qsp) == 0) {
-				$nilairsp = '-';
+				$this->SetXY($k * 4.8 + 12.0, $j * 0.575 + $y1);
+				$this->Cell(9.6, 0.575, $nilairsp, 'TBR', 0, 'C');
+				$this->SetXY($k * 4.8 + 12.0, $j * 0.575 + $y1 + 0.575);
+				$this->Cell(9.6, 0.575, $nilairso, 'BR', 0, 'C');
 			} else {
-				$sp = vquery($qsp)[0];
-				$nilairsp = KonversiNilai($sp['akspr']);
+				foreach ($qthpel as $th) {
+					$qsp = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='1'";
+					if (cquery($qsp) == 0) {
+						$nilaisp = '';
+					} else {
+						$sp = vquery($qsp)[0];
+						$nilaisp = KonversiNilai($sp['nilaisikap']);
+					}
+					$this->SetXY($i * 4.8 + 12, $j * 0.575 + $y1);
+					$this->Cell(4.8, 0.575, $nilaisp, 'TBR', 0, 'C');
+
+					$qsos = "SELECT nilaisikap FROM tbnilaisikap WHERE idsiswa='$id' AND idthpel='$th[idthpel]' AND aspek='2'";
+					if (cquery($qsos) == 0) {
+						$nilaisos = '';
+					} else {
+						$sos = vquery($qsos)[0];
+						$nilaisos = KonversiNilai($sos['nilaisikap']);
+					}
+					$this->SetXY($i * 4.8 + 12, $j * 0.575 + $y1 + 0.575);
+					$this->Cell(4.8, 0.575, $nilaisos, 'BR', 0, 'C');
+					$i++;
+				}
+				for ($k = $i; $k < 4; $k++) {
+					$this->SetXY($k * 4.8 + 12, $j * 0.575 + $y1);
+					$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+					$this->SetXY($k * 4.8 + 12, $j * 0.575 + $y1 + 0.575);
+					$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+				}
 			}
-			$this->Cell(4.8, 0.575, $nilairsp, 'TBR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-			$this->SetXY($k * 4.8 + 12.0, $j * 0.575 + $y1 + 0.575);
-			$qso = "SELECT AVG(nilaisikap) AS aksos FROM tbnilaisikap WHERE idsiswa='$id' AND aspek='2' GROUP BY idsiswa";
-			if (cquery($qso) == 0) {
-				$nilairso = '-';
-			} else {
-				$so = vquery($qso)[0];
-				$nilairso = KonversiNilai($so['aksos']);
-			}
-			$this->Cell(4.8, 0.575, $nilairso, 'BR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
 		}
 		$y2 = $y0 + 1.4;
 		$this->SetXY(2.75, $j * 0.575 + $y2);
-		$jeks = cekdata('tbekskul');
-		$this->Cell(4.25, 0.575 * $jeks, 'Kegiatan Ekstrakurikuler', 'LTBR', 0, 'L');
-		$deks = viewdata('tbekskul');
-		$k = 0;
-		foreach ($deks as $eks) {
-			$this->SetXY(7.0, ($j + $k) * 0.575 + $y2);
-			if ($k == 0) {
-				$brd = 'TBR';
-			} else {
-				$brd = 'BR';
-			}
-			$this->Cell(5.0, 0.575, $eks['nmekskul'], $brd, 0, 'L');
-			$i = 0;
-			if (JmlKolom($awal, $akhir, $opset) == 4) {
-				foreach ($qthpel as $th) {
-					$qneks = "SELECT nilaieks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' AND idthpel='$th[idthpel]'";
-					if (cquery($qneks) == 0) {
-						$nilaiekskul = '-';
-					} else {
-						$neks = vquery($qneks)[0];
-						$nilaieks = KonversiNilai($neks['nilaieks']);
-						$nilaiekskul = str_replace('A (Amat Baik)', 'SB (Sangat Baik)', $nilaieks);
-					}
-
-					$this->SetXY($i * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
-					$this->Cell(4.8, 0.575, $nilaiekskul, $brd, 0, 'C');
-					$i++;
-				}
-			} else {
-				foreach ($qthpel as $th) {
-					$qneks = "SELECT nilaieks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' AND idthpel='$th[idthpel]'";
-					if (cquery($qneks) == 0) {
-						$nilaiekskul = '-';
-					} else {
-						$neks = vquery($qneks)[0];
-						$nilaieks = KonversiNilai($neks['nilaieks']);
-						$nilaiekskul = str_replace('A (Amat Baik)', 'SB (Sangat Baik)', $nilaieks);
-					}
-
-					$this->SetXY($i * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
-					$this->Cell(4.8, 0.575, $nilaiekskul, $brd, 0, 'C');
-					$i++;
-				}
-				for ($l = $i; $l < 2; $l++) {
-					$this->SetXY($l * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
-					$this->Cell(4.8, 0.575, '', $brd, 0, 'C');
-				}
-				$qreks = "SELECT AVG(nilaieks) as nrkpeks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' GROUP BY idekskul";
-				if (cquery($qreks) == 0) {
-					$nilaiekskul = '-';
+		$sqleks = "SELECT idekskul, nmekskul FROM tbnilaiekskul INNER JOIN tbekskul USING(idekskul) WHERE idsiswa='$id' GROUP BY idekskul";
+		$jeks = cquery($sqleks);
+		if ($jeks > 0) {
+			$this->Cell(4.25, 0.575 * $jeks, 'Kegiatan Ekstrakurikuler', 'LTBR', 0, 'L');
+			$deks = vquery($sqleks);
+			$k = 0;
+			foreach ($deks as $eks) {
+				$this->SetXY(7.0, ($j + $k) * 0.575 + $y2);
+				if ($k == 0) {
+					$brd = 'TBR';
 				} else {
-					$reks = vquery($qreks)[0];
-					$nilaieks = KonversiNilai(round($reks['nrkpeks']));
-					$nilaiekskul = str_replace('A (Amat Baik)', 'SB (Sangat Baik)', $nilaieks);
+					$brd = 'BR';
 				}
+				$this->Cell(5.0, 0.575, $eks['nmekskul'], $brd, 0, 'L');
+				$i = 0;
+				if (JmlKolom($awal, $akhir, $opset) == 4) {
+					foreach ($qthpel as $th) {
+						$qneks = "SELECT nilaieks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' AND idthpel='$th[idthpel]'";
+						if (cquery($qneks) == 0) {
+							$nilaiekskul = '';
+						} else {
+							$neks = vquery($qneks)[0];
+							$nilaieks = KonversiNilai($neks['nilaieks']);
+							$nilaiekskul = str_replace('A (Amat Baik)', 'SB (Sangat Baik)', $nilaieks);
+						}
 
-				$this->Cell(4.8, 0.575, $nilaiekskul, $brd, 0, 'C');
-				$this->Cell(4.8, 0.575, '', $brd, 0, 'C');
+						$this->SetXY($i * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
+						$this->Cell(4.8, 0.575, $nilaiekskul, $brd, 0, 'C');
+						$i++;
+					}
+				} else {
+					if (CekLulus($id) > 0) {
+						foreach ($qthpel as $th) {
+							$qneks = "SELECT nilaieks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' AND idthpel='$th[idthpel]'";
+							if (cquery($qneks) == 0) {
+								$nilaiekskul = '';
+							} else {
+								$neks = vquery($qneks)[0];
+								$nilaieks = KonversiNilai($neks['nilaieks']);
+								$nilaiekskul = str_replace('A (Amat Baik)', 'SB (Sangat Baik)', $nilaieks);
+							}
+
+							$this->SetXY($i * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
+							$this->Cell(4.8, 0.575, $nilaiekskul, $brd, 0, 'C');
+							$i++;
+						}
+
+						$qreks = "SELECT AVG(nilaieks) as nrkpeks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' GROUP BY idekskul";
+						if (cquery($qreks) == 0) {
+							$nilaiekskul = '';
+						} else {
+							$reks = vquery($qreks)[0];
+							$nilaieks = KonversiNilai(round($reks['nrkpeks']));
+							$nilaiekskul = str_replace('A (Amat Baik)', 'SB (Sangat Baik)', $nilaieks);
+						}
+
+						$this->Cell(9.6, 0.575, $nilaiekskul, $brd, 0, 'C');
+					} else {
+						foreach ($qthpel as $th) {
+							$qneks = "SELECT nilaieks FROM tbnilaiekskul WHERE idsiswa='$id' AND idekskul='$eks[idekskul]' AND idthpel='$th[idthpel]'";
+							if (cquery($qneks) == 0) {
+								$nilaiekskul = '';
+							} else {
+								$neks = vquery($qneks)[0];
+								$nilaieks = KonversiNilai($neks['nilaieks']);
+								$nilaiekskul = str_replace('A (Amat Baik)', 'SB (Sangat Baik)', $nilaieks);
+							}
+
+							$this->SetXY($i * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
+							$this->Cell(4.8, 0.575, $nilaiekskul, $brd, 0, 'C');
+							$i++;
+						}
+						for ($l = $i; $l < 4; $l++) {
+							$this->SetXY($l * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
+							$this->Cell(4.8, 0.575, '', $brd, 0, 'C');
+						}
+					}
+				}
+				$k++;
 			}
-			$k++;
+		} else {
+			$sqleks = "SELECT idekskul, nmekskul FROM tbekskul LIMIT 3";
+			$jeks = cquery($sqleks);
+			$this->Cell(4.25, 0.575 * $jeks, 'Kegiatan Ekstrakurikuler', 'LTBR', 0, 'L');
+			$deks = vquery($sqleks);
+			$k = 0;
+			foreach ($deks as $eks) {
+				$this->SetXY(7.0, ($j + $k) * 0.575 + $y2);
+				if ($k == 0) {
+					$brd = 'TBR';
+				} else {
+					$brd = 'BR';
+				}
+				$this->Cell(5.0, 0.575, $eks['nmekskul'], $brd, 0, 'L');
+				$i = 0;
+				if (JmlKolom($awal, $akhir, $opset) == 4) {
+					foreach ($qthpel as $th) {
+						$this->SetXY($i * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
+						$this->Cell(4.8, 0.575, '', $brd, 0, 'C');
+						$i++;
+					}
+				} else {
+					foreach ($qthpel as $th) {
+						$this->SetXY($i * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
+						$this->Cell(4.8, 0.575, '', $brd, 0, 'C');
+						$i++;
+					}
+					for ($l = $i; $l < 4; $l++) {
+						$this->SetXY($l * 4.8 + 12.0, ($j + $k) * 0.575 + $y2);
+						$this->Cell(4.8, 0.575, '', $brd, 0, 'C');
+					}
+				}
+				$k++;
+			}
 		}
 		$y3 = $y0 + 1.525;
 		$this->SetXY(2.75, ($j + $k) * 0.575 + $y3);
@@ -1427,9 +1618,9 @@ class PDF extends FPDF
 			foreach ($qthpel as $th) {
 				$qabs = "SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
 				if (cquery($qabs) == 0) {
-					$sakit = '-';
-					$ijin = '-';
-					$alpa = '-';
+					$sakit = '';
+					$ijin = '';
+					$alpa = '';
 				} else {
 					$abs = vquery($qabs)[0];
 					$sakit = RapikanAbsen($abs['sakit']);
@@ -1445,37 +1636,67 @@ class PDF extends FPDF
 				$i++;
 			}
 		} else {
-			foreach ($qthpel as $th) {
-				$qabs = "SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
-				if (cquery($qabs) == 0) {
-					$sakit = '-';
-					$ijin = '-';
-					$alpa = '-';
-				} else {
-					$abs = vquery($qabs)[0];
-					$sakit = RapikanAbsen($abs['sakit']);
-					$ijin = RapikanAbsen($abs['izin']);
-					$alpa = RapikanAbsen($abs['alpa']);
+			if (CekLulus($id) > 0) {
+				foreach ($qthpel as $th) {
+					$qabs = "SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
+					if (cquery($qabs) == 0) {
+						$sakit = '';
+						$ijin = '';
+						$alpa = '';
+					} else {
+						$abs = vquery($qabs)[0];
+						$sakit = RapikanAbsen($abs['sakit']);
+						$ijin = RapikanAbsen($abs['izin']);
+						$alpa = RapikanAbsen($abs['alpa']);
+					}
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3);
+					$this->Cell(4.8, 0.575, $sakit, 'TBR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 0.575);
+					$this->Cell(4.8, 0.575, $ijin, 'BR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 1.15);
+					$this->Cell(4.8, 0.575, $alpa, 'BR', 0, 'C');
+					$i++;
 				}
 				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3);
-				$this->Cell(4.8, 0.575, $sakit, 'TBR', 0, 'C');
+				$this->Cell(9.6, 0.575, '', 'TBR', 0, 'C');
 				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 0.575);
-				$this->Cell(4.8, 0.575, $ijin, 'BR', 0, 'C');
+				$this->Cell(9.6, 0.575, '', 'BR', 0, 'C');
 				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 1.15);
-				$this->Cell(4.8, 0.575, $alpa, 'BR', 0, 'C');
-				$i++;
+				$this->Cell(9.6, 0.575, '', 'BR', 0, 'C');
+			} else {
+				foreach ($qthpel as $th) {
+					$qabs = "SELECT sakit, izin, alpa FROM tbabsensi WHERE idsiswa='$id' AND idthpel='$th[idthpel]'";
+					if (cquery($qabs) == 0) {
+						$sakit = '';
+						$ijin = '';
+						$alpa = '';
+					} else {
+						$abs = vquery($qabs)[0];
+						$sakit = RapikanAbsen($abs['sakit']);
+						$ijin = RapikanAbsen($abs['izin']);
+						$alpa = RapikanAbsen($abs['alpa']);
+					}
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3);
+					$this->Cell(4.8, 0.575, $sakit, 'TBR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 0.575);
+					$this->Cell(4.8, 0.575, $ijin, 'BR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 1.15);
+					$this->Cell(4.8, 0.575, $alpa, 'BR', 0, 'C');
+					$i++;
+				}
+				for ($m = $i; $m < 4; $m++) {
+					$this->SetXY($m * 4.8 + 12, ($j + $k) * 0.575 + $y3);
+					$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+					$this->SetXY($m * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 0.575);
+					$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+					$this->SetXY($m * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 1.15);
+					$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+				}
 			}
-			$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3);
-			$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-			$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 0.575);
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-			$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y3 + 1.15);
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
 		}
 		$y4 = $y0 + 3.375;
+		$y5 = $y4 + 0.575;
+		$y6 = $y5 + 0.575;
 		$this->SetXY(2.75, ($j + $k) * 0.575 + $y4);
 		$this->Cell(4.25, 1.725, 'Keputusan Akhir Tahun', 1, 0, 'L');
 		$this->Cell(5.0, 0.575, 'Naik Kelas / Lulus / Mengulang', 'TBR', 0, 'L');
@@ -1486,53 +1707,83 @@ class PDF extends FPDF
 		$i = 0;
 		if (JmlKolom($awal, $akhir, $opset) == 4) {
 			foreach ($qthpel as $th) {
+				if (substr($th['nmthpel'], -1) == '2') {
+					$ctt = IsiKepAkhir($id, $th['idthpel']);
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
+					$this->Cell(4.8, 0.575, $ctt['catatan'], 'TBR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+					$this->Cell(4.8, 0.575, $ctt['tgl'], 'BR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+					$this->Cell(4.8, 0.575, $ctt['lainnya'], 'BR', 0, 'C');
+				} else {
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
+					$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+					$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+					$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+					$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+				}
+				$i++;
+			}
+		} else {
+			if (CekLulus($id) > 0) {
+				foreach ($qthpel as $th) {
+					if (substr($th['nmthpel'], -1) == '2') {
+						$ctt = IsiKepAkhir($id, $th['idthpel']);
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
+						$this->Cell(4.8, 0.575, $ctt['catatan'], 'TBR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+						$this->Cell(4.8, 0.575, $ctt['tgl'], 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+						$this->Cell(4.8, 0.575, $ctt['lainnya'], 'BR', 0, 'C');
+					} else {
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
+						$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+						$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+						$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+					}
+					$i++;
+				}
 				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
-				$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-				$i++;
+				$this->Cell(9.6, 0.575, '', 'TBR', 0, 'C');
+				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+				$this->Cell(9.6, 0.575, '', 'BR', 0, 'C');
+				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+				$this->Cell(9.6, 0.575, '', 'BR', 0, 'C');
+			} else {
+				foreach ($qthpel as $th) {
+					if (substr($th['nmthpel'], -1) == '2') {
+						$ctt = IsiKepAkhir($id, $th['idthpel']);
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
+						$this->Cell(4.8, 0.575, $ctt['catatan'], 'TBR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+						$this->Cell(4.8, 0.575, $ctt['tgl'], 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+						$this->Cell(4.8, 0.575, $ctt['lainnya'], 'BR', 0, 'C');
+					} else {
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
+						$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+						$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+						$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+					}
+					$i++;
+				}
+				for ($l = $i; $l < 4; $l++) {
+					foreach ($qthpel as $th) {
+						$this->SetXY($l * 4.8 + 12, ($j + $k) * 0.575 + $y4);
+						$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+						$this->SetXY($l * 4.8 + 12, ($j + $k) * 0.575 + $y5);
+						$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+						$this->SetXY($l * 4.8 + 12, ($j + $k) * 0.575 + $y6);
+						$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
+						$i++;
+					}
+				}
 			}
-		} else {
-			foreach ($qthpel as $th) {
-				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4);
-				$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-				$i++;
-			}
-			$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-		}
-
-		$i = 0;
-		if (JmlKolom($awal, $akhir, $opset) == 4) {
-			foreach ($qthpel as $th) {
-				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4 + 0.575);
-				$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-				$i++;
-			}
-		} else {
-			foreach ($qthpel as $th) {
-				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4 + 0.575);
-				$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-				$i++;
-			}
-
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-		}
-
-		$i = 0;
-		if (JmlKolom($awal, $akhir, $opset) == 4) {
-			foreach ($qthpel as $th) {
-				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 +  $y4 + 1.15);
-				$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-				$i++;
-			}
-		} else {
-			foreach ($qthpel as $th) {
-				$this->SetXY($i * 4.8 + 12, ($j + $k) * 0.575 + $y4 + 1.15);
-				$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-				$i++;
-			}
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
-			$this->Cell(4.8, 0.575, '', 'BR', 0, 'C');
 		}
 	}
 	function IsiCover($id)
@@ -1577,20 +1828,49 @@ class PDF extends FPDF
 	{
 		$this->SetLineWidth(0.001);
 		$cekregis = CekRegis($id);
-		if ($cekregis >= 6) {
+		$cekmutasi = CekMutasi($id);
+		$cekdo = CekDropOut($id);
+		if ($cekregis >= 6 || $cekmutasi > 0 || $cekdo > 0) {
 			$qthakhir = "SELECT MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
 			$tha = vquery($qthakhir)[0];
 			$akhir = $tha['akhir'];
 			$awal = $tha['awal'];
 		} else {
-			$qthakhir = "SELECT MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
-			$tha = vquery($qthakhir)[0];
-			$akhir = $tha['akhir'];
+			if (CekLulus($id) > 0) {;
+				$qpake = "SELECT idthpel FROM tbregistrasi WHERE idsiswa='$id' AND idjreg<'8' ORDER BY idthpel";
+				$kepake = cquery($qpake);
+				//var_dump($qpake);
 
-			$qthp = "SELECT MIN(idthpel) as awal FROM tbthpel WHERE idthpel<='$akhir' ORDER BY idthpel DESC LIMIT 6";
-			$thp = vquery($qthp)[0];
-			$awal = $thp['awal'];
+				$qreg = "SELECT r.idthpel FROM tbregistrasi r WHERE idsiswa='$id' AND idjreg='8'";
+				$reg = vquery($qreg)[0];
+				$batas = $reg['idthpel'];
+
+				$qkabeh = "SELECT idthpel FROM tbthpel WHERE idthpel<='$batas'";
+				$kabeh = cquery($qkabeh);
+				if ($kabeh > 6) {
+					$ofset = $kabeh - $kepake;
+				} else {
+					$ofset = 0;
+				}
+
+				//var_dump($ofset);
+				$qthpel = "SELECT idthpel FROM tbthpel WHERE idthpel<='$batas' LIMIT 6 OFFSET $ofset";
+				//var_dump($qthpel);
+				$thp = vquery($qthpel);
+				//var_dump($thp);
+				foreach ($thp as $th) {
+					$tahun[] = $th['idthpel'];
+				}
+				$awal = min($tahun);
+				$akhir = max($tahun);
+			} else {
+				$qthakhir = "SELECT MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
+				$tha = vquery($qthakhir)[0];
+				$akhir = $tha['akhir'];
+				$awal = $tha['awal'];
+			}
 		}
+
 		$qthpel = "SELECT idthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir'";
 		$nthpel = cquery($qthpel);
 		$hal = ceil($nthpel / 4);
@@ -1599,7 +1879,7 @@ class PDF extends FPDF
 			$this->SetAutoPageBreak(true, 2);
 			$this->AddPage();
 			$this->GetNilaiTitle($id, $i);
-			$this->GetTableJudul($awal, $akhir, $i);
+			$this->GetTableJudul($id, $awal, $akhir, $i);
 			$this->GetTableIsi($id, $awal, $akhir, $i);
 		}
 	}

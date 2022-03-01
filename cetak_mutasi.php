@@ -136,7 +136,7 @@ class PDF extends FPDF
 				$opset = 26;
 				$no = 26;
 			}
-			$sql = "SELECT idsiswa, nmsiswa, nisn, nis, gender, jnsmutasi, aslkesmp, tglsurat, alasan, idkelas FROM tbsiswa s LEFT JOIN tbmutasi m USING(idsiswa) LEFT JOIN tbregistrasi r USING(idsiswa) LEFT JOIN tbregistrasi_detil rd USING(idreg) WHERE deleted = '0' AND (idjreg = '2' OR idjreg='6') GROUP BY r.idsiswa ORDER BY m.tglsurat, s.nis LIMIT 25 OFFSET $opset";
+			$sql = "SELECT idsiswa, nmsiswa, nisn, nis, gender, jnsmutasi, aslkesmp, tglsurat, alasan, idkelas FROM tbsiswa s LEFT JOIN tbmutasi m USING(idsiswa) LEFT JOIN tbregistrasi r USING(idsiswa) LEFT JOIN tbregistrasi_detil rd USING(idreg) WHERE deleted = '0' AND (idjreg = '2' OR idjreg='6') GROUP BY r.idsiswa ORDER BY s.nis,m.tglsurat LIMIT 25 OFFSET $opset";
 
 			$qs = vquery($sql);
 
@@ -211,7 +211,7 @@ class PDF extends FPDF
 	function PrintChapter()
 	{
 		$this->SetLineWidth(0.001);
-		$sql = "SELECT nis, nisn, nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) WHERE  r.idjreg='2' OR r.idjreg='6'ORDER BY nis";
+		$sql = "SELECT nis, nisn, nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) WHERE  r.idjreg='2' OR r.idjreg='6'ORDER BY s.nis";
 		$nsiswa = cquery($sql);
 		if ($nsiswa > 0) {
 			$hal = ceil($nsiswa / 25);

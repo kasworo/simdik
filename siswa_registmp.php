@@ -38,7 +38,7 @@ $objPHPExcel->setActiveSheetIndex(0)
 	->setCellValue('G5', '(7)')
 	->setCellValue('H3', 'Ket.')
 	->setCellValue('H5', '(8)');
-$sql = "SELECT idsiswa, nis, nisn, nmsiswa, jnsregistrasi, r.*, rd.idkelas, nmkelas, nmthpel FROM tbsiswa LEFT JOIN tbregistrasi r USING(idsiswa) LEFT JOIN tbregistrasi_detil rd USING(idreg) LEFT JOIN tbthpel USING(idthpel) LEFT JOIN tbkelas USING(idkelas) LEFT JOIN ref_jnsregistrasi USING(idjreg) WHERE deleted='0' AND r.idjreg IS NULL";
+$sql = "SELECT idsiswa, nis, nisn, nmsiswa, jnsregistrasi, r.idjreg, r.idthpel, nmthpel, rd.idkelas, nmkelas, nmthpel FROM tbsiswa LEFT JOIN tbregistrasi r USING(idsiswa) LEFT JOIN tbregistrasi_detil rd USING(idreg) LEFT JOIN tbthpel USING(idthpel) LEFT JOIN tbkelas USING(idkelas) LEFT JOIN ref_jnsregistrasi USING(idjreg) WHERE deleted='0' AND r.idjreg<'6' GROUP BY idsiswa";
 //var_dump($sql);
 if (cquery($sql) > 0) {
 	$datane = vquery($sql);

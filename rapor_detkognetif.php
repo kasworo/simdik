@@ -1,5 +1,6 @@
 <?php
-	$ds=viewdata('tbsiswa',array('idsiswa'=>$_GET['id']))[0];  
+$ds = viewdata('tbsiswa', array('idsiswa' => $_GET['id']))[0];
+$namasiswa = $ds['nmsiswa'];
 ?>
 
 <div class="alert alert-warning">
@@ -9,7 +10,7 @@
 </div>
 <div class="card card-primary card-outline">
 	<div class="card-header">
-		<h5 class="card-title m-0">Detail Nilai Pengetahuan Untuk <?php echo $namasiswa;?></h5>
+		<h5 class="card-title m-0">Detail Nilai Pengetahuan Untuk <?php echo $namasiswa; ?></h5>
 	</div>
 	<div class="card-body">
 		<div class="table-responsive">
@@ -19,47 +20,47 @@
 						<th style="text-align:center;width:5%;vertical-align: middle" rowspan="2">No</th>
 						<th style="text-align:center;vertical-align: middle;width:37.5%" rowspan="2">Mata Pelajaran</th>
 						<?php
-							$sql="SELECT th.nmthpel FROM tbregistrasi rg INNER JOIN tbthpel th USING(idthpel) WHERE rg.idsiswa='$_GET[id]'";
-							$qtp=vquery($sql);
-							foreach ($qtp as $tp):
+						$sql = "SELECT th.nmthpel FROM tbregistrasi rg INNER JOIN tbthpel th USING(idthpel) WHERE rg.idsiswa='$_GET[id]'";
+						$qtp = vquery($sql);
+						foreach ($qtp as $tp) :
 						?>
-						<th style="text-align:center;" colspan="2">
-							<?php echo $tp['nmthpel'];?>
-						</th>
+							<th style="text-align:center;" colspan="2">
+								<?php echo $tp['nmthpel']; ?>
+							</th>
 						<?php endforeach ?>
 					</tr>
 					<tr>
-						<?php foreach ($qtp as $tp): ?>
-						<th style="text-align:center">N</th>
-						<th style="text-align:center">P</th>
+						<?php foreach ($qtp as $tp) : ?>
+							<th style="text-align:center">N</th>
+							<th style="text-align:center">P</th>
 						<?php endforeach ?>
 					</tr>
 				</thead>
 				<tbody>
 					<?php
-					$no=0;
-					$qmp=viewdata('tbmapel');
-					foreach ($qmp as $mp):
-						$no++;						
-				?>
-					<tr>
-						<td style="text-align:center;"><?php echo $no.'.';?></td>
-						<td><?php echo $mp['nmmapel'];?></td>
-						<?php
-						$sql="SELECT rg.idthpel FROM tbregistrasi rg INNER JOIN tbthpel th USING(idthpel) WHERE rg.idsiswa='$_GET[id]'";				   
-						$qtp=vquery($sql);
-						foreach($qtp as $tp):
-							$key=array(
-								'idmapel'=>$mp['idmapel'],
-								'idthpel'=>$tp['idthpel'],
-								'aspek'=>$_GET['d']
-							);
-							$dn=viewdata('tbnilairapor',$key)[0];
+					$no = 0;
+					$qmp = viewdata('tbmapel');
+					foreach ($qmp as $mp) :
+						$no++;
 					?>
-						<td style="text-align:center;"><?php echo $dn['nilairapor'];?></td>
-						<td style="text-align:center;"><?php echo $dn['predikat'];?></td>
-						<?php endforeach ?>
-					</tr>
+						<tr>
+							<td style="text-align:center;"><?php echo $no . '.'; ?></td>
+							<td><?php echo $mp['nmmapel']; ?></td>
+							<?php
+							$sql = "SELECT rg.idthpel FROM tbregistrasi rg INNER JOIN tbthpel th USING(idthpel) WHERE rg.idsiswa='$_GET[id]'";
+							$qtp = vquery($sql);
+							foreach ($qtp as $tp) :
+								$key = array(
+									'idmapel' => $mp['idmapel'],
+									'idthpel' => $tp['idthpel'],
+									'aspek' => '3'
+								);
+								$dn = viewdata('tbnilairapor', $key)[0];
+							?>
+								<td style="text-align:center;"><?php echo $dn['nilairapor']; ?></td>
+								<td style="text-align:center;"><?php echo $dn['predikat']; ?></td>
+							<?php endforeach ?>
+						</tr>
 					<?php endforeach ?>
 				</tbody>
 			</table>

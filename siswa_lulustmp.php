@@ -1,9 +1,6 @@
 <?php
 require_once "assets/library/PHPExcel.php";
 include "dbfunction.php";
-$sql = "SELECT MAX(idkelas) as maks FROM tbkelas INNER JOIN tbjenjang USING(idjenjang) INNER JOIN tbskul USING(idjenjang)";
-$kl = vquery($sql)[0];
-$kelas = $kl['maks'];
 $objPHPExcel = new PHPExcel();
 $objPHPExcel->getProperties()->setCreator("Kasworo Wardani")
 	->setLastModifiedBy("Kasworo Wardani")
@@ -49,20 +46,8 @@ $objPHPExcel->setActiveSheetIndex(0)
 	->setCellValue('J5', '(10)')
 	->setCellValue('K3', 'Ket.')
 	->setCellValue('K5', '(11)');
-$field = array('nmsiswa', 'nisn', 'nis', 'nmthpel');
-$tbl = array(
-	'tbregistrasi rg' => 'idsiswa',
-	'tbkelas k' => 'idkelas',
-	'tbthpel tp' => 'idthpel',
-	'ref_jnsregistrasi' => 'idjreg'
-);
-$where = array(
-	'deleted' => '0',
-	'tp.aktif' => '1',
-	'rg.idkelas' => $kelas
-);
-$sqls="SELECT nmsiswa, nisn, nis, nmthpel FROM tbsiswa LEFT JOIN tbregistrasi rg USING(idsiswa) LEFT JOIN tbkelas k USING(idkelas) LEFT JOIN tbthpel tp USING(idthpel) LEFT JOIN ref_jnsregistrasi USING(idjreg) WHERE deleted='0' AND tp.aktif='1' AND rg.idkelas=$kelas";
-$datane =vquery($sqls);
+$sqls = "SELECT nmsiswa, nisn, nis, nmthpel FROM tbsiswa LEFT JOIN tbregistrasi rg USING(idsiswa) LEFT JOIN tbthpel tp USING(idthpel) WHERE deleted='0' AND tp.aktif='1' AND rg.idjreg='8'";
+$datane = vquery($sqls);
 foreach ($datane as $row) {
 	$no++;
 	$objPHPExcel->setActiveSheetIndex(0)

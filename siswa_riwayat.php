@@ -111,4 +111,30 @@ if ($_POST['d'] == '4') {
 		);
 	}
 }
+
+if ($_POST['d'] == '5') {
+	$data = cekdata('tbakhirtahun', array('idsiswa' => $_POST['id']));
+	if ($data == 0) {
+		$rows = array(
+			'nama' => $nmsiswa,
+			'idsiswa' => '',
+			'idthpel' => '',
+			'tglcatatan' => '',
+			'catatan' => '',
+			'judul' => 'Isi Catatan Akhir Tahun Untuk ' . $nmsiswa,
+			'tmbl' => '<i class="fas fa-save"></i> Simpan'
+		);
+	} else {
+		$m = viewdata('tbakhirtahun', array('idsiswa' => $_POST['id']))[0];
+		$rows = array(
+			'nama' => $nmsiswa,
+			'idsiswa' => $m['idsiswa'],
+			'idthpel' => $m['idthpel'],
+			'tglcatatan' => $m['tglcatatan'],
+			'catatan' => $m['catatan'],
+			'judul' => 'Update Catatan Akhir Tahun Untuk ' . $nmsiswa,
+			'tmbl' => '<i class="fas fa-save"></i> Update'
+		);
+	}
+}
 echo json_encode($rows);

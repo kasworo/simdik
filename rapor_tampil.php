@@ -36,11 +36,11 @@ if ($_GET['d'] == '4') {
 					</div>
 				</div>
 				<div class="modal-footer justify-content-between">
-					<a href="rapor_template.php?d=<?php echo $_GET['d']; ?>" class="btn btn-success btn-sm btn-flat" target="_blank"><i class="fas fa-download"></i> Download</a>
-					<button type="submit" name="upload" class="btn btn-primary btn-sm btn-flat">
+					<a href="rapor_template.php?d=<?php echo $_GET['d']; ?>" class="btn btn-success btn-sm" target="_blank"><i class="fas fa-download"></i> Download</a>
+					<button type="submit" name="upload" class="btn btn-primary btn-sm">
 						<i class="fas fa-upload"></i>&nbsp;Upload
 					</button>
-					<button type="button" class="btn btn-danger btn-sm btn-flat" data-dismiss="modal"><i class="fas fa-power-off"></i> Tutup</button>
+					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-power-off"></i> Tutup</button>
 				</div>
 			</form>
 		</div>
@@ -57,13 +57,13 @@ if ($_GET['d'] == '4') {
 	<div class="card-header">
 		<h5 class="card-title m-0">Data Nilai <?php echo $aspek; ?></h5>
 		<div class="card-tools">
-			<button class="btn btn-flat btn-success btn-sm" data-target="#myImportNilai" data-toggle="modal">
+			<button class="btn btn-success btn-sm" data-target="#myImportNilai" data-toggle="modal">
 				<i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
 			</button>
 		</div>
 	</div>
 	<div class="card-body">
-		<table id="tb_rombel" class="table table-bordered table-striped table-sm">
+		<table id="tb_rapor" class="table table-bordered table-striped table-sm">
 			<thead>
 				<tr>
 					<th style="text-align: center;width:2.5%">No.</th>
@@ -95,7 +95,7 @@ if ($_GET['d'] == '4') {
 							$nilai = '-';
 						}
 					}
-					if ($_GET['d'] == '3' || $_GET['d'] == '3') {
+					if ($_GET['d'] == '3' || $_GET['d'] == '4') {
 						$qcek = "SELECT nilairapor FROM tbnilairapor WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]'";
 						if (cquery($qcek) > 0) {
 							$qnilai = "SELECT AVG(nilairapor) as rata FROM tbnilairapor WHERE idsiswa='$s[idsiswa]' AND aspek='$_GET[d]' GROUP BY idmapel";
@@ -105,7 +105,6 @@ if ($_GET['d'] == '4') {
 							$nilai = '-';
 						}
 					}
-
 				?>
 					<tr>
 						<td style="text-align:center"><?php echo $no . '.'; ?></td>
@@ -117,10 +116,10 @@ if ($_GET['d'] == '4') {
 							<?php echo $nilai; ?>
 						</td>
 						<td style="text-align:center">
-							<button data-id="<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-info btn-flat btnDetail">
+							<button data-id="<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-info btnDetail">
 								<i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Detail
 							</button>
-							<button data-id="<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-success btn-flat btnInput">
+							<button data-id="<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-success btnInput">
 								<i class="fas fa-edit" aria-hidden="true"></i>&nbsp;Input
 							</button>
 						</td>
@@ -131,11 +130,17 @@ if ($_GET['d'] == '4') {
 	</div>
 </div>
 <script type="text/javascript">
-	function validAngka(a) {
-		if (!/^[0-9.]+$/.test(a.value)) {
-			a.value = a.value.substring(0, a.value.length - 1000);
-		}
-	}
+	$(function() {
+		$('#tb_rapor').DataTable({
+			"paging": true,
+			"lengthChange": false,
+			"searching": true,
+			"ordering": false,
+			"info": false,
+			"autoWidth": false,
+			"responsive": true,
+		});
+	});
 	$(".btnInput").click(function() {
 		let id = $(this).data('id');
 		let asp = "<?php echo $_GET['d']; ?>";
@@ -155,10 +160,8 @@ if ($_GET['d'] == '4') {
 		} else if (asp == '3') {
 			window.location.href = "index.php?p=detailkognetif&id=" + id
 		} else if (asp == '4') {
-			window.location.href = "index.php?p=detailterampil&id=" + id
+			window.location.href = "index.php?p=detailmotorik&id=" + id
 		}
-		//window.location.href = "index.php?p=detailnilai&id=" + id + "&d=" + d
-
 	})
 	$(document).ready(function() {
 		$(function() {

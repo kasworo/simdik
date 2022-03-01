@@ -177,7 +177,7 @@ if (isset($_POST['downrpt'])) {
 
         $sqlso = "SELECT nilaisikap FROM tbnilaisikap INNER JOIN tbsiswa USING(idsiswa) INNER JOIN tbthpel USING(idthpel) WHERE nis='$s[nis]' AND nmthpel='$tahun' AND aspek='2'";
         if (cquery($sqlso) > 0) {
-            $so = vquery($sqlso);
+            $so = vquery($sqlso)[0];
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValueByColumnAndRow($jmp * 4 + 7, $baris, $so['nilaisikap']);
         }

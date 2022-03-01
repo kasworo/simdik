@@ -79,9 +79,9 @@ if (isset($_POST['simpan'])) {
 				});
 			</script>";
 		}
-		//exit;
 	}
 }
+
 if (isset($_POST['upload'])) {
 	require_once 'assets/library/PHPExcel.php';
 	require_once 'assets/library/excel_reader.php';
@@ -191,6 +191,110 @@ if (isset($_POST['upload'])) {
 		}
 	}
 }
+
+if (isset($_POST['lanjut'])) {
+	$sqth = "SELECT idthpel FROM tbthpel WHERE aktif='1'";
+	$th = vquery($sqth)[0];
+	$saiki = $th['idthpel'];
+	$sms = $th['idthpel'] - 1;
+	$sukses = 0;
+	$update = 0;
+	$gagal = 0;
+	$sqlm = "SELECT idsiswa, nmsiswa, nis, nisn, idkelas, nmkelas, idthpel FROM tbsiswa INNER JOIN tbregistrasi USING(idsiswa) INNER JOIN tbregistrasi_detil USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE deleted='0' AND idthpel='$sms' AND idjreg<='3' ORDER BY nis";
+
+	$dlama = vquery($sqlm);
+	foreach ($dlama as $dl) {
+		$key = array(
+			'idsiswa' => $dl['idsiswa'],
+			'idthpel' => $dl['idthpel']
+		);
+		if (cekdata('tbregistrasi', $key) > 0) {
+			$dr = viewdata('tbregistrasi', $key)[0];
+			$keyrg = array(
+				'idreg' => $dr['idreg']
+			);
+			if (cekdata('tbregistrasi_detil', $keyrg) > 0) {
+				$datane = array(
+					'idkelas' => $dl['idkelas'],
+					'tglreg' => date('Y-m-d')
+				);
+				editdata('tbregistrasi_detail', $datane, '', $keyrg);
+			} else {
+				$datane = array(
+					'idreg' => $dr['idreg'],
+					'idkelas' => $dl['idkelas'],
+					'tglreg' => date('Y-m-d')
+				);
+				adddata('tbregistrasi_detil', $datane);
+			}
+			$update++;
+		} else {
+			$datane = array(
+				'idjreg' => '4',
+				'idsiswa' => $dl['idsiswa'],
+				'idthpel' => $dl['idthpel'],
+			);
+			$tambah = adddata('tbregistrasi', $datane);
+			if ($tambah > 0) {
+				$sukses++;
+			} else {
+				$gagal++;
+			}
+		}
+	}
+}
+if (isset($_POST['naik'])) {
+	$sqth = "SELECT idthpel FROM tbthpel WHERE aktif='1'";
+	$th = vquery($sqth)[0];
+	$saiki = $th['idthpel'];
+	$sms = $th['idthpel'] - 1;
+	$sqlm = "SELECT idsiswa, nmsiswa, nis, nisn, idkelas, idthpel, nmkelas FROM tbsiswa INNER JOIN tbregistrasi USING(idsiswa) INNER JOIN tbregistrasi_detil USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE deleted='0' AND idthpel='$sms' AND (idjreg='2' OR idjreg='4') AND idkelas<>'9' GROUP BY idsiswa ORDER BY nis";
+	$dlama = vquery($sqlm);
+
+	$sukses = 0;
+	$update = 0;
+	$gagal = 0;
+	foreach ($dlama as $dl) {
+		$key = array(
+			'idsiswa' => $dl['idsiswa'],
+			'idthpel' => $dl['idthpel']
+		);
+		if (cekdata('tbregistrasi', $key) > 0) {
+			$dr = viewdata('tbregistrasi', $key)[0];
+			$keyrg = array(
+				'idreg' => $dr['idreg']
+			);
+			if (cekdata('tbregistrasi_detil', $keyrg) > 0) {
+				$datane = array(
+					'idkelas' => $dl['idkelas'] + 1,
+					'tglreg' => date('Y-m-d')
+				);
+				editdata('tbregistrasi_detail', $datane, '', $keyrg);
+			} else {
+				$datane = array(
+					'idreg' => $dr['idreg'],
+					'idkelas' => $dl['idkelas'] + 1,
+					'tglreg' => date('Y-m-d')
+				);
+				adddata('tbregistrasi_detil', $datane);
+			}
+			$update++;
+		} else {
+			$datane = array(
+				'idjreg' => '3',
+				'idsiswa' => $dl['idsiswa'],
+				'idthpel' => $dl['idthpel'],
+			);
+			$tambah = adddata('tbregistrasi', $datane);
+
+			if ($tambah > 0) {
+				$sukses++;
+			} else {
+				$gagal++;
+			}
+		}
+	}
+}
 ?>
 <div class="modal fade" id="myImportReg" aria-modal="true">
 	<div class="modal-dialog">
@@ -240,12 +344,12 @@ if (isset($_POST['upload'])) {
 					<div class="col-sm-12">
 						<div class="form-group row mb-2">
 							<label class="col-sm-5">Peserta Didik</label>
-							<input type="hidden" class="form-control input-sm" id="idsiswa" name="idsiswa">
-							<input type="text" class="form-control input-sm col-sm-6" id="nmsiswa" name="nmsiswa" disabled="true">
+							<input type="hidden" class="form-control form-control-sm" id="idsiswa" name="idsiswa">
+							<input type="text" class="form-control form-control-sm col-sm-6" id="nmsiswa" name="nmsiswa" disabled="true">
 						</div>
 						<div class="form-group row mb-2">
 							<label class="col-sm-5">Tahun Pelajaran</label>
-							<select class="form-control input-sm col-sm-6" id="kdthpel" name="kdthpel" readonly>
+							<select class="form-control form-control-sm col-sm-6" id="kdthpel" name="kdthpel" readonly>
 								<option value="">..Pilih..</option>
 								<?php
 								$qtp = viewdata('tbthpel', $key);
@@ -259,7 +363,7 @@ if (isset($_POST['upload'])) {
 						</div>
 						<div class="form-group row mb-2">
 							<label class="col-sm-5">Terdaftar Sebagai</label>
-							<select class="form-control input-sm col-sm-6" id="idreg" name="idreg" readonly>
+							<select class="form-control form-control-sm col-sm-6" id="idreg" name="idreg" readonly>
 								<option value="">..Pilih..</option>
 								<?php
 								$sqreg = "SELECT*FROM ref_jnsregistrasi";
@@ -273,7 +377,7 @@ if (isset($_POST['upload'])) {
 						</div>
 						<div class="form-group row mb-2">
 							<label class="col-sm-5">Kelas</label>
-							<select class="form-control input-sm col-sm-6" id="kdkelas" name="kdkelas">
+							<select class="form-control form-control-sm col-sm-6" id="kdkelas" name="kdkelas">
 								<option value="">..Pilih..</option>
 								<?php
 								$sqkls = "SELECT idkelas, nmkelas FROM tbkelas INNER JOIN tbskul USING(idjenjang)";
@@ -298,30 +402,28 @@ if (isset($_POST['upload'])) {
 		</div>
 	</div>
 </div>
-
 <div class="card card-secondary card-outline">
 	<div class="card-header">
-		<h4 class="card-title">Registrasi Peserta Didik</h4>
+		<h4 class="card-title">Pengaturan Kelas Periode <?php echo $tapel; ?></h4>
 		<div class="card-tools">
-			<button class="btn btn-success btn-sm" data-target="#myImportReg" data-toggle="modal">
-				<i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
-			</button>
-			<?php
-			$where = array('aktif' => '1');
-			$th = viewdata('tbthpel', $where)[0];
-			if (substr($th['nmthpel'], -1) == '2') :
-			?>
-				<button class="btn btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
-					<i class="fas fa-plus-circle"></i>&nbsp;Lanjutkan
-				</button>
-			<?php else : ?>
-				<button class="btn btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
-					<i class="fas fa-plus-circle"></i>&nbsp;Naik Kelas
-				</button>
-				<!-- <button class="btn btn-primary btn-sm" data-target="#myLanjutin" data-toggle="modal">
-					<i class="fas fa-plus-circle"></i>&nbsp;Naik Kelas
-				</button> -->
-			<?php endif; ?>
+			<form action="" method="post">
+				<a href="#" class="btn btn-success btn-sm" data-target="#myImportReg" data-toggle="modal">
+					<i class="fas fa-cloud-upload-alt"></i>&nbsp;Import
+				</a>
+				<?php
+				$where = array('aktif' => '1');
+				$th = viewdata('tbthpel', $where)[0];
+				if (substr($th['nmthpel'], -1) == '2') :
+				?>
+					<button type="submit" class="btn btn-primary btn-sm" name="lanjut" id="lanjut">
+						<i class="fas fa-plus-circle"></i>&nbsp;Lanjutkan
+					</button>
+				<?php else : ?>
+					<button type="submit" class="btn btn-primary btn-sm" name="naik" id="naik">
+						<i class="fas fa-plus-circle"></i>&nbsp;Naik Kelas
+					</button>
+				<?php endif; ?>
+			</form>
 		</div>
 	</div>
 	<div class="card-body">
@@ -338,13 +440,11 @@ if (isset($_POST['upload'])) {
 				</thead>
 				<tbody>
 					<?php
-
-					$sql = "SELECT idsiswa, nis, nisn, nmsiswa, nmkelas, r.idthpel FROM tbsiswa INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel USING(idthpel) LEFT JOIN tbregistrasi_detil rd USING(idreg) LEFT JOIN tbkelas USING(idkelas) WHERE deleted='0' AND aktif='1' AND idjreg<6 GROUP BY idsiswa ORDER BY nis";
 					$no = 0;
-					$qs = vquery($sql);
+					$sqlb = "SELECT idsiswa, nmsiswa, nis, nisn, nmkelas FROM tbsiswa LEFT JOIN tbregistrasi USING(idsiswa) LEFT JOIN tbregistrasi_detil USING(idreg) LEFT JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE deleted='0' AND aktif='1'GROUP BY idsiswa ORDER BY nis";
+					$qs = vquery($sqlb);
 					foreach ($qs as $s) :
 						$no++;
-
 					?>
 						<tr>
 							<td style="text-align:center"><?php echo $no . '.'; ?></td>
@@ -385,14 +485,6 @@ if (isset($_POST['upload'])) {
 			"responsive": true,
 		});
 	});
-	// $("#kdrombel").change(function() {
-	// 	var rmb = $(this).val();
-	// 	if (rmb == '' || rmb == null) {
-	// 		toastr.error('Pilih Rombel Dulu!');
-	// 	} else {
-	// 		$("#idreg").removeAttr('disabled');
-	// 	}
-	// })
 
 	$(".btnRegistrasi").click(function() {
 		let id = $(this).data('id');
@@ -412,18 +504,7 @@ if (isset($_POST['upload'])) {
 		})
 	})
 
-	$("#lanjutkan").click(function() {
-		var rblama = $("#rombelold").val();
-		var rbnew = $("#rombelnew").val();
-		$.ajax({
-			url: "rombel_simpan.php",
-			type: 'POST',
-			data: 'aksi=2&rl=' + rblama + "&rb=" + rbnew,
-			success: function(data) {
-				toastr.success(data)
-			}
-		})
-	})
+
 	$("#btnrefresh").click(function() {
 		window.location.reload();
 	})

@@ -17,7 +17,7 @@ if (isset($_POST['upload'])) {
         $cekkolom = $data->colcount($sheet_index = 0);
         $isidata = $baris - 9;
         if ($_POST['tmp'] == '1') {
-            if ($cekkolom != 54) {
+            if ($cekkolom < 54) {
                 echo "<script>
                         $(function() {
                             toastr.error('File Template Nilai Rapor Salah!','Mohon Maaf!',{
@@ -269,6 +269,7 @@ if (isset($_POST['upload'])) {
             }
             //sisipkan pesan di sini
         }
+
 
         if ($_POST['tmp'] == '2') {
             if ($cekkolom != 26) {

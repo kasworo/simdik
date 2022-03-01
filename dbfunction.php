@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pwd = "";
-$db = "dbsimdik";
+$db = "dbcbtnew";
 $conn = new mysqli($host, $user, $pwd, $db);
 if (mysqli_connect_errno()) {
 	echo "Error: Could not connect to database. ";
@@ -17,8 +17,8 @@ function indonesian_date($date)
 		"Juli", "Agustus", "September",
 		"Oktober", "November", "Desember"
 	);
-	$year		= substr($date, 0, 4);
-	$month	   = substr($date, 5, 2);
+	$year = substr($date, 0, 4);
+	$month = substr($date, 5, 2);
 	$currentdate = substr($date, 8, 2);
 	if ($month >= 1) {
 		$result = $currentdate . " " . $indonesian_month[(int) $month - 1] . " " . $year;
@@ -26,6 +26,40 @@ function indonesian_date($date)
 		$result = '';
 	}
 	return $result;
+}
+function isithpel()
+{
+	$tahun = date('Y');
+	$bulan = date('m');
+	if ($bulan <= 12) {
+		if ($bulan > 6) {
+			$tahun = $tahun;
+			$semester = '1';
+			$nmsemester = 'Ganjil';
+			$tgl = strtotime("07/01" . $tahun);
+			$awal = date('Y-m-d', $tgl);
+		} else {
+			$tahun = $tahun - 1;
+			$semester = '2';
+			$nmsemester = 'Genap';
+			$tgl = strtotime("01/01" . $tahun);
+			$awal = date('Y-m-d', $tgl);
+		}
+	}
+	$tahun1 = $tahun + 1;
+	$ay = $tahun . $semester;
+	$nama = $tahun . '/' . $tahun1 . '-' . $nmsemester;
+	$cek = cekdata('tbthpel', array('nmthpel' => $ay));
+	if ($cek == 0) {
+		$data = array(
+			'nmthpel' => $ay,
+			'desthpel' => $nama,
+			'awal' => $awal,
+			'aktif' => '1'
+		);
+		editdata('tbthpel', array('aktif' => '0'));
+		adddata('tbthpel', $data);
+	}
 }
 function getagama($idagm)
 {
@@ -389,6 +423,7 @@ function vquery($sql)
 function cquery($sql)
 {
 	global $conn;
+	//var_dump($sql);
 	$result = $conn->query($sql);
 	return $result->num_rows;
 }
@@ -451,6 +486,7 @@ function cekdata($tbl, $key = '', $grup = '', $ord = '')
 			$sql = "SELECT*FROM $tbl WHERE " . implode(' AND ', $where) . " GROUP BY $grup";
 		}
 	}
+	//var_dump($sql);
 	$result = $conn->query($sql);
 	return $result->num_rows;
 }
@@ -461,8 +497,6 @@ function adddata($tbl, $data)
 	$key = array_keys($data);
 	$val = array_values($data);
 	$sql = "INSERT INTO $tbl (" . implode(', ', $key) . ") VALUES ('" . implode("', '", $val) . "')";
-	// var_dump($sql);
-	// die;
 	$conn->query($sql);
 	return $conn->affected_rows;
 }
@@ -488,7 +522,7 @@ function editdata($tbl, $data, $join = '', $field = '')
 		}
 		$sql = "UPDATE $tbl INNER JOIN " . implode(' ', $tbjoin) . " SET " . implode(', ', $cols) . " WHERE " . implode(' AND ', $where);
 	}
-	//var_dump($sql);die;
+
 	$conn->query($sql);
 	return $conn->affected_rows;
 }

@@ -5,10 +5,9 @@ if (!isset($_SESSION['login'])) {
 	exit;
 }
 include "dbfunction.php";
-if (empty($_COOKIE['id'])) { {
-		header("Location: logout.php");
-		exit;
-	}
+if (empty($_COOKIE['id'])) {
+	header("Location: logout.php");
+	exit;
 } else {
 	$user = array(
 		'username' => $_COOKIE['id']
@@ -100,7 +99,7 @@ if (empty($_COOKIE['id'])) { {
 						<input type="hidden" name="jenis" id="jenis">
 						<div class="form-group row mb-2">
 							<label class="col-5 ml-2">Dari Tahun Pelajaran</label>
-							<select class="form-control input-sm col-6" id="awal" name="awal">
+							<select class="form-control form-control-sm col-6" id="awal" name="awal">
 								<option value="">..Pilih..</option>
 								<?php foreach ($qtp as $tp) : ?>
 									<option value="<?php echo $tp['awal']; ?>"><?php echo $tp['namathpel']; ?></option>
@@ -109,7 +108,7 @@ if (empty($_COOKIE['id'])) { {
 						</div>
 						<div class="form-group row mb-2">
 							<label class="col-5 ml-2">Sampai Tahun Pelajaran</label>
-							<select class="form-control input-sm col-6" id="akhir" name="akhir">
+							<select class="form-control form-control-sm col-6" id="akhir" name="akhir">
 								<option value="">..Pilih..</option>
 								<?php foreach ($qtp as $tp) : ?>
 									<option value="<?php echo $tp['akhir']; ?>"><?php echo $tp['namathpel']; ?></option>
@@ -361,6 +360,10 @@ if (empty($_COOKIE['id'])) { {
 											include "rapor_tampil.php";
 											break;
 										}
+									case 'catatanrapor': {
+											include "rapor_catatan.php";
+											break;
+										}
 									case 'inputsikap': {
 											include "rapor_sikap.php";
 											break;
@@ -382,7 +385,7 @@ if (empty($_COOKIE['id'])) { {
 											break;
 										}
 									case 'detailmotorik': {
-											include "rapor_det.php";
+											include "rapor_detmotorik.php";
 											break;
 										}
 									case 'nilaius': {
@@ -394,7 +397,16 @@ if (empty($_COOKIE['id'])) { {
 											break;
 										}
 									case 'nilaiijz': {
-											include "rapor_rekap.php";
+											include "ijz_tampil.php";
+											break;
+										}
+									case 'detailijz': {
+											include "ijz_detail.php";
+											break;
+										}
+
+									case 'inputijz': {
+											include "ijz_input.php";
 											break;
 										}
 									case 'nilaieksim': {

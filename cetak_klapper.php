@@ -149,7 +149,7 @@ class PDF extends FPDF
 				$this->Cell(6.5, 0.575, ucwords(strtolower($s['nmsiswa'])), 'BR', 0, 'L');
 				$this->Cell(5.75, 0.575, ucwords(strtolower($s['tmplahir'])) . ', ' . indonesian_date($s['tgllahir']), 'BR', 0, 'L');
 				$this->Cell(0.75, 0.575, $s['gender'], 'BR', 0, 'C');
-				$sqlr = "SELECT idkelas, tglreg FROM tbregistrasi INNER JOIN tbregistrasi_detil USING(idreg) WHERE idsiswa='$s[idsiswa]' AND (idjreg='1' OR idjreg='2')";
+				$sqlr = "SELECT idkelas, tglreg, idjreg FROM tbregistrasi INNER JOIN tbregistrasi_detil USING(idreg) WHERE idsiswa='$s[idsiswa]' AND (idjreg='1' OR idjreg='2')";
 				if (cquery($sqlr) == 0) {
 					$this->Cell(1.25, 0.575, '-', 'BR', 0, 'C');
 					$this->Cell(3.0, 0.575, '-', 'BR', 0, 'L');
@@ -157,8 +157,14 @@ class PDF extends FPDF
 					$this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
 				} else {
 					$rg = vquery($sqlr)[0];
+					if ($rg['idjreg'] == '1') {
+						$tgl = indonesian_date($rg['tglreg']);
+					}
+					if ($rg['idjreg'] == '2') {
+						$tgl = '';
+					}
 					$this->Cell(1.25, 0.575, UbahKelas($rg['idkelas']), 'BR', 0, 'C');
-					$this->Cell(3.0, 0.575, indonesian_date($rg['tglreg']), 'BR', 0, 'L');
+					$this->Cell(3.0, 0.575, $tgl, 'BR', 0, 'L');
 					$this->Cell(3.0, 0.575, '', 'BR', 0, 'C');
 					$this->Cell(4.75, 0.575, '', 'BR', 0, 'C');
 				}

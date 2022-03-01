@@ -9,4 +9,3 @@
         'akmapel'=>$k['akmapel']
     );
     echo json_encode($rows);
-?>

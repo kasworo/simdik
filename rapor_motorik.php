@@ -1,92 +1,96 @@
-<?php $idsiswa=$_GET['id'];?>
+<?php $idsiswa = $_GET['id']; ?>
 <script type="text/javascript">
-function isitable(id, th) {
-    $.ajax({
-        url: 'rapor_data.php',
-        type: 'POST',
-        data: "as=4&id=" + id + "&th=" + th,
-        success: function(data) {
-            $("#datane").html(data);
-        }
-    });
-}
-$(document).ready(function() {
-    let id = "<?php echo $idsiswa;?>";
-    let th = $("#txtThpel").val();
-    $("#simpan").hide();
-    isitable(id, th);
-
-    $("#txtThpel").change(function(e) {
-        e.preventDefault();
-        let id = "<?php echo $idsiswa;?>";
+    function isitable(id, th) {
+        $.ajax({
+            url: 'rapor_data.php',
+            type: 'POST',
+            data: "as=4&id=" + id + "&th=" + th,
+            success: function(data) {
+                $("#datane").html(data);
+            }
+        });
+    }
+    $(document).ready(function() {
+        let id = "<?php echo $idsiswa; ?>";
         let th = $("#txtThpel").val();
+        $("#simpan").hide();
         isitable(id, th);
+
+        $("#txtThpel").change(function(e) {
+            e.preventDefault();
+            let id = "<?php echo $idsiswa; ?>";
+            let th = $("#txtThpel").val();
+            isitable(id, th);
+        })
+        $("#pilih").click(function(e) {
+            e.preventDefault();
+            $(".txtNilai").removeAttr('disabled');
+            $(".txtDeskripsi").removeAttr('disabled');
+            $(".txtPredikat").removeAttr('disabled');
+            $(this).hide();
+            $("#simpan").show();
+        })
     })
-    $("#pilih").click(function(e) {
-        e.preventDefault();
-        $(".txtNilai").removeAttr('disabled');
-        $(".txtDeskripsi").removeAttr('disabled');
-        $(".txtPredikat").removeAttr('disabled');
-        $(this).hide();
-        $("#simpan").show();
-    })
-})
 </script>
-<?php 
-    if(isset($_POST['motorik'])){       
-        $rows = isset($_POST['mapel']) ? $_POST['mapel'] : 1;
-        $i=0;
-        $gagal=0;
-        $tambah=0;
-        $edit=0;
-        $batal=0;
-        foreach ($rows as $row){
-            $key=array(
-                'idsiswa'=>$idsiswa,
-                'idthpel'=>$_POST['thpel'],
-                'idmapel'=>$_POST['mapel'][$i],
-                'aspek'=>'4'
-            ); 
-            
-            $ceknilai=cekdata('tbnilairapor',$key);
-		    if($ceknilai>0){
-			    $nilai=array(
-				    'nilairapor'=>$_POST['nilai'][$i],
-			        'predikat'=>$_POST['predikat'][$i],
-				    'deskripsi'=>$_POST['deskripsi'][$i]
-			    );				
-			    $editnilai=editdata('tbnilairapor',$nilai,'',$key);
-			    if($editnilai>0){$edit++;}
-			    else {$batal++;}
-		    }
-		    else {
-			    $nilai=array(
-				    'idsiswa'=>$idsiswa,
-				    'idthpel'=>$_POST['thpel'],
-				    'idmapel'=>$_POST['mapel'][$i],				    
-				    'nilairapor'=>$_POST['nilai'][$i],
-                    'predikat'=>$_POST['predikat'][$i],
-				    'deskripsi'=>$_POST['deskripsi'][$i],
-                    'aspek'=>'4',
-			    );
-			    $tambahnilai=adddata('tbnilairapor',$nilai);		
-			    if($tambahnilai>0){ $tambah++;}
-			    else {$gagal++;}
-		    }
-          $i++;  
+<?php
+if (isset($_POST['motorik'])) {
+    $rows = isset($_POST['mapel']) ? $_POST['mapel'] : 1;
+    $i = 0;
+    $gagal = 0;
+    $tambah = 0;
+    $edit = 0;
+    $batal = 0;
+    foreach ($rows as $row) {
+        $key = array(
+            'idsiswa' => $idsiswa,
+            'idthpel' => $_POST['thpel'],
+            'idmapel' => $_POST['mapel'][$i],
+            'aspek' => '4'
+        );
+
+        $ceknilai = cekdata('tbnilairapor', $key);
+        if ($ceknilai > 0) {
+            $nilai = array(
+                'nilairapor' => $_POST['nilai'][$i],
+                'predikat' => $_POST['predikat'][$i],
+                'deskripsi' => $_POST['deskripsi'][$i]
+            );
+            $editnilai = editdata('tbnilairapor', $nilai, '', $key);
+            if ($editnilai > 0) {
+                $edit++;
+            } else {
+                $batal++;
+            }
+        } else {
+            $nilai = array(
+                'idsiswa' => $idsiswa,
+                'idthpel' => $_POST['thpel'],
+                'idmapel' => $_POST['mapel'][$i],
+                'nilairapor' => $_POST['nilai'][$i],
+                'predikat' => $_POST['predikat'][$i],
+                'deskripsi' => $_POST['deskripsi'][$i],
+                'aspek' => '4',
+            );
+            $tambahnilai = adddata('tbnilairapor', $nilai);
+            if ($tambahnilai > 0) {
+                $tambah++;
+            } else {
+                $gagal++;
+            }
         }
-        if($tambah>0 || $edit>0){
-            echo "<script>
+        $i++;
+    }
+    if ($tambah > 0 || $edit > 0) {
+        echo "<script>
 				    $(function() {
-					    toastr.info('Ada ".$tambah." data ditambah, ".$edit." data diupdate, ".$gagal." data gagal ditambahkan, ".$batal." data gagal diupdate!','Terima Kasih',{
+					    toastr.info('Ada " . $tambah . " data ditambah, " . $edit . " data diupdate, " . $gagal . " data gagal ditambahkan, " . $batal . " data gagal diupdate!','Terima Kasih',{
 					    timeOut:2000,
 					    fadeOut:2000
 				    });
 			    });
 	    	</script>";
-        } 
-        else {
-            echo "<script>
+    } else {
+        echo "<script>
 				    $(function() {
 					    toastr.error('Tidak ada data yang berhasil ditambahkan atau diupdate!','Mohon Maaf',{
 					    timeOut:2000,
@@ -94,8 +98,8 @@ $(document).ready(function() {
 				    });
 			    });
 	    	</script>";
-        }           
-    }		
+    }
+}
 ?>
 <div class="alert alert-danger">
     <p><strong>Petunjuk:</strong></p>
@@ -123,21 +127,20 @@ $(document).ready(function() {
             <div class="form-group row mt-2 mb-4">
                 <div class="col-sm-3">
                     <script type="text/javascript" src="js/get_thpel.js"></script>
-                    <select class="form-control input-sm" id="txtKls" onchange="getthpel(this.value)">
+                    <select class="form-control form-control-sm" id="txtKls" onchange="getthpel(this.value)">
                         <option value=""> ..Pilih.. </option>
                         <?php
-						$fkls=array('idkelas', 'nmkelas');
-						$tbl=array('tbskul'=>'idjenjang');
-						$qkls=fulljoin($fkls,'tbkelas',$tbl);
-						foreach ($qkls as $kl):
-					?>
-                        <option value="<?php echo $kl['idkelas'].'&id='.$idsiswa;?>"> <?php echo $kl['nmkelas'];?>
-                        </option>
+                        $sqlk = "SELECT idkelas, nmkelas FROM tbkelas INNER JOIN tbjenjang USING(idjenjang)";
+                        $qkls = vquery($sqlk);
+                        foreach ($qkls as $kl) :
+                        ?>
+                            <option value="<?php echo $kl['idkelas'] . '&id=' . $idsiswa; ?>"> <?php echo $kl['nmkelas']; ?>
+                            </option>
                         <?php endforeach ?>
                     </select>
                 </div>
                 <div class="col-sm-3">
-                    <select class="form-control" id="txtThpel" name="thpel" disabled>
+                    <select class="form-control form-control-sm" id="txtThpel" name="thpel" disabled>
                         <option value=""> ..Pilih.. </option>
                     </select>
                 </div>
@@ -158,13 +161,13 @@ $(document).ready(function() {
     </form>
 </div>
 <script type="text/javascript">
-function
-validAngka(a) {
-    if (!/^[0-9.]+$/.test(a.value)) {
-        a.value =
-            a.value.substring(0,
-                a.value.length -
-                1000);
+    function
+    validAngka(a) {
+        if (!/^[0-9.]+$/.test(a.value)) {
+            a.value =
+                a.value.substring(0,
+                    a.value.length -
+                    1000);
+        }
     }
-}
 </script>
