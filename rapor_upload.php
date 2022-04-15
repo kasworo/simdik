@@ -2,6 +2,7 @@
 	require_once "assets/library/PHPExcel.php";
 	require_once "assets/library/excel_reader.php";
 	include "dbfunction.php";
+	
 	if(empty($_FILES['tmprapor']['tmp_name'])){ 
 		echo "<script>
 				alert('ERROR');
@@ -84,4 +85,3 @@
 			}
 		}
 	}
-?>

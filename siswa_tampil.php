@@ -2,8 +2,6 @@
 if (isset($_POST['upload'])) {
 	require_once 'assets/library/PHPExcel.php';
 	require_once 'assets/library/excel_reader.php';
-	// include "dbfunction.php";
-	// var_dump($_FILES['filepd']);die;
 	if (empty($_FILES['filepd']['tmp_name'])) {
 		echo "<script>
 			$(function() {
@@ -405,7 +403,7 @@ if (isset($_POST['simpan']) && isset($_POST['idreg'])) {
 								$qtp = viewdata('tbthpel', $key);
 								foreach ($qtp as $tp) :
 								?>
-									<option value="<?php echo $tp['idthpel']; ?>" <?php echo $tp['aktif'] == '1' ? "selected" : ""; ?>>
+									<option value="<?php echo $tp['idthpel']; ?>">
 										<?php echo $tp['desthpel'];	?>
 									</option>
 								<?php endforeach ?>
@@ -416,6 +414,7 @@ if (isset($_POST['simpan']) && isset($_POST['idreg'])) {
 							<select class="form-control input-sm col-sm-6" id="idreg" name="idreg" disabled>
 								<option value="">..Pilih..</option>
 								<?php
+
 								$sqreg = "SELECT*FROM ref_jnsregistrasi";
 								$qreg = vquery($sqreg);
 								foreach ($qreg as $rg) :

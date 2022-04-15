@@ -190,20 +190,20 @@ class PDF extends FPDF
 		$this->y0 = $this->GetY();
 	}
 
-	function Footer()
-	{
-		// if ($this->PageNo()>1) {
-		// 	$this->SetXY(3.75,-1.575);
-		// 	$this->SetFont('Arial','I',8);
-		// 	$sql="SELECT LEFT(desthpel,9) as tahun FROM tbthpel WHERE idthpel='$id'";
-		// 	var_dump($sql);		   		
-		// 	$th=vquery($sql)[0];
-		// 	$hal=$this->PageNo()-1;
-		// 	$this->Cell(26.25,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'C');
-		// 	$this->Cell(1.75,1.0,'Halaman '.$hal,0,0,'C');
+	// function Footer()
+	// {
+	// 	 if ($this->PageNo()>1) {
+	// 	 	$this->SetXY(3.75,-1.575);
+	// 	 	$this->SetFont('Arial','I',8);
+	// 	 	$sql="SELECT LEFT(desthpel,9) as tahun FROM tbthpel WHERE idthpel='$id'";
+	// 	 	var_dump($sql);		   		
+	// 	 	$th=vquery($sql)[0];
+	// 	 	$hal=$this->PageNo()-1;
+	// 	 	$this->Cell(26.25,1.0,'Buku Induk Peserta Didik Tahun Pelajaran '.$th['tahun'],0,0,'C');
+	// 	 	$this->Cell(1.75,1.0,'Halaman '.$hal,0,0,'C');
 
-		// }
-	}
+	// 	 }
+	// }
 
 	function SetCol($col)
 	{
@@ -275,7 +275,7 @@ class PDF extends FPDF
 	{
 		$d = viewdata('tbsiswa', array('idsiswa' => $id))[0];
 		$this->PasFoto($id);
-		$this->SetFont('Times', 'B', 11);
+		$this->SetFont('Times', '', 11);
 		$this->SetXY(2.75, 4.5);
 		$this->Cell(0.75, 0.5725, 'A.');
 		$this->Cell(12.5, 0.5725, 'Keterangan Diri Peserta Didik');
@@ -480,7 +480,6 @@ class PDF extends FPDF
 		$this->Cell(0.25, 0.5725, ':');
 		$this->Cell(8.25, 0.5725, $hobi4);
 		$this->Ln(0.75);
-		//$this->y0 = $this->GetY();
 		$this->SetFont('Times', 'B', 11);
 		$this->Cell(0.75, 0.5725, 'B.');
 		$this->Cell(12.5, 0.5725, 'Registrasi Peserta Didik');
@@ -562,10 +561,10 @@ class PDF extends FPDF
 			'jnsmutasi' => '1'
 		);
 		if (cekdata('tbmutasi', $km) == 0) {
-			$aslsmp = '';
-			$nosurat = '';
-			$tglsurat = '';
-			$alasan = '';
+			$aslsmp = '-';
+			$nosurat = '-';
+			$tglsurat = '-';
+			$alasan = '-';
 		} else {
 			$mu = viewdata('tbmutasi', $km)[0];
 			$aslsmp = $mu['aslkesmp'];
@@ -623,8 +622,8 @@ class PDF extends FPDF
 			$gajiayah = getgajiortu($da['idhsl']);
 			$hdpayah = getkethdp($da['wafat']);
 			$alamat1 = $da['alamat'] . ', Desa ' . $da['desa'];
-			$alamat2 = 'Kecamatan ' . $da['kec'] . ', Kabupaten ' . $d['kab'];
-			$alamat3 = 'Provinsi ' . $da['prov'] . ', Kode Pos ' . $da['kdpos'];
+			$alamat2 = 'Kecamatan ' . $da['kec'] . ', Kabupaten ' . $da['kab'];
+			$alamat3 = 'Provinsi ' . $da['prov']; //. ', Kode Pos ' . $da['kdpos'];
 			$nohp = $da['nohp'];
 		}
 
@@ -649,8 +648,8 @@ class PDF extends FPDF
 			$gajiibu = getgajiortu($di['idhsl']);
 			$hdpibu = getkethdp($di['wafat']);
 			$alamat1 = $di['alamat'] . ', Desa ' . $di['desa'];
-			$alamat2 = 'Kecamatan ' . $di['kec'] . ', Kabupaten ' . $d['kab'];
-			$alamat3 = 'Provinsi ' . $di['prov'] . ', Kode Pos ' . $di['kdpos'];
+			$alamat2 = 'Kecamatan ' . $di['kec'] . ', Kabupaten ' . $di['kab'];
+			$alamat3 = 'Provinsi ' . $di['prov']; // . ', Kode Pos ' . $di['kdpos'];
 			$nohp = $di['nohp'];
 		}
 		$this->SetFont('Times', '', 11);
@@ -811,8 +810,8 @@ class PDF extends FPDF
 			$krjwali = getkerjaortu($dw['idkerja']);
 			$gajiwali = getgajiortu($dw['idhsl']);
 			$alamat1 = $dw['alamat'] . ', Desa ' . $dw['desa'];
-			$alamat2 = 'Kecamatan ' . $dw['kec'] . ', Kabupaten ' . $d['kab'];
-			$alamat3 = 'Provinsi ' . $dw['prov'] . ', Kode Pos ' . $dw['kdpos'];
+			$alamat2 = 'Kecamatan ' . $dw['kec'] . ', Kabupaten ' . $dw['kab'];
+			$alamat3 = 'Provinsi ' . $dw['prov']; // . ', Kode Pos ' . $dw['kdpos'];
 			$nohp = $dw['nohp'];
 			$hubkel = GetHubKel($dw['hubkel']);
 		}
@@ -903,7 +902,7 @@ class PDF extends FPDF
 		}
 		$this->Ln(0.125);
 		$this->Cell(0.75, 0.5725);
-		$this->Cell(0.75, 0.5725, '4.');
+		$this->Cell(0.75, 0.5725, '3.');
 		$this->Cell(12.5, 0.5725, 'Perkembangan Kesehatan');
 		$this->Ln();
 		for ($i = 1; $i <= 4; $i++) {
@@ -1043,7 +1042,7 @@ class PDF extends FPDF
 		$this->Cell(8.25, 0.5725, $nmslta);
 		$this->Ln(0.75);
 		$this->SetFont('Times', 'B', 11);
-		$this->Cell(0.75, 0.5725, 'H.');
+		$this->Cell(0.75, 0.5725, 'G.');
 		$this->Cell(12.5, 0.5725, 'Catatan Penting Lainnya');
 		$this->Ln();
 		$this->SetFont('Times', '', 11);
@@ -1115,82 +1114,52 @@ class PDF extends FPDF
 		}
 	}
 
-	function GetTableJudul($id, $awal, $akhir, $hal)
+	function GetTableJudul($id, $kur, $awal, $akhir, $hal)
 	{
-
-		if ($hal == 1) {
-			$opset = 0;
-			$y0 = 4.5;
-			$this->SetXY(2.75, $y0);
-		} else {
-			$opset = 4;
-			$y0 = 3.5;
-			$this->SetXY(2.75, $y0);
-		}
 		$this->SetLineWidth(0);
 		$this->SetDrawColor(2, 2, 2);
 		$this->SetFont('Times', '', 10);
-		$this->Cell(1.0, 1.725, 'No.', 'LTBR', 0, 'C');
-		$this->Cell(8.25, 1.725, 'Mata Pelajaran', 'TBR', 0, 'C');
-		$i = 0;
-
-		$qthpel = GetKolom($awal, $akhir, $opset);
-		if (JmlKolom($awal, $akhir, $opset) == 4) {
+		if ($kur == '1') {
+			$y0 = 4.5;
+			$this->SetXY(2.75, $y0);
+			$this->Cell(1.0, 1.15, 'No.', 'LTBR', 0, 'C');
+			$this->Cell(8.25, 1.15, 'Mata Pelajaran', 'TBR', 0, 'C');
+			$this->SetXY(12, $y0);
+			$this->Cell(3.6, 0.575, '2016/2017', 'TBR', 0, 'C');
+			$this->SetXY(12, $y0 + 0.575);
+			$this->Cell(1.8, 0.575, 'I', 'BR', 0, 'C');
+			$this->Cell(1.8, 0.575, 'II', 'BR', 0, 'C');
+			$i = 0;
+			$qthpel = GetKolom($awal, $akhir, 0);
 			foreach ($qthpel as $th) {
-				$this->SetXY($i * 4.8 + 12, $y0);
-				$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
-				$this->SetXY($i * 4.8 + 12, $y0 + 0.575);
-				$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
-				$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-				$this->SetXY($i * 4.8 + 12, $y0 + 1.15);
-				$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-				$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-				$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-				$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+				if (substr($th['nmthpel'], -1) == '1') {
+					$this->SetXY($i * 1.8 + 15.6, $y0);
+					$this->Cell(3.6, 0.575, substr($th['desthpel'], 0, 9), 'TBR', 0, 'C');
+					$this->SetXY($i * 1.8 + 15.6, $y0 + 0.575);
+					$this->Cell(1.8, 0.575, 'I', 'BR', 0, 'C');
+				} else {
+					$semester = 'II';
+					$this->SetXY($i * 1.8 + 15.6, $y0 + 0.575);
+					$this->Cell(1.8, 0.575, 'II', 'BR', 0, 'C');
+				}
 				$i++;
 			}
 		} else {
-			if (CekLulus($id) > 0) {
-				foreach ($qthpel as $th) {
-					$this->SetXY($i * 4.8 + 12, $y0);
-					$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
-					$this->SetXY($i * 4.8 + 12, $y0 + 0.575);
-					$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
-					$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-					$this->SetXY($i * 4.8 + 12, $y0 + 1.15);
-					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-					$i++;
-				}
-				for ($j = $i; $j < 2; $j++) {
-					$this->SetXY($j * 4.8 + 12, $y0);
-					$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
-					$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
-					$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
-					$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-					$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
-					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-				}
-				$this->SetXY($j * 4.8 + 12, $y0);
-				$this->Cell(4.8, 0.575, 'Rata-rata', 'TR', 0, 'C');
-				$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
-				$this->Cell(4.80, 0.575, 'Nilai Rapor', 'BR', 0, 'C');
-				$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
-				$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
-				$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-				$this->SetXY(($j + 1) * 4.8 + 12, $y0);
-				$this->Cell(4.8, 0.575, 'Nilai Akhir', 'TR', 0, 'C');
-				$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 0.575);
-				$this->Cell(4.8, 0.575, 'Kelulusan', 'BR', 0, 'C');
-				$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 1.15);
-				$this->Cell(2.40, 0.575, 'US', 'BR', 0, 'C');
-				$this->Cell(2.40, 0.575, 'Ijazah', 'BR', 0, 'C');
+			if ($hal == 1) {
+				$opset = 0;
+				$y0 = 4.5;
+				$this->SetXY(2.75, $y0);
 			} else {
+				$opset = 4;
+				$y0 = 3.5;
+				$this->SetXY(2.75, $y0);
+			}
+
+			$this->Cell(1.0, 1.725, 'No.', 'LTBR', 0, 'C');
+			$this->Cell(8.25, 1.725, 'Mata Pelajaran', 'TBR', 0, 'C');
+			$i = 0;
+			$qthpel = GetKolom($awal, $akhir, $opset);
+			if (JmlKolom($awal, $akhir, $opset) == 4) {
 				foreach ($qthpel as $th) {
 					$this->SetXY($i * 4.8 + 12, $y0);
 					$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
@@ -1204,23 +1173,79 @@ class PDF extends FPDF
 					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
 					$i++;
 				}
-				for ($j = $i; $j < 4; $j++) {
+			} else {
+				if (CekLulus($id) > 0) {
+					foreach ($qthpel as $th) {
+						$this->SetXY($i * 4.8 + 12, $y0);
+						$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, $y0 + 0.575);
+						$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+						$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, $y0 + 1.15);
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+						$i++;
+					}
+					for ($j = $i; $j < 2; $j++) {
+						$this->SetXY($j * 4.8 + 12, $y0);
+						$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+						$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
+						$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+						$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+						$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					}
 					$this->SetXY($j * 4.8 + 12, $y0);
-					$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+					$this->Cell(4.8, 0.575, 'Rata-rata', 'TR', 0, 'C');
 					$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
+					$this->Cell(4.80, 0.575, 'Nilai Rapor', 'BR', 0, 'C');
+					$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
 					$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
 					$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
-					$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
-					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
-					$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
-					$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					$this->SetXY(($j + 1) * 4.8 + 12, $y0);
+					$this->Cell(4.8, 0.575, 'Nilai Akhir', 'TR', 0, 'C');
+					$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 0.575);
+					$this->Cell(4.8, 0.575, 'Kelulusan', 'BR', 0, 'C');
+					$this->SetXY(($j + 1) * 4.8 + 12, $y0 + 1.15);
+					$this->Cell(2.40, 0.575, 'US', 'BR', 0, 'C');
+					$this->Cell(2.40, 0.575, 'Ijazah', 'BR', 0, 'C');
+				} else {
+					foreach ($qthpel as $th) {
+						$this->SetXY($i * 4.8 + 12, $y0);
+						$this->Cell(4.8, 0.575, $th['desthpel'], 'TBR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, $y0 + 0.575);
+						$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+						$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+						$this->SetXY($i * 4.8 + 12, $y0 + 1.15);
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+						$i++;
+					}
+					for ($j = $i; $j < 4; $j++) {
+						$this->SetXY($j * 4.8 + 12, $y0);
+						$this->Cell(4.8, 0.575, '', 'TBR', 0, 'C');
+						$this->SetXY($j * 4.8 + 12, $y0 + 0.575);
+						$this->Cell(2.40, 0.575, 'Pengetahuan', 'BR', 0, 'C');
+						$this->Cell(2.40, 0.575, 'Keterampilan', 'BR', 0, 'C');
+						$this->SetXY($j * 4.8 + 12, $y0 + 1.15);
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+						$this->Cell(1.0, 0.575, 'Nilai', 'BR', 0, 'C');
+						$this->Cell(1.40, 0.575, 'Predikat', 'BR', 0, 'C');
+					}
 				}
 			}
 		}
 	}
 
-	function GetTableIsi($id, $awal, $akhir, $hal)
+	function GetTableIsi($id, $kur, $awal, $akhir, $hal)
 	{
 		if ($hal == 1) {
 			$opset = 0;
@@ -1235,7 +1260,8 @@ class PDF extends FPDF
 		$this->SetDrawColor(2, 2, 2);
 		$qthpel = GetKolom($awal, $akhir, $opset);
 		$j = 0;
-		$qmp = viewdata('tbmapel');
+		$sqm = "SELECT idmapel, nmmapel FROM tbmapel WHERE idkur='$kur'";
+		$qmp = vquery($sqm);
 		foreach ($qmp as $mp) {
 			$no = $j + 1;
 			$this->SetFont('Times', '', 10);
@@ -1335,11 +1361,13 @@ class PDF extends FPDF
 					$this->Cell(2.4, 0.575, '', 'BR', 0, 'C');
 					$sqijz = "SELECT nilaiijz FROM tbnilaiijz WHERE idsiswa='$id' AND idmapel='$mp[idmapel]'";
 
-					if (cquery($sqijz) == 0) {
+					if (
+						cquery($sqijz) == 0
+					) {
 						$nilaijz = '';
 					} else {
 						$ijz = vquery($sqijz)[0];
-						$nilaijz = $ijz['nilaiijz'];
+						$nilaijz = round($ijz['nilaiijz'], 0);
 					}
 					$this->Cell(2.4, 0.575, $nilaijz, 'BR', 0, 'C');
 				} else {
@@ -1824,13 +1852,13 @@ class PDF extends FPDF
 		$this->BiodataIsi($id);
 	}
 
-	function PrintNilai($id)
+	function PrintNilai($id, $kur)
 	{
 		$this->SetLineWidth(0.001);
 		$cekregis = CekRegis($id);
 		$cekmutasi = CekMutasi($id);
 		$cekdo = CekDropOut($id);
-		if ($cekregis >= 6 || $cekmutasi > 0 || $cekdo > 0) {
+		if ($cekregis >= 6) {
 			$qthakhir = "SELECT MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
 			$tha = vquery($qthakhir)[0];
 			$akhir = $tha['akhir'];
@@ -1839,8 +1867,6 @@ class PDF extends FPDF
 			if (CekLulus($id) > 0) {;
 				$qpake = "SELECT idthpel FROM tbregistrasi WHERE idsiswa='$id' AND idjreg<'8' ORDER BY idthpel";
 				$kepake = cquery($qpake);
-				//var_dump($qpake);
-
 				$qreg = "SELECT r.idthpel FROM tbregistrasi r WHERE idsiswa='$id' AND idjreg='8'";
 				$reg = vquery($qreg)[0];
 				$batas = $reg['idthpel'];
@@ -1852,19 +1878,15 @@ class PDF extends FPDF
 				} else {
 					$ofset = 0;
 				}
-
-				//var_dump($ofset);
 				$qthpel = "SELECT idthpel FROM tbthpel WHERE idthpel<='$batas' LIMIT 6 OFFSET $ofset";
-				//var_dump($qthpel);
 				$thp = vquery($qthpel);
-				//var_dump($thp);
 				foreach ($thp as $th) {
 					$tahun[] = $th['idthpel'];
 				}
 				$awal = min($tahun);
 				$akhir = max($tahun);
 			} else {
-				$qthakhir = "SELECT MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id'";
+				$qthakhir = "SELECT MIN(idthpel) as awal, MAX(idthpel) as akhir FROM tbregistrasi WHERE idsiswa='$id' AND idjreg<'6'";
 				$tha = vquery($qthakhir)[0];
 				$akhir = $tha['akhir'];
 				$awal = $tha['awal'];
@@ -1879,8 +1901,8 @@ class PDF extends FPDF
 			$this->SetAutoPageBreak(true, 2);
 			$this->AddPage();
 			$this->GetNilaiTitle($id, $i);
-			$this->GetTableJudul($id, $awal, $akhir, $i);
-			$this->GetTableIsi($id, $awal, $akhir, $i);
+			$this->GetTableJudul($id, $kur, $awal, $akhir, $i);
+			$this->GetTableIsi($id, $kur, $awal, $akhir, $i);
 		}
 	}
 }
@@ -1893,12 +1915,12 @@ $akhir = $_GET['akhir'];
 $qthpel = "SELECT idthpel FROM tbthpel WHERE idthpel BETWEEN '$awal' AND '$akhir' GROUP BY LEFT(nmthpel,4)";
 $qthn = vquery($qthpel);
 foreach ($qthn as $thn) {
-	$pdf->PrintCover($thn['idthpel']);
-	$sql = "SELECT si.idsiswa, si.nmsiswa FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) WHERE th.idthpel BETWEEN '$awal' AND '$akhir' AND (rg.idjreg='1' OR rg.idjreg='2') ORDER BY si.nis";
+	//$pdf->PrintCover($thn['idthpel']);
+	$sql = "SELECT si.idsiswa, rd.idkur FROM tbsiswa si INNER JOIN tbregistrasi rg USING(idsiswa) INNER JOIN tbthpel th USING(idthpel) INNER JOIN tbregistrasi_detil rd USING(idreg) WHERE th.idthpel BETWEEN '$awal' AND '$akhir' AND (rg.idjreg='1' OR rg.idjreg='2') AND si.idsiswa='7' ORDER BY si.nis";
 	$qsiswa = vquery($sql);
 	foreach ($qsiswa as $ds) {
 		$pdf->PrintBiodata($ds['idsiswa']);
-		$pdf->PrintNilai($ds['idsiswa']);
+		$pdf->PrintNilai($ds['idsiswa'], $ds['idkur']);
 	}
 }
 $pdf->Output();

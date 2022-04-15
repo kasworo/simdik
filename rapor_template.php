@@ -1,7 +1,6 @@
 <?php
 require_once "assets/library/PHPExcel.php";
 include "dbfunction.php";
-
 function CellsToMergeByColsRow($start = -1, $end = -1, $row = -1, $n = 0)
 {
     $merge = 'A1:A1';

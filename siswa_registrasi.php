@@ -13,7 +13,7 @@ if (isset($_POST['simpan'])) {
 		'idthpel' => $_POST['kdthpel']
 	);
 	$reg = viewdata('tbregistrasi', $dtr)[0];
-	$sqlr = "SELECT idsiswa FROM tbregistrasi INNER JOIN tbregistrasi_detil USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='$_POST[idsiswa]' AND idthpel='$_POST[kdthpel]' AND idjreg='$_POST[idreg]'";
+	$sqlr = "SELECT idreg FROM tbregistrasi INNER JOIN tbregistrasi_detil USING(idreg) INNER JOIN tbkelas USING(idkelas) INNER JOIN tbthpel USING(idthpel) WHERE idsiswa='$_POST[idsiswa]' AND idthpel='$_POST[kdthpel]' AND idjreg='$_POST[idreg]'";
 	$cekregis = cquery($sqlr);
 	if ($cekregis === 0) {
 		$data = array(
@@ -48,11 +48,12 @@ if (isset($_POST['simpan'])) {
 			</script>";
 		}
 	} else {
+		$dr = vquery($sqlr)[0];
 		$data = array(
 			'idkelas' => $_POST['kdkelas'],
 			'tglreg' => $tgl
 		);
-		$key = array('idjreg' => $_POST['idreg']);
+		$key = array('idreg' => $dr['idreg']);
 		$rows = editdata('tbregistrasi_detil', $data, '', $key);
 		if ($rows > 0) {
 			echo "<script>

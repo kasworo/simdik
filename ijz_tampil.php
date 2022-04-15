@@ -38,8 +38,7 @@ if (isset($_POST['tambahin'])) {
     $ct = vquery($sqt)[0];
     $cektahun = $ct['cekth'];
 
-    $sql = "SELECT idsiswa, idthpel FROM tbregistrasi INNER JOIN tbthpel USING(idthpel) WHERE aktif='1' AND idjreg='8'";
-
+    $sql = "SELECT idsiswa, idthpel FROM tbregistrasi r INNER JOIN tbthpel USING(idthpel) WHERE aktif='1' AND idjreg='8'";
     $ceksiswa = cquery($sql);
     if ($cektahun != '1' && $ceksiswa == 0) {
         echo "<script>
@@ -55,8 +54,11 @@ if (isset($_POST['tambahin'])) {
         $gagal = 0;
         $update = 0;
         $dreg = vquery($sql);
+
         foreach ($dreg as $reg) {
-            $qmp = viewdata('tbmapel');
+            $qkur = "SELECT idkur FROM tbregistrasi r INNER JOIN tbregistrasi_detil USING(idreg) WHERE idjreg='4' AND idthpel='$reg[idthpel]' AND idsiswa='$reg[idsiswa]'";
+            $kur = vquery($qkur)[0];
+            $qmp = viewdata('tbmapel', array('idkur' => $kur['idkur']));
             foreach ($qmp as $mp) {
                 $qijz = "SELECT AVG(nilairapor) as nilaiijz FROM tbnilairapor WHERE idsiswa='$reg[idsiswa]' AND idmapel='$mp[idmapel]' GROUP BY idmapel";
                 $ijz = vquery($qijz)[0];
@@ -175,37 +177,40 @@ if (isset($_POST['tambahin'])) {
                     $sql = "SELECT s.idsiswa, s.nis, s.nisn, s.nmsiswa FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel t USING(idthpel) WHERE r.idjreg='8' AND t.aktif='1' ORDER BY s.nis";
                     $qs = vquery($sql);
                     $no = 0;
-                    foreach ($qs as $s) {
+                    foreach ($qs as $s) :
                         $no++;
                         $sqijz = "SELECT AVG(nilaiijz) as rata, SUM(nilaiijz) as jml FROM tbnilaiijz ijz LEFT JOIN tbthpel tp USING(idthpel) WHERE idsiswa='$s[idsiswa]' AND tp.aktif='1' GROUP BY idsiswa";
-                        $ijz = vquery($sqijz)[0];
+                        $cek = cquery($sqijz);
+                        if ($cek > 0) :
+                            $ijz = vquery($sqijz)[0];
                     ?>
-                        <tr>
-                            <td style="text-align:center"><?php echo $no . '.'; ?></td>
-                            <td title="<?php echo $s['idsiswa']; ?>">
-                                <?php echo ucwords(strtolower($s['nmsiswa'])); ?>
-                            </td>
-                            <td style="text-align:center"><?php echo $s['nis'] . ' / ' . $s['nisn']; ?></td>
-                            <td style="text-align:center">
-                                <?php
-                                echo number_format(round($ijz['jml'], 2), 1, ',', '.');
-                                ?>
-                            </td>
-                            <td style="text-align:center">
-                                <?php
-                                echo number_format(round($ijz['rata'], 2), 2, ',', '.');
-                                ?>
-                            </td>
-                            <td style="text-align: center">
-                                <a href="index.php?p=detailijz&id=<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-secondary">
-                                    <i class="fas fa-list"></i>&nbsp;Detail
-                                </a>
-                                <a href="index.php?p=inputijz&id=<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-success">
-                                    <i class="fas fa-edit"></i>&nbsp;Input
-                                </a>
-                            </td>
-                        </tr>
-                    <?php } ?>
+                            <tr>
+                                <td style="text-align:center"><?php echo $no . '.'; ?></td>
+                                <td title="<?php echo $s['idsiswa']; ?>">
+                                    <?php echo ucwords(strtolower($s['nmsiswa'])); ?>
+                                </td>
+                                <td style="text-align:center"><?php echo $s['nis'] . ' / ' . $s['nisn']; ?></td>
+                                <td style="text-align:center">
+                                    <?php
+                                    echo number_format(round($ijz['jml'], 2), 1, ',', '.');
+                                    ?>
+                                </td>
+                                <td style="text-align:center">
+                                    <?php
+                                    echo number_format(round($ijz['rata'], 2), 2, ',', '.');
+                                    ?>
+                                </td>
+                                <td style="text-align: center">
+                                    <a href="index.php?p=detailijz&id=<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-secondary">
+                                        <i class="fas fa-list"></i>&nbsp;Detail
+                                    </a>
+                                    <a href="index.php?p=inputijz&id=<?php echo $s['idsiswa']; ?>" class="btn btn-xs btn-success">
+                                        <i class="fas fa-edit"></i>&nbsp;Input
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endif ?>
+                    <?php endforeach ?>
                 </tbody>
             </table>
         </div>

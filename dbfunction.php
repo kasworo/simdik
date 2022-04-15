@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pwd = "";
-$db = "dbcbtnew";
+$db = "dbsimdik";
 $conn = new mysqli($host, $user, $pwd, $db);
 if (mysqli_connect_errno()) {
 	echo "Error: Could not connect to database. ";
@@ -49,7 +49,10 @@ function isithpel()
 	$tahun1 = $tahun + 1;
 	$ay = $tahun . $semester;
 	$nama = $tahun . '/' . $tahun1 . '-' . $nmsemester;
-	$cek = cekdata('tbthpel', array('nmthpel' => $ay));
+	$key = array(
+		'nmthpel' => $ay
+	);
+	$cek = cekdata('tbthpel', $key);
 	if ($cek == 0) {
 		$data = array(
 			'nmthpel' => $ay,
@@ -57,7 +60,7 @@ function isithpel()
 			'awal' => $awal,
 			'aktif' => '1'
 		);
-		editdata('tbthpel', array('aktif' => '0'));
+		editdata('tbthpel', array('aktif' => '0'),);
 		adddata('tbthpel', $data);
 	}
 }
@@ -101,6 +104,7 @@ function getgender($id)
 	}
 	return $jk;
 }
+
 function getwni($id)
 {
 	if ($id == '1') {
@@ -522,7 +526,6 @@ function editdata($tbl, $data, $join = '', $field = '')
 		}
 		$sql = "UPDATE $tbl INNER JOIN " . implode(' ', $tbjoin) . " SET " . implode(', ', $cols) . " WHERE " . implode(' AND ', $where);
 	}
-
 	$conn->query($sql);
 	return $conn->affected_rows;
 }

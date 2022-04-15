@@ -1,44 +1,44 @@
 <?php
-	session_start();
-	include "dbfunction.php";
-    $error=false;
-    if(isset($_COOKIE['id']) && isset($_COOKIE['key'])){
-        $pwd=$_COOKIE['key'];
-        $keys=array(
-            'username'=>$_COOKIE['id']
-        );
-        $data=viewdata('tbuser',$keys)[0];
-		if($pwd===hash('sha256',$data['passwd'])){
-			$_SESSION['login']=true;
-		}
-	}
-    
-	if(isset($_SESSION['login'])){
-		header("Location: index.php?p=dashboard");
-		exit;
-	}
-	
-    if(isset($_POST['login'])){
-		$user=$conn->real_escape_string($_POST['user']);
-		$pass=$_POST['pass'];
-        $keys=array(
-            'username'=>$user
-        );
-		$cekuser=cekdata('tbuser',$keys);
-		if($cekuser===1){
-			$data=viewdata('tbuser',$keys)[0];
-           if(password_verify($pass, $data['passwd'])){
-				$_SESSION['login']=true;
-				setcookie('id',$data['username'],time()+3600);
-				if(isset($_POST['ingat'])){					
-					setcookie('key',hash('sha256',$data['passwd']),time()+3600);
-				}
-				header("Location:index.php?p=dashboard");
-				exit;
-			}
-		}
-		$error=true;
-	}	
+session_start();
+include "dbfunction.php";
+$error = false;
+if (isset($_COOKIE['id']) && isset($_COOKIE['key'])) {
+    $pwd = $_COOKIE['key'];
+    $keys = array(
+        'username' => $_COOKIE['id']
+    );
+    $data = viewdata('tbuser', $keys)[0];
+    if ($pwd === hash('sha256', $data['passwd'])) {
+        $_SESSION['login'] = true;
+    }
+}
+
+if (isset($_SESSION['login'])) {
+    header("Location: index.php?p=dashboard");
+    exit;
+}
+
+if (isset($_POST['login'])) {
+    $user = $conn->real_escape_string($_POST['user']);
+    $pass = $_POST['pass'];
+    $keys = array(
+        'username' => $user
+    );
+    $cekuser = cekdata('tbuser', $keys);
+    if ($cekuser === 1) {
+        $data = viewdata('tbuser', $keys)[0];
+        if (password_verify($pass, $data['passwd'])) {
+            $_SESSION['login'] = true;
+            setcookie('id', $data['username'], time() + 3600);
+            if (isset($_POST['ingat'])) {
+                setcookie('key', hash('sha256', $data['passwd']), time() + 3600);
+            }
+            header("Location:index.php?p=dashboard");
+            exit;
+        }
+    }
+    $error = true;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,9 +75,9 @@
                         </div>
                     </div>
                     <style>
-                    #viewpass:hover {
-                        cursor: pointer;
-                    }
+                        #viewpass:hover {
+                            cursor: pointer;
+                        }
                     </style>
                     <div class="input-group mb-3">
                         <input type="password" class="form-control" id="pass" name="pass" placeholder="Password">
@@ -112,26 +112,26 @@
     <script src="assets/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="assets/js/adminlte.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        $("#viewpass").click(function() {
-            var x = $("#pass").attr('type');
-            if (x === 'password') {
-                $(this).removeClass("fas fa-eye");
-                $(this).addClass("fas fa-eye-slash");
-                $(this).attr("title", "Sembunyikan Password");
-                $("#pass").attr('type', 'text');
-            } else {
-                $(this).removeClass("fas fa-eye-slash");
-                $(this).attr("title", "Tampilkan Password");
-                $(this).addClass("fas fa-eye");
-                $("#pass").attr('type', 'password');
-            }
+        $(document).ready(function() {
+            $("#viewpass").click(function() {
+                var x = $("#pass").attr('type');
+                if (x === 'password') {
+                    $(this).removeClass("fas fa-eye");
+                    $(this).addClass("fas fa-eye-slash");
+                    $(this).attr("title", "Sembunyikan Password");
+                    $("#pass").attr('type', 'text');
+                } else {
+                    $(this).removeClass("fas fa-eye-slash");
+                    $(this).attr("title", "Tampilkan Password");
+                    $(this).addClass("fas fa-eye");
+                    $("#pass").attr('type', 'password');
+                }
+            })
         })
-    })
     </script>
-    <?php 
-    if($error) {
-		echo "<script>
+    <?php
+    if ($error) {
+        echo "<script>
 				$(function() {
 					toastr.error('Cek Username dan Password Anda!','Mohon Maaf',{
 						timeOut:1000,
@@ -142,8 +142,8 @@
 					});
 				});
 			</script>";
-	}
-	?>
+    }
+    ?>
 </body>
 
 </html>

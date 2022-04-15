@@ -1,33 +1,56 @@
 <?php
-	if(isset($_POST['simpan'])){
-		$data=array(
-			'idskul'	=>$_POST['idskul'],
-			'nama'	  =>$_POST['nmgtk'],
-			'nik'	   =>$_POST['nik'],
-			'nip'	   =>$_POST['nip'],
-			'tmplahir'  =>$_POST['tmplahir'],
-			'tgllahir'  =>$_POST['tgllahir'],
-			'gender'	=>$_POST['gender'],
-			'agama'	 =>$_POST['agama'],
-			'kepeg'	 =>$_POST['stsp'],
-			'jbtdinas'  =>$_POST['jbtd'],
-			'email'	 =>$_POST['imel'],
-			'alamat'	=>$_POST['almt'],
-			'desa'	  =>$_POST['desa'],
-			'kec'	   =>$_POST['kec'],
-			'kab'	   =>$_POST['kab'],
-			'prov'	  =>$_POST['prov'],
-			'kdpos'	 =>$_POST['kdpos'],
-			'nohp'	  =>$_POST['nohp']
+if (isset($_POST['simpan'])) {
+	$key = array(
+		'idgtk' => $_POST['idgtk'],
+		'idskul' => $idskul
+	);
+	if (cekdata('tbgtk', $key) > 0) {
+		$data = array(
+			'nama'	  => $_POST['nmgtk'],
+			'nik'	   => $_POST['nik'],
+			'nip'	   => $_POST['nip'],
+			'tmplahir'  => $_POST['tmplahir'],
+			'tgllahir'  => $_POST['tgllahir'],
+			'gender'	=> $_POST['gender'],
+			'agama'	 => $_POST['agama'],
+			'kepeg'	 => $_POST['stsp'],
+			'jbtdinas'  => $_POST['jbtd'],
+			'email'	 => $_POST['imel'],
+			'alamat'	=> $_POST['almt'],
+			'desa'	  => $_POST['desa'],
+			'kec'	   => $_POST['kec'],
+			'kab'	   => $_POST['kab'],
+			'prov'	  => $_POST['prov'],
+			'kdpos'	 => $_POST['kdpos'],
+			'nohp'	  => $_POST['nohp']
 		);
-		if($_GET['m']=='1'){
-			$rows=adddata('tbgtk',$data);
-		}
-		else {
-			$rows=editdata('tbgtk',$data,'idgtk',$_GET['id']);
-		}
-		if($rows>0){
-			echo "<script>
+		$rows = editdata('tbgtk', $data, '', $key);
+	} else {
+		$data = array(
+			'idskul'	=> $idskul,
+			'nama'	  => $_POST['nmgtk'],
+			'nik'	   => $_POST['nik'],
+			'nip'	   => $_POST['nip'],
+			'tmplahir'  => $_POST['tmplahir'],
+			'tgllahir'  => $_POST['tgllahir'],
+			'gender'	=> $_POST['gender'],
+			'agama'	 => $_POST['agama'],
+			'kepeg'	 => $_POST['stsp'],
+			'jbtdinas'  => $_POST['jbtd'],
+			'email'	 => $_POST['imel'],
+			'alamat'	=> $_POST['almt'],
+			'desa'	  => $_POST['desa'],
+			'kec'	   => $_POST['kec'],
+			'kab'	   => $_POST['kab'],
+			'prov'	  => $_POST['prov'],
+			'kdpos'	 => $_POST['kdpos'],
+			'nohp'	  => $_POST['nohp']
+		);
+		$rows = adddata('tbgtk', $data);
+	}
+
+	if ($rows > 0) {
+		echo "<script>
 				$(function() {
 					toastr.success('Tambah atau Edit Data GTK Berhasil!','Terima Kasih',
 					{
@@ -39,9 +62,8 @@
 					});
 				});
 			</script>";
-		}
-		else {
-			echo "<script>
+	} else {
+		echo "<script>
 				$(function() {
 					toastr.error('Data GTK Gagal Disimpan!','Mohon Maaf',
 					{
@@ -53,42 +75,42 @@
 					});
 				});
 			</script>";
-		}
 	}
-if(isset($_GET['id'])){
+}
+if (isset($_GET['id'])) {
 ?>
-<script type="text/javascript">
-$(document).ready(function() {
-	var id = "<?php echo $_GET['id'];?>";
-	$.ajax({
-		url: "gtk_edit.php",
-		type: "POST",
-		dataType: 'json',
-		data: "id=" + id,
-		success: function(e) {
-			$("#idgtk").val(e.idgtk);
-			$("#nmgtk").val(e.nama);
-			$("#nik").val(e.nik);
-			$("#nip").val(e.nip);
-			$("#tmplahir").val(e.tmplahir);
-			$("#tgllahir").val(e.tgllahir);
-			$("#gender").val(e.gender);
-			$("#agama").val(e.agama);
-			$("#stsp").val(e.kepeg);
-			$("#jbtd").val(e.jbtd);
-			$("#imel").val(e.email);
-			$("#almt").val(e.alamat);
-			$("#desa").val(e.desa);
-			$("#kec").val(e.kec);
-			$("#kab").val(e.kab);
-			$("#prov").val(e.prov);
-			$("#kdpos").val(e.kdpos);
-			$("#nohp").val(e.nohp);
-			$("#fotogtk").attr("src", e.dir + e.foto);
-		}
-	})
-});
-</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var id = "<?php echo $_GET['id']; ?>";
+			$.ajax({
+				url: "gtk_edit.php",
+				type: "POST",
+				dataType: 'json',
+				data: "id=" + id,
+				success: function(e) {
+					$("#idgtk").val(e.idgtk);
+					$("#nmgtk").val(e.nama);
+					$("#nik").val(e.nik);
+					$("#nip").val(e.nip);
+					$("#tmplahir").val(e.tmplahir);
+					$("#tgllahir").val(e.tgllahir);
+					$("#gender").val(e.gender);
+					$("#agama").val(e.agama);
+					$("#stsp").val(e.kepeg);
+					$("#jbtd").val(e.jbtd);
+					$("#imel").val(e.email);
+					$("#almt").val(e.alamat);
+					$("#desa").val(e.desa);
+					$("#kec").val(e.kec);
+					$("#kab").val(e.kab);
+					$("#prov").val(e.prov);
+					$("#kdpos").val(e.kdpos);
+					$("#nohp").val(e.nohp);
+					$("#fotogtk").attr("src", e.dir + e.foto);
+				}
+			})
+		});
+	</script>
 <?php  } ?>
 <div class="alert alert-warning">
 	<p><strong>Petunjuk</strong><br />Silahkan cek kembali data anda, lengkapi dan betulkan jika masih terdapat data
@@ -103,8 +125,7 @@ $(document).ready(function() {
 			<div class="row">
 				<div class="col-sm-2">
 					<div style="text-align:center;margin-top:10px">
-						<img class="img img-responsive img-circle" id="fotogtk" src="assets/img/avatar.gif"
-							width="100%" />
+						<img class="img img-responsive img-circle" id="fotogtk" src="assets/img/avatar.gif" width="100%" />
 						<span id="fotogtk_status"></span>
 					</div>
 				</div>
@@ -114,24 +135,20 @@ $(document).ready(function() {
 							<div class="row mb-2">
 								<label class="col-sm-5 offset-sm-1">Nama Lengkap</label>
 								<div class="col-sm-6">
-									<input type="hidden" class="form-control" name="idgtk" id="idgtk">
-									<input type="hidden" class="form-control" name="idskul" id="idskul"
-										value="<?php echo $idskul;?>">
+									<input type="text" class="form-control form-control-sm" name="idgtk" id="idgtk">
 									<input class="form-control form-control-sm" name="nmgtk" id="nmgtk">
 								</div>
 							</div>
 							<div class="row mb-2">
 								<label class="col-sm-5 offset-sm-1">N I K</label>
 								<div class="col-sm-6">
-									<input class="form-control form-control-sm" name="nik" id="nik"
-										onkeyup="validAngka(this)">
+									<input class="form-control form-control-sm" name="nik" id="nik" onkeyup="validAngka(this)">
 								</div>
 							</div>
 							<div class="row mb-2">
 								<label class="col-sm-5 offset-sm-1">N I P</label>
 								<div class="col-sm-6">
-									<input class="form-control form-control-sm" name="nip" id="nip"
-										onkeyup="validAngka(this)">
+									<input class="form-control form-control-sm" name="nip" id="nip" onkeyup="validAngka(this)">
 								</div>
 							</div>
 							<div class="row mb-2">
@@ -149,7 +166,7 @@ $(document).ready(function() {
 							<div class="row mb-2">
 								<label class="col-sm-5 offset-sm-1">Jenis Kelamin</label>
 								<div class="col-sm-6">
-									<select class="form-control" name="gender" id="gender">
+									<select class="form-control form-control-sm" name="gender" id="gender">
 										<option value="">..Pilih..</option>
 										<option value="L">Laki-laki</option>
 										<option value="P">Perempuan</option>
@@ -159,7 +176,7 @@ $(document).ready(function() {
 							<div class="row mb-2">
 								<label class="col-sm-5 offset-sm-1">Agama</label>
 								<div class="col-sm-6">
-									<select class="form-control" name="agama" id="agama">
+									<select class="form-control form-control-sm" name="agama" id="agama">
 										<option value="">..Pilih..</option>
 										<option value="A">Islam</option>
 										<option value="B">Kristen</option>
@@ -173,7 +190,7 @@ $(document).ready(function() {
 							<div class="row mb-2">
 								<label class="col-sm-5 offset-sm-1">Status Kepegawaian</label>
 								<div class="col-sm-6">
-									<select class="form-control" name="stsp" id="stsp">
+									<select class="form-control form-control-sm" name="stsp" id="stsp">
 										<option value="">..Pilih..</option>
 										<option value="1">Aparatur Sipil Negara</option>
 										<option value="2">GTT/PTT Kabupaten</option>
@@ -184,7 +201,7 @@ $(document).ready(function() {
 							<div class="row mb-2">
 								<label class="col-sm-5 offset-sm-1">Jabatan Dinas</label>
 								<div class="col-sm-6">
-									<select class="form-control" name="jbtd" id="jbtd">
+									<select class="form-control form-control-sm" name="jbtd" id="jbtd">
 										<option value="">..Pilih..</option>
 										<option value="1">Kepala Sekolah</option>
 										<option value="2">Wakil Kepala Sekolah</option>
@@ -256,34 +273,34 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<div class="card-footer">
-			<button type="submit" class="btn btn-primary btn-md btn-flat ml-2" name="simpan">
+			<button type="submit" class="btn btn-primary btn-md ml-2" name="simpan">
 				<i class="fas fa-fw fa-save"></i>
 				<span>&nbsp;Simpan</span>
 			</button>
-			<?php if($level=='1'):?>
-			<a href="index.php?p=datagtk" class="btn btn-md btn-danger btn-flat ml-2">
-				<i class="fas fa-fw fa-power-off"></i>
-				<span>&nbsp;Tutup</span>
-			</a>
-			<?php else: ?>
-			<a href="index.php?p=dashboard" class="btn btn-md btn-danger btn-flat ml-2">
-				<i class="fas fa-fw fa-power-off"></i>
-				<span>&nbsp;Tutup</span>
-			</a>
+			<?php if ($level == '1') : ?>
+				<a href="index.php?p=datagtk" class="btn btn-md btn-danger ml-2">
+					<i class="fas fa-fw fa-power-off"></i>
+					<span>&nbsp;Tutup</span>
+				</a>
+			<?php else : ?>
+				<a href="index.php?p=dashboard" class="btn btn-md btn-danger ml-2">
+					<i class="fas fa-fw fa-power-off"></i>
+					<span>&nbsp;Tutup</span>
+				</a>
 			<?php endif ?>
 		</div>
 	</form>
 </div>
 <script type="text/javascript">
-function validAngka(a) {
-	if (!/^[0-9.]+$/.test(a.value)) {
-		a.value = a.value.substring(0, a.value.length - 1000);
+	function validAngka(a) {
+		if (!/^[0-9.]+$/.test(a.value)) {
+			a.value = a.value.substring(0, a.value.length - 1000);
+		}
 	}
-}
-$(document).ready(function() {
-	$('#tgllahir').datetimepicker({
-		timepicker: false,
-		format: 'Y-m-d'
-	});
-})
+	$(document).ready(function() {
+		$('#tgllahir').datetimepicker({
+			timepicker: false,
+			format: 'Y-m-d'
+		});
+	})
 </script>

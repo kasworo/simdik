@@ -1,7 +1,6 @@
 <?php
 include "dbfunction.php";
 $sql = "SELECT s.idsiswa, s.nmsiswa, r.idjreg, rd.idkelas, r.idthpel FROM tbsiswa s INNER JOIN tbregistrasi r USING(idsiswa) INNER JOIN tbthpel tp USING(idthpel) LEFT JOIN tbregistrasi_detil rd USING(idreg) LEFT JOIN tbkelas k USING(idkelas) WHERE s.idsiswa='$_POST[id]' AND tp.aktif='1' AND r.idjreg<6";
-
 $cek = cquery($sql);
 if ($cek > 0) {
     $judul = 'Edit Registrasi Peserta Didik';
@@ -31,6 +30,4 @@ if ($cek > 0) {
         'tmb' => $tmb
     );
 }
-
-
 echo json_encode($data);

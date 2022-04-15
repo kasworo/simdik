@@ -113,7 +113,9 @@ if (isset($_POST['simpan'])) {
                     <tbody>
                         <?php
                         $no = 0;
-                        $qmp = viewdata('tbmapel');
+                        $qkur = "SELECT idkur FROM tbregistrasi r INNER JOIN tbthpel tp USING(idthpel)INNER JOIN tbregistrasi_detil USING(idreg) WHERE idjreg='4' AND tp.aktif='1' AND idsiswa='$_GET[id]'";
+                        $kur = vquery($qkur)[0];
+                        $qmp = viewdata('tbmapel', array('idkur' => $kur['idkur']));
                         foreach ($qmp as $mp) :
                             $no++;
                             $sql = "SELECT ijz.* FROM tbnilaiijz ijz LEFT JOIN tbthpel tp USING(idthpel) WHERE idmapel='$mp[idmapel]' AND idsiswa='$_GET[id]' AND tp.aktif='1'";

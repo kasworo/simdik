@@ -42,12 +42,14 @@ if (empty($_COOKIE['id'])) {
 	//	 session_unset();
 	//	 session_destroy(); 
 	// }
-	$tahun = array(
-		'aktif' => '1'
-	);
-
-	$tp = viewdata("tbthpel", $tahun)[0];
+	$tahun = array('aktif' => '1');
+	$tp = viewdata('tbthpel', $tahun)[0];
 	$tapel = $tp['desthpel'];
+
+
+	$skl = viewdata('tbskul')[0];
+	$idskul = $skl['idskul'];
+	$nmskul = $skl['nmskul'];
 ?>
 	<!DOCTYPE html>
 	<html>
